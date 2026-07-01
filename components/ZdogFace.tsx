@@ -9,6 +9,7 @@ const RIGHT_EYE = { x: 18, y: -12 };
 const SMILE = { x: 0, y: 9 };
 const MAX_EYE_OFFSET = 7;
 const TRACKING_DISTANCE = 180;
+const TEXT_PRIMARY_COLOR = "#282828";
 
 export function ZdogFace() {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -51,14 +52,14 @@ export function ZdogFace() {
       addTo: face,
       translate: { ...LEFT_EYE, z: 45 },
       stroke: 9,
-      color: "var(--text-primary)",
+      color: TEXT_PRIMARY_COLOR,
     });
 
     const rightEye = new Zdog.Shape({
       addTo: face,
       translate: { ...RIGHT_EYE, z: 45 },
       stroke: 9,
-      color: "var(--text-primary)",
+      color: TEXT_PRIMARY_COLOR,
     });
 
     const smile = new Zdog.Shape({
@@ -70,7 +71,7 @@ export function ZdogFace() {
       ],
       closed: false,
       stroke: 6,
-      color: "var(--text-primary)",
+      color: TEXT_PRIMARY_COLOR,
     });
 
     illustration.updateRenderGraph();

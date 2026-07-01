@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { AboutPanel } from "@/components/AboutPanel";
+import { BlogPanel } from "@/components/BlogPanel";
 import { ComponentsPanel } from "@/components/ComponentsPanel";
 import { ProgressiveBlur } from "@/components/ProgressiveBlur";
 import { Tabs, type TabId } from "@/components/Tabs";
@@ -46,6 +47,7 @@ export function Hero() {
           >
             {activeTab === "about" ? <AboutPanel /> : null}
             {activeTab === "components" ? <ComponentsPanel /> : null}
+            {activeTab === "blog" ? <BlogPanel /> : null}
           </div>
 
           <ProgressiveBlur edge="top" />
