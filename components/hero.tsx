@@ -45,7 +45,12 @@ export function Hero() {
             aria-labelledby={`tab-${activeTab}`}
             className="h-full overflow-y-auto overscroll-contain px-6 py-6 scrollbar-none [&::-webkit-scrollbar]:hidden"
           >
-            {activeTab === "about" ? <AboutPanel /> : null}
+            <div
+              className={activeTab === "about" ? undefined : "hidden"}
+              aria-hidden={activeTab !== "about"}
+            >
+              <AboutPanel />
+            </div>
             {activeTab === "components" ? <ComponentsPanel /> : null}
             {activeTab === "blog" ? <BlogPanel /> : null}
           </div>
