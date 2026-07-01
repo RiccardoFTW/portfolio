@@ -16,7 +16,7 @@ const tabTitles: Record<TabId, string> = {
 };
 
 export function Hero() {
-  const [activeTab, setActiveTab] = useState<TabId>("components");
+  const [activeTab, setActiveTab] = useState<TabId>("about");
 
   return (
     <main className="h-dvh min-h-dvh bg-[var(--canvas)] p-3 sm:p-6">
