@@ -19,9 +19,9 @@ export function Hero() {
   const [activeTab, setActiveTab] = useState<TabId>("about");
 
   return (
-    <main className="h-dvh min-h-dvh bg-[var(--canvas)] p-3 sm:p-6">
+    <main className="h-dvh min-h-dvh bg-background p-3 sm:p-6">
       <section
-        className="mx-auto flex h-full w-full max-w-[692px] flex-col overflow-hidden rounded-[var(--radius-panel)] bg-[var(--panel)] shadow-[var(--shadow-panel)]"
+        className="mx-auto flex h-full w-full max-w-[692px] flex-col overflow-hidden rounded-(--radius-panel) bg-(--panel) shadow-(--shadow-panel)"
         aria-labelledby="portfolio-title"
       >
         <h1 id="portfolio-title" className="sr-only">
@@ -33,7 +33,7 @@ export function Hero() {
             <ZdogFace />
           </div>
 
-          <h2 className="text-sm font-medium tracking-[-0.01em] text-[var(--text-primary)]">
+          <h2 className="text-sm font-medium tracking-[-0.01em] text-foreground">
             {tabTitles[activeTab]}
           </h2>
         </header>
@@ -43,7 +43,7 @@ export function Hero() {
             id="portfolio-tabpanel"
             role="tabpanel"
             aria-labelledby={`tab-${activeTab}`}
-            className="h-full overflow-y-auto overscroll-contain px-6 py-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="h-full overflow-y-auto overscroll-contain px-6 py-6 scrollbar-none [&::-webkit-scrollbar]:hidden"
           >
             {activeTab === "about" ? <AboutPanel /> : null}
             {activeTab === "components" ? <ComponentsPanel /> : null}

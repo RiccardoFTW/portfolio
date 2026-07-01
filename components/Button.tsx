@@ -22,7 +22,7 @@ export function Button({
   buttonRef,
 }: ButtonProps) {
   const color = variant === "overlay" ? "text-white" : "text-[var(--text-secondary)]";
-  const className = `flex h-9 items-center rounded-[var(--radius-tab)] px-3 text-[13px] font-medium ${color}`;
+  const className = `flex h-9 items-center rounded-(--radius-tab) px-3 text-[13px] font-medium ${color}`;
 
   if (as === "span") {
     return <span className={className}>{label}</span>;
@@ -38,7 +38,7 @@ export function Button({
       aria-selected={isActive}
       tabIndex={isActive ? 0 : -1}
       onClick={onClick}
-      className={`${className} relative outline-none before:absolute before:top-1/2 before:left-1/2 before:h-11 before:w-full before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] transition-colors duration-[var(--duration-ui)] ease-[var(--ease-hover)] focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--canvas)] pointer-fine:hover:text-[var(--text-primary)]`}
+      className={`${className} relative outline-none before:absolute before:top-1/2 before:left-1/2 before:h-11 before:w-full before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] transition-colors duration-(--duration-ui) ease-(--ease-hover) focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background pointer-fine:hover:text-foreground`}
     >
       {label}
     </button>

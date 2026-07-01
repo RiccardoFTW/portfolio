@@ -35,8 +35,6 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const activeTabRef = useRef<HTMLButtonElement | null>(null);
-  const valueRef = useRef(value);
-  valueRef.current = value;
   const shouldFocusActiveTabRef = useRef(false);
   const x = useMotionValue(0);
   const velocity = useVelocity(x);
@@ -49,7 +47,7 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
     const container = containerRef.current;
     const activeTabElement = activeTabRef.current;
     const visualTabElement = container?.querySelector<HTMLButtonElement>(
-      `#tab-${hoveredTabRef.current ?? valueRef.current}`,
+      `#tab-${hoveredTabRef.current ?? value}`,
     );
 
     if (!container || !activeTabElement || !visualTabElement) return;
@@ -67,7 +65,7 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
 
       return isSamePosition && isSameWidth ? currentIndicator : nextIndicator;
     });
-  }, []);
+  }, [value]);
 
   useLayoutEffect(() => {
     const container = containerRef.current;
@@ -150,7 +148,7 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
             role="tablist"
             aria-label="Portfolio sections"
             onKeyDown={handleKeyDown}
-            className="flex justify-center gap-1 rounded-[var(--radius-tabs)] bg-[var(--tabs-surface)] p-1 shadow-[var(--shadow-tabs)]"
+            className="flex justify-center gap-1 rounded-(--radius-tabs) bg-muted p-1 shadow-(--shadow-tabs)"
           >
             {tabs.map((tab) => (
               <li key={tab.id} onPointerEnter={() => previewTab(tab.id)}>
@@ -181,7 +179,7 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
               scaleX: shouldReduceMotion ? 1 : scaleX,
               filter: shouldReduceMotion ? "blur(0px)" : filter,
             }}
-            className="pointer-events-none absolute inset-y-1 left-0 overflow-hidden rounded-[var(--radius-tab)] bg-[var(--accent)]"
+            className="pointer-events-none absolute inset-y-1 left-0 overflow-hidden rounded-(--radius-tab) bg-(--accent)"
           >
             <m.div
               className="flex w-max justify-center gap-1 pl-1"
