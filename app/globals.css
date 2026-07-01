@@ -1,26 +1,164 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--canvas);
+  --color-foreground: var(--text-primary);
+  --color-muted: var(--tabs-surface);
+  --color-muted-foreground: var(--text-secondary);
+  --color-ring: var(--focus-ring);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  color-scheme: light;
+
+  --canvas: #f5f5f5;
+  --panel: #ffffff;
+  --text-primary: oklch(0.277 0 0);
+  --text-secondary: oklch(0.613 0 0);
+  --text-muted: oklch(60% 0.006 260);
+  --tabs-surface: oklch(96.8% 0.003 247);
+  --component-surface: oklch(98.2% 0.002 247);
+  --component-border: oklch(18% 0.006 260 / 0.07);
+  --accent: oklch(0.656 0.19 250.834);
+  --palette-1: var(--text-primary);
+  --palette-2: var(--text-secondary);
+  --palette-3: var(--accent);
+  --focus-ring: var(--accent);
+
+  --radius-tabs: 999px;
+  --radius-tab: 999px;
+  --radius-component: 16px;
+  --radius-panel: 24px;
+  --width-components: 560px;
+  --edge-blur-size: 88px;
+  --edge-blur-strength: 12px;
+  --shadow-panel:
+    0 0 0 1px oklch(0% 0 0 / 0.035),
+    0 2px 8px oklch(0% 0 0 / 0.04),
+    0 20px 50px oklch(0% 0 0 / 0.08);
+  --shadow-tabs:
+    0 0 0 1px oklch(18% 0.006 260 / 0.05),
+    0 1px 2px oklch(18% 0.006 260 / 0.04);
+
+  --ease-in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  --ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  --ease-in-quart: cubic-bezier(0.895, 0.03, 0.685, 0.22);
+  --ease-in-quint: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+  --ease-in-expo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+  --ease-in-circ: cubic-bezier(0.6, 0.04, 0.98, 0.335);
+  --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-circ: cubic-bezier(0.075, 0.82, 0.165, 1);
+  --ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  --ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --ease-in-out-quart: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-in-out-quint: cubic-bezier(0.86, 0, 0.07, 1);
+  --ease-in-out-expo: cubic-bezier(1, 0, 0, 1);
+  --ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+  --ease-hover: ease;
+  --duration-ui: 160ms;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    min-width: 320px;
+    background: var(--canvas);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100dvh;
+    margin: 0;
+    background: var(--canvas);
+    color: var(--text-primary);
+  }
+
+  ::selection {
+    background: oklch(92% 0.05 251);
+    color: var(--text-primary);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.edge-blur {
+  position: absolute;
+  z-index: 10;
+  inset-inline: 0;
+  height: var(--edge-blur-size);
+  pointer-events: none;
+  contain: paint;
+  -webkit-backdrop-filter: blur(var(--edge-blur-strength));
+  backdrop-filter: blur(var(--edge-blur-strength));
+}
+
+.edge-blur--top {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--panel) 0%,
+    color-mix(in oklab, var(--panel) 82%, transparent) 34%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(to bottom, black 0% 24%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0% 24%, transparent 100%);
+}
+
+.edge-blur--bottom {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    var(--panel) 0%,
+    color-mix(in oklab, var(--panel) 82%, transparent) 34%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(to top, black 0% 24%, transparent 100%);
+  mask-image: linear-gradient(to top, black 0% 24%, transparent 100%);
+}
+
+.hold-to-delete-btn {
+  position: relative;
+}
+
+.hold-to-delete-overlay {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1s linear;
+}
+
+.hold-to-delete-btn:active .hold-to-delete-overlay {
+  clip-path: inset(0 0 0 0);
+}
+
+.toast-card__title {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+}
+
+.toast-card__description {
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
