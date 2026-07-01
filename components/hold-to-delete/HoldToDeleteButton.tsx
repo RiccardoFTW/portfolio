@@ -38,7 +38,7 @@ export function HoldToDeleteButton() {
     <button
       type="button"
       aria-label="Hold to delete"
-      className="hold-to-delete-btn rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--component-surface)]"
+      className="hold-to-delete-btn rounded-full outline-none focus-visible:ring-2 focus-visible:ring-(--focus-ring) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--component-surface)]"
     >
       <ButtonContent
         className={`hold-to-delete-overlay ${contentClassName} pointer-events-none absolute inset-0 bg-[#ffdbdc] text-[#e5484d]`}

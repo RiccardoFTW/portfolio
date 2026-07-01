@@ -39,7 +39,7 @@ export function ToastStack() {
     <LazyMotion features={domAnimation} strict>
       <m.button
         aria-label="Add toast"
-        className="inline-flex h-8 items-center justify-center rounded-full bg-[#339CFF] px-3 font-sans text-sm font-medium tracking-[-0.03em] text-white shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_2px_2px_rgba(0,0,0,0.08)] outline-none transition-[background-color,box-shadow] duration-150 ease-out hover:bg-[#248EEA] focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--component-surface)]"
+        className="inline-flex h-8 items-center justify-center rounded-full bg-[#339CFF] px-3 font-sans text-sm font-medium tracking-[-0.03em] text-white shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_2px_2px_rgba(0,0,0,0.08)] outline-none transition-[background-color,box-shadow] duration-150 ease-out hover:bg-[#248EEA] focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-(--component-surface)"
         type="button"
         onClick={handleAddDemoToast}
         whileTap={{ scale: 0.97 }}

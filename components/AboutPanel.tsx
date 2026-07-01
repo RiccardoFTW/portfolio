@@ -23,7 +23,7 @@ function PaletteSwatch({ label, token, value }: PaletteSwatchProps) {
     >
       <span
         role="tooltip"
-        className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2 translate-y-0.5 whitespace-nowrap rounded-2xl bg-[var(--accent)] px-2 py-1 font-mono text-[10px] leading-none font-normal tracking-normal text-white opacity-0 shadow-sm transition-[opacity,transform] duration-[125ms] ease-[var(--ease-out-cubic)] pointer-fine:group-hover:translate-y-0 pointer-fine:group-hover:opacity-100"
+        className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2 translate-y-0.5 whitespace-nowrap rounded-2xl bg-(--accent) px-2 py-1 font-mono text-[10px] leading-none font-normal tracking-normal text-white opacity-0 shadow-sm transition-[opacity,transform] duration-125 ease-(--ease-out-cubic) pointer-fine:group-hover:translate-y-0 pointer-fine:group-hover:opacity-100"
       >
         {value}
       </span>
@@ -35,11 +35,11 @@ export function AboutPanel() {
   return (
     <section
       aria-label="About Riccardo"
-      className="mx-auto w-full max-w-[var(--width-components)] pt-16 pb-16"
+      className="mx-auto w-full max-w-(--width-components) pt-16 pb-16"
     >
-      <div className="space-y-5 text-pretty text-xl leading-[1.45] font-medium tracking-[-0.02em] text-[var(--text-primary)]">
+      <div className="space-y-5 text-pretty text-xl leading-[1.45] font-medium tracking-[-0.02em] text-foreground">
         <p>
-          Hi! I’m <span className="text-[var(--accent)]">Riccardo</span>, and I
+          Ciao! I’m <span className="text-(--accent)">Riccardo</span>, and I
           like building things, especially where design and technology meet. I
           enjoy turning rough ideas into clear, thoughtful experiences, moving
           between visual design, interaction, and code.
@@ -61,7 +61,7 @@ export function AboutPanel() {
           interfaces can look, feel, and behave.
         </p>
 
-        <div className="text-pretty text-xl leading-[1.45] font-medium tracking-[-0.02em] text-[var(--text-primary)]">
+        <div className="text-pretty text-xl leading-[1.45] font-medium tracking-[-0.02em] text-foreground">
           As you may have noticed, my favorite color palette is{" "}
           <ul
             aria-label="Favorite color palette"

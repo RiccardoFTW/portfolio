@@ -206,7 +206,7 @@ function PressFillButton({
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerCancel}
-        className="relative size-14 touch-manipulation rounded-full outline-none select-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--component-surface)]"
+        className="relative size-14 touch-manipulation rounded-full outline-none select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-(--component-surface)"
       >
         <span
           className={`${contentClassName} ${baseClassName} pointer-events-none absolute inset-0`}
