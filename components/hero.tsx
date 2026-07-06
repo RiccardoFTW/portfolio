@@ -5,15 +5,9 @@ import { useState } from "react";
 import { AboutPanel } from "@/components/AboutPanel";
 import { BlogPanel } from "@/components/BlogPanel";
 import { ComponentsPanel } from "@/components/ComponentsPanel";
+import { Dither } from "@/components/Dither";
 import { ProgressiveBlur } from "@/components/ProgressiveBlur";
 import { Tabs, type TabId } from "@/components/Tabs";
-import { ZdogFace } from "@/components/ZdogFace";
-
-const tabTitles: Record<TabId, string> = {
-  about: "About",
-  components: "Components",
-  blog: "Blog",
-};
 
 export function Hero() {
   const [activeTab, setActiveTab] = useState<TabId>("about");
@@ -28,14 +22,8 @@ export function Hero() {
           Riccardo Ventura — Design Engineer
         </h1>
 
-        <header className="flex shrink-0 items-center justify-between p-4">
-          <div className="size-14" aria-hidden="true">
-            <ZdogFace />
-          </div>
-
-          <h2 className="text-sm font-medium tracking-[-0.01em] text-foreground">
-            {tabTitles[activeTab]}
-          </h2>
+        <header className="flex shrink-0 items-center justify-between p-2">
+          <Dither />
         </header>
 
         <div className="relative min-h-0 flex-1">
