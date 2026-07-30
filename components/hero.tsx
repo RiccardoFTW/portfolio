@@ -5,9 +5,15 @@ import { useState } from "react";
 import { AboutPanel } from "@/components/AboutPanel";
 import { BlogPanel } from "@/components/BlogPanel";
 import { ComponentsPanel } from "@/components/ComponentsPanel";
-import { Dither } from "@/components/Dither";
 import { ProgressiveBlur } from "@/components/ProgressiveBlur";
 import { Tabs, type TabId } from "@/components/Tabs";
+import { Dithering } from "@paper-design/shaders-react";
+
+const tabTitles: Record<TabId, string> = {
+  about: "About",
+  components: "Components",
+  blog: "Blog",
+};
 
 export function Hero() {
   const [activeTab, setActiveTab] = useState<TabId>("about");
@@ -22,8 +28,25 @@ export function Hero() {
           Riccardo Ventura — Design Engineer
         </h1>
 
-        <header className="flex shrink-0 items-center justify-between p-2">
-          <Dither />
+        <header className="flex shrink-0 items-center justify-between p-4">
+          <div className="size-14 shrink-0 overflow-hidden" aria-hidden="true">
+            <Dithering
+              className="size-full"
+              style={{ width: "200%", height: "200%" }}
+              colorBack="#ffffff"
+              colorFront="#0095ff"
+              shape="sphere"
+              type="8x8"
+              size={1}
+              speed={0.88}
+              scale={0.12}
+              fit="cover"
+            />
+          </div>
+
+          <h2 className="text-sm font-medium tracking-[-0.01em] text-foreground">
+            {tabTitles[activeTab]}
+          </h2>
         </header>
 
         <div className="relative min-h-0 flex-1">

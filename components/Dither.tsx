@@ -19,7 +19,7 @@ export function Dither() {
         type="8x8"
         size={1}
         speed={0.88}
-        scale={0.58}
+        scale={0.68}
         fit="contain"
       />
     </div>

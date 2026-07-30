@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { GeistMono } from "geist/font/mono";
-
+import localFont from "next/font/local";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
+const caveat = localFont({
+  src: "./fonts/Caveat-VariableFont_wght.ttf",
+  variable: "--font-caveat",
   display: "swap",
-  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -24,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${GeistMono.variable}`}>
+    <html lang="it" className={caveat.variable}>
       <body>{children}</body>
     </html>
   );
