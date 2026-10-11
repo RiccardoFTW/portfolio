@@ -1,0 +1,35 @@
+.illustration {
+    --hairline-plate: var(--surface);
+    --hairline-hi: var(--foreground);
+    --hairline-edge: color-mix(in oklch, var(--text) 85%, var(--surface));
+    --hairline-mid: var(--border-strong);
+    --hairline-lo: color-mix(in oklch, var(--text) 45%, var(--surface));
+}
+
+.illustration :global(.ink) {
+    fill: var(--accent);
+    stroke: var(--accent);
+}
+
+.marker :global(.mark) {
+    fill: var(--annotation-highlight);
+    stroke: var(--annotation-highlight);
+}
+
+/* Kernel layout is unlayered, so the flying figure's box lives here, not in utilities. */
+.writer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 30;
+    width: 9rem;
+    height: 7.2rem;
+    opacity: 0;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .illustration :global(path) {
+        transition: none;
+    }
+}

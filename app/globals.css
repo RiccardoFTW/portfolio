@@ -1,34 +1,209 @@
 @import "tailwindcss";
 
+:root {
+  /* Surfaces */
+  --background: oklch(0.985 0.001 286.376);
+  --surface: oklch(1 0 0);
+  --inset: oklch(0.979 0.002 247.839);
+  --toggle-track-off: var(--inset);
+
+  /* Text */
+  --foreground: oklch(0.247 0.006 258.361);
+  --text: oklch(0.51 0 0);
+
+  /* Structure */
+  --border: oklch(0.946 0.003 264.542);
+  --border-strong: oklch(0.912 0.005 258.326);
+
+  /* Accent and feedback */
+  --accent: oklch(0.669 0.184 248.807);
+  --accent-ink: oklch(0.556 0.187 255.617);
+  --accent-tint: oklch(0.96 0.019 252.878);
+  --annotation-highlight: oklch(0.94 0.08 101);
+  --success: oklch(0.603 0.155 150.883);
+  --success-surface: oklch(0.958 0.017 159.118);
+  --danger: oklch(0.621 0.192 23.042);
+  --danger-surface: oklch(0.956 0.017 17.462);
+
+  /* Syntax colors for code examples, grouped by the role each token plays. */
+  --code-keyword: oklch(0.54 0.23 300);
+  --code-string: oklch(0.5 0.19 150);
+  --code-number: oklch(0.56 0.2 42);
+  --code-tag: oklch(0.53 0.23 255);
+  --code-attribute: oklch(0.52 0.18 210);
+  --code-selector: oklch(0.53 0.22 275);
+  --code-property: oklch(0.54 0.2 330);
+  --code-utility-layout: oklch(0.52 0.22 260);
+  --code-utility-spacing: oklch(0.56 0.2 45);
+  --code-utility-radius: oklch(0.53 0.22 330);
+  --code-utility-surface: oklch(0.51 0.18 225);
+  --code-utility-text: oklch(0.5 0.17 190);
+  --code-utility-border: oklch(0.52 0.2 275);
+  --code-utility-state: oklch(0.54 0.2 15);
+
+  /* Headings share the system accent without knowing its raw color. */
+  --heading: var(--accent-ink);
+
+  /* Layout */
+  --page-max-width: 648px;
+  --page-padding-inline: 24px;
+  --page-padding-block: 48px;
+
+  /* Portfolio aliases (legacy classnames) */
+  --canvas: var(--background);
+
+  /* Shadow */
+  --card-shadow:
+    0 1px 2px rgb(15 23 42 / 0.04),
+    0 8px 24px rgb(15 23 42 / 0.08);
+}
+
+
 @theme inline {
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-canvas: var(--canvas);
+  --font-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-handwriting: var(--font-caveat);
   --font-display: var(--font-caveat);
+  --font-baskerville: var(--font-baskerville);
+  --font-italic: var(--font-italic);
   --text-display: 1.5rem;
   --text-body: 1rem;
   --text-display--line-height: 0.9;
+  --color-text: var(--text);
+  --color-heading: var(--heading);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-surface: var(--surface);
+  --color-inset: var(--inset);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-tint: var(--accent-tint);
+  --color-success: var(--success);
+  --color-success-surface: var(--success-surface);
+  --color-danger: var(--danger);
+  --color-danger-surface: var(--danger-surface);
+  --shadow-card: var(--card-shadow);
 }
 
-@layer base {
-  * {
-    box-sizing: border-box;
-  }
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: oklch(0.209 0.004 264.477);
+    --canvas: var(--background);
+    --surface: oklch(0.26 0.006 271.191);
+    --inset: oklch(0.243 0.004 264.492);
+    --toggle-track-off: oklch(0.55 0.007 264.474);
+    --foreground: oklch(0.964 0.002 247.839);
+    --text: oklch(0.731 0.008 260.731);
+    --border: oklch(0.308 0.006 258.354);
+    --border-strong: oklch(0.356 0.007 264.474);
+    --accent: oklch(0.68 0.173 253.301);
+    --accent-ink: oklch(0.788 0.113 248.33);
+    --accent-tint: oklch(0.68 0.173 253.301 / 0.16);
+    --annotation-highlight: oklch(0.84 0.11 98);
+    --success: oklch(0.705 0.154 153.814);
+    --success-surface: oklch(0.705 0.154 153.814 / 0.14);
+    --danger: oklch(0.666 0.18 21.433);
+    --danger-surface: oklch(0.666 0.18 21.433 / 0.14);
 
+    --code-keyword: oklch(0.78 0.17 300);
+    --code-string: oklch(0.77 0.16 150);
+    --code-number: oklch(0.8 0.17 55);
+    --code-tag: oklch(0.78 0.17 255);
+    --code-attribute: oklch(0.78 0.14 215);
+    --code-selector: oklch(0.78 0.17 275);
+    --code-property: oklch(0.78 0.16 325);
+    --code-utility-layout: oklch(0.78 0.16 260);
+    --code-utility-spacing: oklch(0.8 0.17 60);
+    --code-utility-radius: oklch(0.78 0.16 325);
+    --code-utility-surface: oklch(0.8 0.15 225);
+    --code-utility-text: oklch(0.79 0.14 190);
+    --code-utility-border: oklch(0.78 0.16 275);
+    --code-utility-state: oklch(0.78 0.16 15);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* rough-notation gives each annotation SVG a fixed 100px box with visible overflow; near the page end that empty box adds scroll. A 0 size stops the SVG from rendering. */
+svg.rough-annotation {
+  width: 1px !important;
+  height: 1px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
   html {
-    min-width: 320px;
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
-
-  body {
-    min-height: 100dvh;
-    margin: 0;
+    scroll-behavior: auto;
   }
 }
 
-:root {
-  --canvas: oklch(1 0 0);
-  --text: oklch(0.51 0 0);
-  --accent: oklch(0.669 0.184 248.807);
-  --border: oklch(0.22 0.01 260 / 0.12);
+body {
+  margin: 0;
+  padding: 0;
+  border: 0 solid;
+  box-sizing: border-box;
+  background: var(--color-background);
+  color: var(--foreground);
+}
+
+.toggle-track {
+  display: flex;
+  box-sizing: border-box;
+  width: 44px;
+  height: 24px;
+  padding: 2px;
+  border-radius: 999px;
+  background: var(--toggle-track-off);
+  box-shadow: 0 0 0 2px rgb(18 18 18 / 0.02);
+  transition: background-color 150ms ease, scale 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+button[aria-pressed="true"] .toggle-track {
+  background: var(--accent);
+}
+
+.toggle-thumb {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow:
+    0 1px 2px rgb(18 18 18 / 0.08),
+    0 1px 1px rgb(18 18 18 / 0.02),
+    inset 0 -1px 2px rgb(18 18 18 / 0.04),
+    inset 0 1px 1px rgb(255 255 255 / 0.7);
+  transition: transform 160ms cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+button[aria-pressed="true"] .toggle-thumb {
+  transform: translateX(20px);
+}
+
+.toggle-core {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow:
+    inset 0 1px 2px rgb(18 18 18 / 0.04),
+    0 1px 1px rgb(18 18 18 / 0.02);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle-track {
+    transition: background-color 150ms ease;
+  }
+
+  .group:active .toggle-track {
+    scale: 1;
+  }
+
+  .toggle-thumb {
+    transition: none;
+  }
 }

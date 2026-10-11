@@ -139,7 +139,7 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
       <div className="flex items-center" onPointerLeave={clearPreview}>
         <div
           aria-hidden="true"
-          className="w-10 shrink-0 self-stretch min-h-11"
+          className="w-10 shrink-0 self-stretch min-h-13"
           onPointerEnter={() => previewTab(tabs[0].id)}
         />
 
@@ -196,7 +196,7 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
 
         <div
           aria-hidden="true"
-          className="w-10 shrink-0 self-stretch min-h-11"
+          className="w-10 shrink-0 self-stretch min-h-13"
           onPointerEnter={() => previewTab(tabs[tabs.length - 1].id)}
         />
       </div>

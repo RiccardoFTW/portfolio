@@ -63,7 +63,7 @@ export function FeedbackComponent() {
   return (
     <LazyMotion features={domMax} strict>
       <MotionConfig transition={popoverTransition} reducedMotion="user">
-        <div ref={containerRef}>
+        <div ref={containerRef} className="flex w-full justify-center">
           {isOpen ? (
             <FeedbackPopover
               feedback={feedback}

@@ -25,14 +25,14 @@ export function FeedbackPopover({
   return (
     <m.div
       layoutId="feedback-popover"
-      className="relative h-48 w-[min(100%,364px)] overflow-hidden rounded-2xl bg-[#f5f6f7] p-1 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_2px_2px_rgba(0,0,0,0.04)]"
+      className="relative h-56 w-[min(100%,420px)] overflow-hidden rounded-2xl bg-[#f5f6f7] p-1.5 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_2px_2px_rgba(0,0,0,0.04)]"
     >
       <m.span
         aria-hidden="true"
         layoutId="feedback-label"
         animate={{ opacity: feedback ? 0 : 1 }}
         transition={{ opacity: { duration: 0.15 } }}
-        className="pointer-events-none absolute left-4 top-4 z-10 text-sm text-zinc-400"
+        className="pointer-events-none absolute left-5 top-5 z-10 text-base text-zinc-400"
       >
         Feedback
       </m.span>
@@ -53,7 +53,7 @@ export function FeedbackPopover({
             transition={contentTransition}
             className="flex h-full items-center justify-center"
           >
-            <p className="text-sm font-medium">Feedback received. Thank you!</p>
+            <p className="text-base font-medium">Feedback received. Thank you!</p>
           </m.div>
         ) : (
           <m.form
@@ -83,13 +83,13 @@ export function FeedbackPopover({
                   onSubmit();
                 }
               }}
-              className="h-32 w-full resize-none rounded-t-lg p-3 text-sm outline-none"
+              className="h-36 w-full resize-none rounded-t-lg p-4 text-base outline-none"
             />
-            <div className="flex h-12 items-center border-t border-dashed border-[#e6e7e8] px-2.5">
+            <div className="flex h-14 items-center border-t border-dashed border-[#e6e7e8] px-3">
               <button
                 type="submit"
                 disabled={isLoading || feedback.trim().length === 0}
-                className="relative ml-auto inline-flex h-6 w-[104px] items-center justify-center overflow-hidden rounded-md bg-(--accent) text-xs font-medium text-white"
+                className="relative ml-auto inline-flex h-8 w-[128px] items-center justify-center overflow-hidden rounded-lg bg-(--accent) text-sm font-medium text-white"
               >
                 <AnimatePresence initial={false} mode="popLayout">
                   <m.span

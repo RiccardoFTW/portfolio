@@ -1,0 +1,54 @@
+'use client'
+
+import { Search } from "lucide-react";
+import ToggleButton from "../../ToggleButton";
+import ExampleBracket from "../ExampleBracket";
+import { useState } from "react";
+
+
+export default function SearchBar() {
+    const [showFinished, setShowFinished] = useState(false)
+    const [isCorrected, setIsCorrected] = useState(false)
+    const buttonRadius = isCorrected ? "rounded-2xl" : "rounded-lg";
+    return (
+        <div className="space-y-6">
+            <ExampleBracket label="Searchbar" side="left" className="mx-auto w-full max-w-lg">
+                <div
+                    aria-hidden="true"
+                    className="mx-auto flex w-full max-w-lg items-center gap-2 rounded-3xl bg-surface p-2 shadow-[0_0_0_1px_oklch(0_0_0/0.06),0_1px_2px_-1px_oklch(0_0_0/0.06),0_2px_4px_0_oklch(0_0_0/0.04)] dark:shadow-[0_0_0_1px_oklch(1_0_0/0.08)]"
+                >
+                    <span className="min-w-0 flex-1 px-3 py-2 text-sm text-text">
+                        {showFinished ? "Cerca un progetto..." : (
+                            <span className="block h-2 w-36 max-w-full rounded-full bg-border-strong" />
+                        )}
+                    </span>
+
+                    <span
+                        className={`grid size-10 shrink-0 place-items-center ${buttonRadius} bg-inset text-foreground transition-[border-radius] duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] motion-reduce:transition-none`}
+                    >
+                        <Search
+                            aria-hidden="true"
+                            strokeWidth={1.5}
+                            className={`col-start-1 row-start-1 size-4 transition-[opacity,filter,scale] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:scale-100 motion-reduce:blur-none motion-reduce:transition-[opacity] motion-reduce:duration-200 ${showFinished ? "scale-100 opacity-100 blur-none" : "scale-[0.95] opacity-0 blur-[2px]"}`}
+                        />
+                        <span className={`col-start-1 row-start-1 size-4 rounded bg-border-strong transition-[opacity,filter,scale] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:scale-100 motion-reduce:blur-none motion-reduce:transition-[opacity] motion-reduce:duration-200 ${showFinished ? "scale-[0.95] opacity-0 blur-[2px]" : "scale-100 opacity-100 blur-none"}`} />
+                    </span>
+                </div>
+            </ExampleBracket>
+            <div role="group" aria-label="Controlli della searchbar" className="flex flex-col items-center gap-2">
+                <ToggleButton
+                    label="Componente finito della barra di ricerca"
+                    annotation={{ text: "Rifinito", side: "left" }}
+                    pressed={showFinished}
+                    onPressedChange={setShowFinished}
+                />
+                <ToggleButton
+                    label="Correggi il raggio della barra di ricerca"
+                    annotation={{ text: "Corretto", side: "right" }}
+                    pressed={isCorrected}
+                    onPressedChange={setIsCorrected}
+                />
+            </div>
+        </div>
+    );
+}
