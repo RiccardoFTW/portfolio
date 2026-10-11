@@ -43,7 +43,8 @@ const TOOLS = [
   { name: "stilografica", at: [0, -6], dir: [0.1, -0.5], lean: 4, nib: [80, 96],
     prof: [[0, 0], [1.5, 3.8], [3, 4.4], [64, 4.4], [65, 3.8], [79, 3.1], [80, 0]], marks: [[64, 4.4], [56, 4.4]] },
   { name: "evidenziatore", at: [-4, 6], dir: [0.8, 0.35], lean: 11,
-    prof: [[0, 0], [1.5, 5.2], [3, 6], [62, 6], [68, 3.6, 3.6], [76, 3.2, 0.8]], marks: [[62, 6]] },
+    prof: [[0, 0], [1.5, 5.2], [3, 6], [62, 6], [68, 3.6, 3.6], [76, 3.2, 0.8]], marks: [[62, 6]],
+    chisel: [[72, 3.4, 2.2], [76, 3.2, 0.8]] },
   { name: "pennarello", at: [-6, -3], dir: [1, -0.2], lean: 22, clip: [70, 93],
     prof: [[0, 0], [1.5, 4.6], [3, 5.2], [64, 5.2], [64.5, 5.7], [96, 5.7], [99, 4.8], [101, 2.8], [102, 0]], marks: [[64.5, 5.7]] },
 ];
@@ -85,7 +86,8 @@ function mount({ stage, svg, read }, value) {
     const slit = t.nib ? mk("path", { class: "nf lo" }, grp) : null;
     const hole = t.nib ? mk("circle", { r: 0.9, class: "dot off" }, grp) : null;
     const ink = t.nib ? mk("path", { class: "ink" }, grp) : null;
-    return { ...t, grp, sil, seams, extra, nibEl, slit, hole, ink, lift: tween(0), spread: tween(0) };
+    const mark = t.chisel ? mk("path", { class: "mark fo" }, grp) : null;
+    return { ...t, grp, sil, seams, extra, nibEl, slit, hole, ink, mark, lift: tween(0), spread: tween(0) };
   });
   // Back to front: by where each tool crosses the rim.
   tools.slice().sort((a, b) => {
@@ -125,6 +127,16 @@ function mount({ stage, svg, read }, value) {
       tool.slit.setAttribute("d", open([f(t0 + 7 * k, 0), f(t1, 0)]));
       place(tool.hole, f(t0 + 6 * k, 0));
       tool.ink.setAttribute("d", poly([f(t0 + 13 * k, -1.1), f(t1, 0), f(t0 + 13 * k, 1.1)]));
+    }
+    if (tool.chisel) {
+      const tipL = [], tipR = [];
+      for (const [t, rp, rq = rp] of tool.chisel) {
+        const ring = Array.from({ length: N }, (_, i) => at(t, rp, rq, (i / N) * 2 * Math.PI));
+        let lo = ring[0], hi = ring[0];
+        for (const s of ring) { if (across(s) < across(lo)) lo = s; if (across(s) > across(hi)) hi = s; }
+        tipL.push(lo); tipR.push(hi);
+      }
+      tool.mark.setAttribute("d", poly([...tipL, ...tipR.reverse()]));
     }
   }
 

@@ -11,7 +11,7 @@
     stroke: var(--accent);
 }
 
-.marker :global(.mark) {
+.illustration :global(.mark) {
     fill: var(--annotation-highlight);
     stroke: var(--annotation-highlight);
 }

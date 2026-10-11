@@ -11,7 +11,7 @@ import { useInkShow } from "./InkShow";
 
 function BrandIcon({ d }: { d: string }) {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="size-5 fill-current">
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="size-4 fill-current">
       <path d={d} />
     </svg>
   );
@@ -37,13 +37,6 @@ const LINKS: { label: string; href: string; icon: ReactNode }[] = [
     href: "https://x.com/USERNAME",
     icon: (
       <BrandIcon d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
-    ),
-  },
-  {
-    label: "Email",
-    href: "mailto:r.ventura.dev@gmail.com",
-    icon: (
-      <BrandIcon d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />
     ),
   },
 ];
@@ -106,7 +99,7 @@ export function Footer() {
           className="absolute inset-0 size-full"
         />
       </div>
-      <div className="relative mt-auto flex flex-col items-center gap-3 pt-10 sm:block sm:pt-0.5">
+      <div className="relative mt-auto flex flex-col items-center gap-3 pt-10 sm:block sm:pt-0.5 translate-1">
         <Annotation type="bracket" as="div" brackets={isSm ? "right" : "top"}>
           <ul className="flex items-center gap-1">
             {LINKS.map(({ label, href, icon }) => (
@@ -123,8 +116,8 @@ export function Footer() {
             ))}
           </ul>
         </Annotation>
-        <span className="order-first -rotate-3 font-handwriting sm:absolute sm:top-1/2 sm:left-full sm:ml-4 sm:-translate-y-1/2 text-2xl whitespace-nowrap text-accent">
-          contattami
+        <span className="order-first font-handwriting sm:absolute sm:top-1/2 sm:left-full sm:ml-4 sm:-translate-y-1/2 text-lg whitespace-nowrap text-accent">
+          Let&apos;s connect!
         </span>
       </div>
     </footer>
