@@ -154,6 +154,64 @@ function inView(element: Element) {
   );
 }
 
+/** The whole mark sits in the viewport, so the pen can draw it on screen. */
+function readyToDraw(element: Element) {
+  const box = element.getBoundingClientRect();
+  const slop = 4;
+  return (
+    box.width > 0 &&
+    box.height > 0 &&
+    box.top >= -slop &&
+    box.bottom <= window.innerHeight + slop &&
+    box.left < window.innerWidth &&
+    box.right > 0
+  );
+}
+
+function aboveView(element: Element) {
+  return element.getBoundingClientRect().bottom < 0;
+}
+
+function whenDrawable(element: Element, signal: AbortSignal) {
+  const state = () => {
+    if (signal.aborted) return "abort" as const;
+    if (readyToDraw(element)) return "draw" as const;
+    if (aboveView(element)) return "pass" as const;
+    return null;
+  };
+  const now = state();
+  if (now === "draw" || now === "pass") return Promise.resolve(now);
+  if (now === "abort") return Promise.reject(abortError());
+
+  return new Promise<"draw" | "pass">((resolve, reject) => {
+    let settled = false;
+    const finish = (next: "draw" | "pass" | "abort") => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      if (next === "abort") reject(abortError());
+      else resolve(next);
+    };
+    const check = () => {
+      const next = state();
+      if (next) finish(next);
+    };
+    const onAbort = () => finish("abort");
+    const cleanup = () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+      window.visualViewport?.removeEventListener("resize", check);
+      window.visualViewport?.removeEventListener("scroll", check);
+      signal.removeEventListener("abort", onAbort);
+    };
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    window.visualViewport?.addEventListener("resize", check);
+    window.visualViewport?.addEventListener("scroll", check);
+    signal.addEventListener("abort", onAbort, { once: true });
+  });
+}
+
 /**
  * rough-notation inserts the svg right before a highlight and right after
  * anything else. Looking on both sides would pick up the previous sibling's
@@ -259,21 +317,25 @@ function readingOrder(a: InkEntry, b: InkEntry) {
 async function fly(
   cursor: Cursor,
   from: Point,
-  to: Point,
+  to: Point | (() => Point | null),
   msTravel: number,
   signal: AbortSignal,
 ) {
+  const sample = () => (typeof to === "function" ? to() : to);
+  let end = sample() ?? from;
   await animate(msTravel, signal, (t) => {
+    const next = sample();
+    if (next) end = next;
     const e = smoothstep(t);
     cursor.place(
       {
-        x: from.x + (to.x - from.x) * e,
-        y: from.y + (to.y - from.y) * e,
+        x: from.x + (end.x - from.x) * e,
+        y: from.y + (end.y - from.y) * e,
       },
-      cursor.turn(from, to, true),
+      cursor.turn(from, end, true),
     );
   });
-  return to;
+  return end;
 }
 
 function heldPaths(entry: InkEntry) {
@@ -418,6 +480,142 @@ export function InkShow({ children }: { children: ReactNode }) {
   );
 }
 
+type Grip = "hand" | "cup" | "entrance" | "fail";
+
+/**
+ * The page is taller than the screen. Draw marks already in view, then each
+ * one that scrolls in. The pen enters from below when the cup is off-screen.
+ */
+async function playScrolled(
+  signal: AbortSignal,
+  entries: InkEntry[],
+  figure: InkFigure,
+  writers: Writers,
+  figureRef: RefObject<InkFigure | null>,
+) {
+  const cursor = cursorFor(writers);
+  let held: ToolName | null = null;
+  let pos: Point | null = null;
+  let borrowed = false;
+
+  const cupVisible = () => {
+    const pot = document.querySelector("[data-hairline='portapenne']");
+    if (!pot) return false;
+    const box = pot.getBoundingClientRect();
+    const visible = Math.min(box.bottom, window.innerHeight) - Math.max(box.top, 0);
+    return visible > Math.min(box.height, window.innerHeight) * 0.45;
+  };
+
+  const offstage = (near: Point): Point => ({
+    x: Math.min(window.innerWidth - 32, Math.max(32, near.x)),
+    y: window.innerHeight + 40,
+  });
+
+  async function putAway() {
+    if (!held) {
+      cursor.hide();
+      return;
+    }
+    const tool = held;
+    try {
+      if (pos && !signal.aborted) {
+        const back = borrowed && cupVisible() ? figure.tip(tool) : null;
+        await fly(cursor, pos, back ?? offstage(pos), TRAVEL_MS, signal);
+      }
+    } finally {
+      if (borrowed) figure.hide(tool, false);
+      cursor.hide();
+      figure.lift(null);
+      borrowed = false;
+      pos = null;
+      held = null;
+    }
+  }
+
+  async function take(tool: ToolName): Promise<Grip> {
+    if (held !== tool) await putAway();
+    held = tool;
+    if (pos) return "hand";
+    if (!cupVisible()) return "entrance";
+
+    figure.lift(tool);
+    await sleep(LIFT_MS, signal);
+    const start = figure.tip(tool);
+    if (!start) return "fail";
+    figure.hide(tool, true);
+    borrowed = true;
+    cursor.show(tool);
+    cursor.place(start, LIFT_OFF);
+    pos = start;
+    return "cup";
+  }
+
+  try {
+    for (const entry of entries) {
+      if (aboveView(entry.element)) {
+        revealAnnotations([entry]);
+        continue;
+      }
+      if (!readyToDraw(entry.element)) {
+        await putAway();
+        const gate = await whenDrawable(entry.element, signal);
+        if (gate === "pass") {
+          revealAnnotations([entry]);
+          continue;
+        }
+      }
+
+      const grip = await take(toolFor(entry.type));
+      if (grip === "fail") {
+        for (const rest of entries) {
+          if (!rest.annotation.isShowing()) revealAnnotations([rest]);
+        }
+        return;
+      }
+
+      entry.annotation.animate = false;
+      entry.annotation.show();
+      let paths = heldPaths(entry);
+      silenceRunning(entry, entries);
+
+      const originNow = () => (paths[0] ? pointOn(paths[0], 0) : null);
+      const origin = originNow();
+      if (origin && grip === "entrance") {
+        const from = offstage(origin);
+        cursor.show(toolFor(entry.type));
+        cursor.place(from, LIFT_OFF);
+        pos = await fly(cursor, from, originNow, TRAVEL_MS, signal);
+      } else if (origin && pos) {
+        pos = await fly(cursor, pos, originNow, grip === "hand" ? HOP_MS : TRAVEL_MS, signal);
+      }
+
+      const duration = entry.annotation.animationDuration ?? 500;
+      entry.element.style.setProperty("--annotation-delay", "0ms");
+      entry.element.style.setProperty("--annotation-duration", `${duration}ms`);
+      entry.element.dataset.annotated = "true";
+
+      paths = heldPaths(entry);
+      const end = await trace(cursor, paths, duration, signal);
+      if (end) pos = end;
+    }
+
+    await putAway();
+  } catch (error) {
+    if (isAbort(error)) return;
+    for (const entry of entries) {
+      if (!entry.annotation.isShowing()) revealAnnotations([entry]);
+    }
+    throw error;
+  } finally {
+    cursor.hide();
+    const current = figureRef.current;
+    if (held && current) {
+      current.hide(held, false);
+      current.lift(null);
+    }
+  }
+}
+
 async function play(
   signal: AbortSignal,
   entriesRef: RefObject<InkEntry[]>,
@@ -449,8 +647,14 @@ async function play(
   const together = Boolean(fits && pot && text && inView(pot) && inView(text));
 
   if (!entries.length) return;
-  if (reduce || !figure || !writers || !together) {
+  if (reduce || !figure || !writers) {
     for (const entry of entries) revealAnnotations([entry]);
+    return;
+  }
+  // Cup and first mark share the screen, so the pen can leave the cup.
+  // Otherwise it flies in from below and draws each mark as it reaches the viewport.
+  if (!together) {
+    await playScrolled(signal, entries, figure, writers, figureRef);
     return;
   }
 
