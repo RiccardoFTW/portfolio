@@ -40,8 +40,8 @@ export default async function LabItemPage({
     <main className="bg-(--canvas) text-(--text)">
       <article className="mx-auto flex w-full max-w-xl flex-col px-6 pt-10 pb-20">
         <Link
-          href="/#lab"
-          aria-label="Torna alla home"
+          href="/lab"
+          aria-label="Torna agli esperimenti"
           className="mb-6 inline-flex size-10 items-center justify-center text-text outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           <svg

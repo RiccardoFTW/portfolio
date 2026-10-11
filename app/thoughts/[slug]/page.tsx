@@ -45,10 +45,10 @@ export default async function ThoughtPage({
     <main className="bg-(--canvas) text-(--text)">
       <article className="mx-auto w-full max-w-2xl px-6 pt-10 pb-20 sm:pt-16">
         <Link
-          href="/#thoughts"
+          href="/thoughts"
           className="inline-flex min-h-11 items-center text-sm font-medium text-(--accent) underline decoration-1 underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-(--accent) focus-visible:ring-offset-2 focus-visible:ring-offset-(--canvas) pointer-fine:hover:text-(--text)"
         >
-          ← Torna ai Thoughts
+          ← Torna alle riflessioni
         </Link>
 
         <header className="mt-14">

@@ -1,6 +1,10 @@
+import Link from "next/link";
 import { Annotation } from "@/components/Annotation";
 import { Highlight } from "@/components/best-practices/Highlight";
 import { Footer } from "@/components/Footer";
+
+const inkLink =
+  "rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 export default function HomePage() {
   return (
@@ -25,7 +29,7 @@ export default function HomePage() {
               po&apos; come la felicità, che troviamo nelle piccole cose.<br />
               Mi piace progettare e sviluppare <Highlight>componenti UI</Highlight> e <Highlight>interfacce</Highlight>, esplorando il punto d&apos;incontro tra design e tecnologia. Dedico particolare attenzione alle <Annotation type="circle" padding={7} className="whitespace-nowrap">micro-interazioni</Annotation>, all&apos;<Annotation type="circle" padding={7} className="whitespace-nowrap">accessibilità</Annotation> e a tutti quei piccoli accorgimenti che rendono un&apos;interfaccia intuitiva e piacevole da utilizzare.<br />
               Nel mio piccolo, cerco di contribuire a rendere Internet un posto migliore.<br />
-              In questo spazio condivido i miei <Annotation iterations={2} className="whitespace-nowrap">esperimenti</Annotation>, ciò che imparo lungo il percorso, <Annotation iterations={2} className="whitespace-nowrap">buone pratiche</Annotation> e <Annotation iterations={2} className="whitespace-nowrap">riflessioni personali</Annotation> sul mondo del design e dello sviluppo.
+              In questo spazio condivido i miei <Annotation iterations={2} className="whitespace-nowrap"><Link href="/lab" className={inkLink}>esperimenti</Link></Annotation>, ciò che imparo lungo il percorso, <Annotation iterations={2} className="whitespace-nowrap"><Link href="/best-practices" className={inkLink}>buone pratiche</Link></Annotation> e <Annotation iterations={2} className="whitespace-nowrap"><Link href="/thoughts" className={inkLink}>riflessioni personali</Link></Annotation> sul mondo del design e dello sviluppo.
             </p>
           </section>
         </section>
