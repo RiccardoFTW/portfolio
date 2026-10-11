@@ -154,13 +154,19 @@ function inView(element: Element) {
   );
 }
 
-function annotationSvg(element: HTMLElement) {
-  for (const node of [element.previousElementSibling, element.nextElementSibling]) {
-    if (node instanceof SVGSVGElement && node.classList.contains("rough-annotation")) {
-      return node;
-    }
-  }
-  return null;
+/**
+ * rough-notation inserts the svg right before a highlight and right after
+ * anything else. Looking on both sides would pick up the previous sibling's
+ * svg when two annotations sit in the same paragraph.
+ */
+function annotationSvg({ element, type }: InkEntry) {
+  const node =
+    type === "highlight"
+      ? element.previousElementSibling
+      : element.nextElementSibling;
+  return node instanceof SVGSVGElement && node.classList.contains("rough-annotation")
+    ? node
+    : null;
 }
 
 function pointOn(path: SVGPathElement, length: number): Point | null {
@@ -270,21 +276,19 @@ async function fly(
   return to;
 }
 
-function heldPaths(element: HTMLElement) {
-  const svg = annotationSvg(element);
+function heldPaths(entry: InkEntry) {
+  const svg = annotationSvg(entry);
   const paths = svg ? [...svg.querySelectorAll("path")] : [];
   for (const path of paths) holdStroke(path);
   return paths;
 }
 
 /** A stroke the pen has not reached yet must stay hidden, even if the library started it. */
-function silenceRunning(current: HTMLElement) {
-  for (const svg of document.querySelectorAll("svg.rough-annotation")) {
-    const host =
-      svg.previousElementSibling instanceof HTMLElement
-        ? svg.previousElementSibling
-        : svg.nextElementSibling;
-    if (host === current) continue;
+function silenceRunning(current: InkEntry, entries: InkEntry[]) {
+  for (const entry of entries) {
+    if (entry === current) continue;
+    const svg = annotationSvg(entry);
+    if (!svg) continue;
     for (const path of svg.querySelectorAll("path")) {
       if (path.style.animationName === "rough-notation-dash") holdStroke(path);
     }
@@ -486,12 +490,8 @@ async function play(
 
       entry.annotation.animate = false;
       entry.annotation.show();
-      let paths = heldPaths(entry.element);
-      silenceRunning(entry.element);
-      const seq = ((window as unknown as { __seq?: string[] }).__seq ??= []);
-      seq.push(
-        `show ${entry.element.textContent?.trim().slice(0, 24)} paths=${paths.length} anim=${paths[0]?.style.animationName || "none"} off=${paths[0]?.style.strokeDashoffset ? "set" : "empty"}`,
-      );
+      let paths = heldPaths(entry);
+      silenceRunning(entry, entries);
 
       const origin = paths[0] ? pointOn(paths[0], 0) : null;
       if (origin && pos) {
@@ -504,7 +504,7 @@ async function play(
       entry.element.style.setProperty("--annotation-duration", `${duration}ms`);
       entry.element.dataset.annotated = "true";
 
-      paths = heldPaths(entry.element);
+      paths = heldPaths(entry);
       const end = await trace(cursor, paths, duration, signal);
       if (end) pos = end;
     }
