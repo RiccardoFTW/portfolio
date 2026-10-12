@@ -134,6 +134,35 @@ svg.rough-annotation {
   height: 1px !important;
 }
 
+.ink-marker {
+  /* Marker wash: uneven gradient, cloned across wrapped lines. */
+  --color: var(--annotation-highlight);
+  margin: var(--marker-margin);
+  padding: var(--marker-padding);
+  border-radius: var(--marker-radius);
+  background-image: var(--marker-image);
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 0% 100%;
+  background-color: transparent;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition-property: background-size;
+  transition-duration: var(--annotation-duration, 350ms);
+  transition-delay: var(--annotation-delay, 0ms);
+  transition-timing-function: ease-out;
+}
+
+.ink-marker[data-annotated="true"] {
+  background-size: 100% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-marker {
+    transition: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

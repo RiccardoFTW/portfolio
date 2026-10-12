@@ -1,17 +1,16 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { annotate } from "rough-notation";
 import type { BracketType } from "rough-notation/lib/model";
-import {
-  revealAnnotations,
-  useAnnotationGroup,
-} from "./AnnotationGroup";
+import { useAnnotationGroup } from "./AnnotationGroup";
+import { revealAnnotations } from "./revealAnnotations";
 import { useInkShow } from "./InkShow";
 
 type AnnotationProps = {
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
   type?: "underline" | "box" | "circle" | "highlight" | "bracket";
   color?: string;
   padding?: number;
@@ -27,6 +26,7 @@ type AnnotationProps = {
 export function Annotation({
   children,
   className,
+  style,
   type = "underline",
   color = "var(--accent)",
   animate = true,
@@ -63,8 +63,9 @@ export function Annotation({
       type === "highlight"
         ? element.previousElementSibling
         : element.nextElementSibling;
-    if (svg?.classList.contains("rough-annotation")) {
+    if (svg instanceof SVGElement && svg.classList.contains("rough-annotation")) {
       svg.setAttribute("aria-hidden", "true");
+      if (type === "highlight") svg.style.opacity = "0";
     }
 
     const entry = { element, annotation };
@@ -101,6 +102,7 @@ export function Annotation({
           elementRef.current = node;
         }}
         className={className}
+        style={style}
       >
         {children}
       </div>
@@ -113,6 +115,7 @@ export function Annotation({
         elementRef.current = node;
       }}
       className={`inline ${className ?? ""}`}
+      style={style}
     >
       {children}
     </span>

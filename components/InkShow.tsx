@@ -7,12 +7,15 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
   type ReactNode,
   type RefObject,
 } from "react";
+import { AnimatePresence, LazyMotion, domAnimation, useReducedMotion } from "motion/react";
+import * as m from "motion/react-m";
 import { usePathname } from "next/navigation";
 import type { RoughAnnotation } from "rough-notation/lib/model";
-import { revealAnnotations } from "./AnnotationGroup";
+import { revealAnnotations } from "./revealAnnotations";
 import { createEvidenziatore } from "./best-practices/hairline/evidenziatore";
 import { createStilografica } from "./best-practices/hairline/stilografica";
 import styles from "./best-practices/hairline/ChapterIllustration.module.css";
@@ -34,6 +37,8 @@ export type InkFigure = {
 type InkController = {
   register: (entry: InkEntry) => () => void;
   bind: (figure: InkFigure | null) => void;
+  /** Draw the marks. No-ops while a pass is already running. */
+  start: () => void;
 };
 
 const InkShowContext = createContext<InkController | null>(null);
@@ -397,6 +402,25 @@ async function trace(
   return last;
 }
 
+function EraserIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="size-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21" />
+      <path d="M22 21H7" />
+      <path d="m5 11 9 9" />
+    </svg>
+  );
+}
+
 export function InkShow({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const hold = pathname === "/";
@@ -407,6 +431,10 @@ export function InkShow({ children }: { children: ReactNode }) {
   const penSvgRef = useRef<SVGSVGElement>(null);
   const markStageRef = useRef<HTMLDivElement>(null);
   const markSvgRef = useRef<SVGSVGElement>(null);
+  const runRef = useRef<AbortController | null>(null);
+  const playingRef = useRef(false);
+  const [started, setStarted] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   const register = useCallback((entry: InkEntry) => {
     entriesRef.current.push(entry);
@@ -419,7 +447,45 @@ export function InkShow({ children }: { children: ReactNode }) {
     figureRef.current = figure;
   }, []);
 
-  const controller = useMemo(() => ({ register, bind }), [register, bind]);
+  const erase = useCallback(() => {
+    runRef.current?.abort();
+    for (const entry of entriesRef.current) {
+      if (entry.annotation.isShowing()) entry.annotation.hide();
+      delete entry.element.dataset.annotated;
+    }
+    setStarted(false);
+  }, []);
+
+  const start = useCallback(() => {
+    if (playingRef.current) return;
+    const pending = entriesRef.current.some((entry) => !entry.annotation.isShowing());
+    if (!pending) return;
+
+    runRef.current?.abort();
+    const run = new AbortController();
+    runRef.current = run;
+    playingRef.current = true;
+    setStarted(true);
+
+    void play(run.signal, entriesRef, figureRef, writersRef)
+      .catch((error) => {
+        if (!isAbort(error)) throw error;
+      })
+      .finally(() => {
+        playingRef.current = false;
+        if (runRef.current === run) runRef.current = null;
+        if (run.signal.aborted) return;
+        const drawn = entriesRef.current.some(
+          (entry) => entry.annotation.isShowing() || entry.element.dataset.annotated === "true",
+        );
+        if (!drawn) setStarted(false);
+      });
+  }, []);
+
+  const controller = useMemo(
+    () => ({ register, bind, start }),
+    [register, bind, start],
+  );
 
   useEffect(() => {
     if (!hold) return;
@@ -443,14 +509,9 @@ export function InkShow({ children }: { children: ReactNode }) {
   }, [hold]);
 
   useEffect(() => {
-    if (!hold) return;
-    const signal = new AbortController();
-
-    void play(signal.signal, entriesRef, figureRef, writersRef).catch((error) => {
-      if (!isAbort(error)) throw error;
-    });
-
-    return () => signal.abort();
+    if (hold) return;
+    runRef.current?.abort();
+    setStarted(false);
   }, [hold]);
 
   return (
@@ -476,6 +537,33 @@ export function InkShow({ children }: { children: ReactNode }) {
           </div>
         </>
       ) : null}
+      <LazyMotion features={domAnimation}>
+        <AnimatePresence>
+          {hold && started ? (
+            <m.div
+              key="eraser"
+              className="fixed top-14 z-40 right-[calc(max(var(--page-padding-inline),(100vw-var(--page-max-width))/2+var(--page-padding-inline))-0.75rem)]"
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.25, filter: "blur(4px)" }}
+              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.25, filter: "blur(4px)" }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { type: "spring", duration: 0.3, bounce: 0 }
+              }
+            >
+              <button
+                type="button"
+                aria-label="Cancella le annotazioni"
+                onClick={erase}
+                className="grid size-10 place-items-center rounded-full text-text transition-[color,background-color,scale] duration-150 ease-out pointer-fine:hover:bg-inset pointer-fine:hover:text-foreground active:scale-[0.96] motion-reduce:transition-[color,background-color] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              >
+                <EraserIcon />
+              </button>
+            </m.div>
+          ) : null}
+        </AnimatePresence>
+      </LazyMotion>
     </InkShowContext.Provider>
   );
 }

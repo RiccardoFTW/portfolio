@@ -10,6 +10,6 @@ export type PortapenneFigure = {
 };
 
 export function createPortapenne(
-  stage: HTMLDivElement,
+  stage: HTMLElement,
   svg: SVGSVGElement,
 ): PortapenneFigure;

@@ -60,7 +60,7 @@ function useIsSm() {
 export function Footer() {
   const isSm = useIsSm();
   const ink = useInkShow();
-  const stageRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLButtonElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const figureRef = useRef<PortapenneFigure | null>(null);
 
@@ -87,18 +87,20 @@ export function Footer() {
   return (
     <footer className="mx-auto flex w-full flex-1 max-w-(--page-max-width) flex-col items-center px-(--page-padding-inline) pb-6 [--figure-h:min(11rem,30dvh)] sm:[--figure-h:min(15rem,30dvh)]">
       {/* The figure leaves room above for a lifted tool, so its box overlaps what sits above and below it. */}
-      <div
+      <button
+        type="button"
         ref={stageRef}
-        aria-hidden="true"
         data-hairline="portapenne"
-        className={`${styles.illustration} relative mt-4 -mb-[calc(var(--figure-h)*0.1)] aspect-[5/4] h-(--figure-h)`}
+        aria-label="Disegna le annotazioni"
+        onClick={() => ink?.start()}
+        className={`${styles.illustration} relative mt-4 -mb-[calc(var(--figure-h)*0.1)] aspect-[5/4] h-(--figure-h) cursor-pointer appearance-none border-0 bg-transparent p-0 text-inherit outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent`}
       >
         <svg
           ref={svgRef}
           viewBox="0 0 400 320"
           className="absolute inset-0 size-full"
         />
-      </div>
+      </button>
       <div className="relative mt-auto flex flex-col items-center gap-3 pt-10 sm:block sm:pt-0.5 translate-1">
         <Annotation type="bracket" as="div" brackets={isSm ? "right" : "top"}>
           <ul className="flex items-center gap-1">

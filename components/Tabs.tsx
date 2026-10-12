@@ -3,6 +3,7 @@
 import { type KeyboardEvent, useCallback, useLayoutEffect, useRef, useState } from "react";
 import {
   LazyMotion,
+  animate,
   domAnimation,
   m,
   useMotionTemplate,
@@ -19,6 +20,13 @@ const tabs = [
   { id: "components", label: "Components" },
   { id: "blog", label: "Blog" },
 ] as const;
+
+const indicatorTransition = {
+  type: "spring",
+  stiffness: 420,
+  damping: 34,
+  mass: 0.8,
+} as const;
 
 export type TabId = (typeof tabs)[number]["id"];
 
@@ -37,11 +45,19 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
   const activeTabRef = useRef<HTMLButtonElement | null>(null);
   const shouldFocusActiveTabRef = useRef(false);
   const x = useMotionValue(0);
+  const widthMv = useMotionValue(0);
+  const targetWidth = useMotionValue(0);
   const velocity = useVelocity(x);
   const scaleX = useTransform(velocity, [-1200, 0, 1200], [1.8, 1, 1.8]);
   const blur = useTransform(velocity, [-1200, 0, 1200], [3, 0, 3]);
   const filter = useMotionTemplate`blur(${blur}px)`;
-  const overlayContentX = useTransform(x, (latest) => -latest);
+  const widthScale = useTransform([widthMv, targetWidth], ([current, target]) =>
+    target > 0 ? current / target : 1,
+  );
+  const inverseWidthScale = useTransform(widthScale, (scale) => (scale > 0 ? 1 / scale : 1));
+  const contentX = useTransform([x, widthScale], ([position, scale]) =>
+    scale > 0 ? -position / scale : 0,
+  );
 
   const updateIndicator = useCallback(() => {
     const container = containerRef.current;
@@ -66,6 +82,24 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
       return isSamePosition && isSameWidth ? currentIndicator : nextIndicator;
     });
   }, [value]);
+
+  useLayoutEffect(() => {
+    targetWidth.set(indicator.width);
+
+    if (shouldReduceMotion || widthMv.get() === 0) {
+      x.set(indicator.x);
+      widthMv.set(indicator.width);
+      return;
+    }
+
+    const position = animate(x, indicator.x, indicatorTransition);
+    const width = animate(widthMv, indicator.width, indicatorTransition);
+
+    return () => {
+      position.stop();
+      width.stop();
+    };
+  }, [indicator.x, indicator.width, shouldReduceMotion, targetWidth, widthMv, x]);
 
   useLayoutEffect(() => {
     const container = containerRef.current;
@@ -168,28 +202,35 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
             data-tabs-overlay
             aria-hidden="true"
             initial={false}
-            animate={{ x: indicator.x, width: indicator.width }}
-            transition={
-              shouldReduceMotion
-                ? { duration: 0 }
-                : { type: "spring", stiffness: 420, damping: 34, mass: 0.8 }
-            }
             style={{
               x,
               scaleX: shouldReduceMotion ? 1 : scaleX,
               filter: shouldReduceMotion ? "blur(0px)" : filter,
             }}
-            className="pointer-events-none absolute inset-y-1 left-0 overflow-hidden rounded-(--radius-tab) bg-(--accent)"
+            className="pointer-events-none absolute inset-y-1 left-0"
           >
             <m.div
-              className="flex w-max justify-center gap-1 pl-1"
-              style={{ x: overlayContentX }}
+              style={{
+                width: indicator.width,
+                scaleX: shouldReduceMotion ? 1 : widthScale,
+                originX: 0,
+              }}
+              className="h-full overflow-hidden rounded-(--radius-tab) bg-(--accent)"
             >
-              {tabs.map((tab) => (
-                <span key={tab.id}>
-                  <Button label={tab.label} variant="overlay" as="span" />
-                </span>
-              ))}
+              <m.div
+                className="flex w-max justify-center gap-1 pl-1"
+                style={{
+                  x: contentX,
+                  scaleX: shouldReduceMotion ? 1 : inverseWidthScale,
+                  originX: 0,
+                }}
+              >
+                {tabs.map((tab) => (
+                  <span key={tab.id}>
+                    <Button label={tab.label} variant="overlay" as="span" />
+                  </span>
+                ))}
+              </m.div>
             </m.div>
           </m.div>
         </div>
