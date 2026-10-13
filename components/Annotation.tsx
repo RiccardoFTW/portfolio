@@ -18,7 +18,6 @@ type AnnotationProps = {
   animate?: boolean;
   multiline?: boolean;
   animationDuration?: number;
-  /** How many times the stroke is drawn. Underlines default to twice in the library. */
   iterations?: number;
   brackets?: BracketType | BracketType[];
 };

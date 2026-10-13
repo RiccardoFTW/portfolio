@@ -1,10 +1,3 @@
-/**
- * Evidenziatore: a highlighter lying on the desk, chisel toward screen-right,
- * the tip lifted a little off the paper. The pointer along it presses it
- * down: on the chisel it dips fully and the lip takes the bright stroke, on
- * the body it dips less and the bright moves to the body. The slider is how
- * far the full press lowers the tip, in degrees.
- */
 const { Cam, disposer, fit, mk, open, pointer, poly, proj, rad, register, tdone, tset, tval, tween } = HL;
 
 const H = [Math.SQRT1_2, -Math.SQRT1_2, 0], G = [Math.SQRT1_2, Math.SQRT1_2, 0], Z = [0, 0, 1];
@@ -18,7 +11,6 @@ const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
 const norm = (a) => mul(a, 1 / Math.hypot(a[0], a[1], a[2]));
 
-/** Pitched by `phi` degrees, tip up when phi is positive. The tail sits on the desk. */
 function pose(phi) {
   const L = norm(add(mul(H, Math.cos(rad(phi))), Z, Math.sin(rad(phi))));
   return { o: [0, 0, R], L };

@@ -51,11 +51,11 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
   const scaleX = useTransform(velocity, [-1200, 0, 1200], [1.8, 1, 1.8]);
   const blur = useTransform(velocity, [-1200, 0, 1200], [3, 0, 3]);
   const filter = useMotionTemplate`blur(${blur}px)`;
-  const widthScale = useTransform([widthMv, targetWidth], ([current, target]) =>
+  const widthScale = useTransform<number, number>([widthMv, targetWidth], ([current, target]) =>
     target > 0 ? current / target : 1,
   );
   const inverseWidthScale = useTransform(widthScale, (scale) => (scale > 0 ? 1 / scale : 1));
-  const contentX = useTransform([x, widthScale], ([position, scale]) =>
+  const contentX = useTransform<number, number>([x, widthScale], ([position, scale]) =>
     scale > 0 ? -position / scale : 0,
   );
 
