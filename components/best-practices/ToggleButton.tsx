@@ -16,13 +16,19 @@ export default function ToggleButton({
     onPressedChange,
     annotation,
 }: ToggleButtonProps) {
+    const accessibleName = annotation
+        ? label.includes(annotation.text)
+            ? label
+            : `${annotation.text} — ${label}`
+        : undefined;
+
     return (
         <button
             type="button"
             aria-pressed={pressed}
-            aria-label={annotation ? label : undefined}
+            aria-label={accessibleName}
             onClick={() => onPressedChange(!pressed)}
-            className={`group relative inline-flex cursor-pointer flex-col items-center justify-center gap-1 rounded-lg px-1.5 py-1 text-[12px] font-medium text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${annotation ? "min-h-12" : "min-h-10"}`}
+            className={`group relative inline-flex cursor-pointer flex-col items-center justify-center gap-1 rounded-lg px-1.5 py-1 text-[12px] font-medium text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink ${annotation ? "min-h-12" : "min-h-10"}`}
         >
             <span aria-hidden="true" className="toggle-track group-active:scale-[0.97]">
                 <span className="toggle-thumb">
@@ -33,7 +39,7 @@ export default function ToggleButton({
             {annotation ? (
                 <span
                     aria-hidden="true"
-                    className={`absolute top-1/2 h-8 w-13 text-accent ${annotation.side === "left"
+                    className={`absolute top-1/2 h-8 w-13 text-accent-ink ${annotation.side === "left"
                         ? "right-full mr-1"
                         : "left-full ml-1"
                     }`}

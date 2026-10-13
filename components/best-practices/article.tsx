@@ -11,7 +11,7 @@ const proseClass =
   "relative text-[16px] leading-6 text-stone-600 dark:text-stone-400";
 
 const sourceLinkClass =
-  "rounded-md px-1 font-handwriting text-xl text-accent transition-[background-color,box-shadow] duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent/4 focus-visible:shadow-[0_0_0_2px_var(--accent)] focus-visible:outline-none";
+  "rounded-md px-1 font-handwriting text-xl text-accent-ink transition-[background-color,box-shadow] duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent/4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink";
 
 function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -27,7 +27,7 @@ export function Measure({ children }: { children: ReactNode }) {
 
 export function Symbol({ children }: { children: ReactNode }) {
   return (
-    <strong className="font-handwriting text-xl leading-none text-accent">
+    <strong className="font-handwriting text-xl leading-none text-accent-ink">
       {children}
     </strong>
   );
@@ -59,7 +59,7 @@ export function ArticleTitle({
       <h2 id={id} className={headingClass}>
         {children}
       </h2>
-      <p className="flex items-center gap-1.5 text-sm font-semibold leading-none tabular-nums text-accent">
+      <p className="flex items-center gap-1.5 text-sm font-semibold leading-none tabular-nums text-accent-ink">
         <span className="grid place-items-center">
           <span className="invisible col-start-1 row-start-1" aria-hidden="true">
             {label}
@@ -112,7 +112,7 @@ export function ArticleHeading({
 
 export function FormulaCallout({ children }: { children: ReactNode }) {
   return (
-    <p className="relative p-6 text-center text-3xl font-handwriting text-accent">
+    <p className="relative p-6 text-center text-3xl font-handwriting text-accent-ink">
       <Annotation type="box" color="var(--accent)" padding={6} animationDuration={350}>
         {children}
       </Annotation>
@@ -156,7 +156,7 @@ export function DemoStage({
 
 export function SourceList({ children }: { children: ReactNode }) {
   return (
-    <ol className="list-decimal space-y-6 pl-6 text-[16px] leading-6 text-stone-600 dark:text-stone-400 marker:text-[13px] marker:font-semibold marker:text-accent">
+    <ol className="list-decimal space-y-6 pl-6 text-[16px] leading-6 text-stone-600 dark:text-stone-400 marker:text-[13px] marker:font-semibold marker:text-accent-ink">
       {children}
     </ol>
   );

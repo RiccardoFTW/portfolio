@@ -95,7 +95,7 @@ export default function ConcentricArcs() {
                     <m.path
                         d="M64 56A176 176 0 0 1 240 232"
                         fill="none"
-                        stroke="var(--accent)"
+                        stroke="var(--accent-ink)"
                         strokeWidth="4"
                         strokeLinecap="round"
                         variants={draw}
@@ -137,7 +137,7 @@ export default function ConcentricArcs() {
                     <m.path
                         d="M64 112V56"
                         fill="none"
-                        stroke="var(--accent)"
+                        stroke="var(--accent-ink)"
                         strokeWidth="5"
                         strokeLinecap="round"
                         variants={draw}
@@ -146,7 +146,7 @@ export default function ConcentricArcs() {
                     <m.path
                         d="M184 232H240"
                         fill="none"
-                        stroke="var(--accent)"
+                        stroke="var(--accent-ink)"
                         strokeWidth="5"
                         strokeLinecap="round"
                         variants={draw}

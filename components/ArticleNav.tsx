@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { domAnimation, LazyMotion, m } from "motion/react";
+import { domAnimation, LazyMotion, m, useReducedMotion } from "motion/react";
 
 const easeOut = [0.23, 1, 0.32, 1] as const;
 
@@ -10,6 +10,7 @@ type ArticleNavProps = {
 };
 
 export function ArticleNav({ sections }: ArticleNavProps) {
+  const reduceMotion = useReducedMotion();
   const [activeId, setActiveId] = useState(sections[0]?.id ?? "");
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export function ArticleNav({ sections }: ArticleNavProps) {
     <LazyMotion features={domAnimation}>
       <m.aside
         className="fixed top-24 left-6 z-10 hidden w-40 xl:block"
-        initial={{ opacity: 0, y: 6 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: easeOut, delay: 0.15 }}
       >
@@ -63,10 +64,10 @@ export function ArticleNav({ sections }: ArticleNavProps) {
                 <li key={section.id}>
                   <a
                     href={`#${section.id}`}
-                    className={`block text-sm font-medium outline-none transition-colors duration-150 focus-visible:text-accent ${
+                    className={`block rounded-sm text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink ${
                       isActive
-                        ? "text-accent"
-                        : "text-text/55 pointer-fine:hover:text-accent"
+                        ? "text-accent-ink"
+                        : "text-text pointer-fine:hover:text-accent-ink"
                     }`}
                     aria-current={isActive ? "true" : undefined}
                   >

@@ -19,11 +19,11 @@ export default function IconAlignment() {
                     <div className="flex items-center justify-center gap-6">
                         <div className="flex min-h-60 flex-col items-center justify-center gap-5 p-5">
                             <div className="relative w-fit">
-                                <span className="absolute right-full top-1/2 mr-4 -translate-y-1/2 whitespace-nowrap font-mono text-[20px] font-medium leading-none tabular-nums tracking-[-0.01em] text-accent">
+                                <span className="absolute right-full top-1/2 mr-4 -translate-y-1/2 whitespace-nowrap font-mono text-[20px] font-medium leading-none tabular-nums tracking-[-0.01em] text-accent-ink">
                                     {leftPadding}<span className="ml-1 text-[11px] font-medium text-stone-500 dark:text-stone-400">px</span>
                                 </span>
 
-                                <span className="absolute left-full top-1/2 ml-4 -translate-y-1/2 whitespace-nowrap font-mono text-[20px] font-medium leading-none tabular-nums tracking-[-0.01em] text-accent">
+                                <span className="absolute left-full top-1/2 ml-4 -translate-y-1/2 whitespace-nowrap font-mono text-[20px] font-medium leading-none tabular-nums tracking-[-0.01em] text-accent-ink">
                                     {rightPadding}<span className="ml-1 text-[11px] font-medium text-stone-500 dark:text-stone-400">px</span>
                                 </span>
                                 <div

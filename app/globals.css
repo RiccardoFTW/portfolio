@@ -5,7 +5,10 @@
   --background: oklch(0.985 0.001 286.376);
   --surface: oklch(1 0 0);
   --inset: oklch(0.979 0.002 247.839);
-  --toggle-track-off: var(--inset);
+  --toggle-track-off: oklch(0.55 0.007 264.474);
+  --toggle-track-on: var(--accent-ink);
+  /* Instructional contours need more contrast than decorative borders. */
+  --demo-edge: oklch(0.55 0.007 264.474);
 
   /* Text */
   --foreground: oklch(0.247 0.006 258.361);
@@ -15,14 +18,28 @@
   --border: oklch(0.946 0.003 264.542);
   --border-strong: oklch(0.912 0.005 258.326);
 
+  /* Contact menu foundation from the supplied tokens. */
+  --ink: var(--foreground);
+  --ink-2: var(--text);
+  --line: var(--border);
+  --line-strong: var(--border-strong);
+  --hover: oklch(0.97 0.002 247.839);
+  --shadow-btn: 0 0 0 1px var(--line-strong), 0 1px 2px rgb(0 0 0 / 0.05);
+  --shadow-overlay:
+    0 0 0 1px var(--line),
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+
   /* Accent and feedback */
   --accent: oklch(0.669 0.184 248.807);
-  --accent-ink: oklch(0.556 0.187 255.617);
+  --accent-ink: oklch(0.51 0.17 255.617);
   --accent-tint: oklch(0.96 0.019 252.878);
   --annotation-highlight: oklch(0.94 0.08 101);
   --success: oklch(0.603 0.155 150.883);
+  --success-ink: oklch(0.5 0.13 150.883);
   --success-surface: oklch(0.958 0.017 159.118);
   --danger: oklch(0.621 0.192 23.042);
+  --danger-ink: oklch(0.52 0.17 23.042);
   --danger-surface: oklch(0.956 0.017 17.462);
 
   /* Syntax colors for code examples, grouped by the role each token plays. */
@@ -77,12 +94,25 @@
   --color-border-strong: var(--border-strong);
   --color-surface: var(--surface);
   --color-inset: var(--inset);
+  --color-demo-edge: var(--demo-edge);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-hover: var(--hover);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --shadow-btn: var(--shadow-btn);
+  --shadow-overlay: var(--shadow-overlay);
+  --radius-control: 8px;
+  --radius-window: 14px;
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
   --color-accent-tint: var(--accent-tint);
   --color-success: var(--success);
+  --color-success-ink: var(--success-ink);
   --color-success-surface: var(--success-surface);
   --color-danger: var(--danger);
+  --color-danger-ink: var(--danger-ink);
   --color-danger-surface: var(--danger-surface);
   --shadow-card: var(--card-shadow);
 }
@@ -93,18 +123,26 @@
     --canvas: var(--background);
     --surface: oklch(0.26 0.006 271.191);
     --inset: oklch(0.243 0.004 264.492);
-    --toggle-track-off: oklch(0.55 0.007 264.474);
+    --toggle-track-off: oklch(0.62 0.007 264.474);
+    --toggle-track-on: var(--accent);
+    --demo-edge: oklch(0.62 0.007 264.474);
     --foreground: oklch(0.964 0.002 247.839);
     --text: oklch(0.731 0.008 260.731);
     --border: oklch(0.308 0.006 258.354);
     --border-strong: oklch(0.356 0.007 264.474);
+    --hover: oklch(0.289 0.006 271.22);
+    --shadow-btn: 0 0 0 1px oklch(1 0 0 / 0.1), 0 1px 2px oklch(0 0 0 / 0.3);
+    --shadow-overlay:
+      0 0 0 1px oklch(1 0 0 / 0.15), 0 8px 28px oklch(0 0 0 / 0.34);
     --accent: oklch(0.68 0.173 253.301);
     --accent-ink: oklch(0.788 0.113 248.33);
     --accent-tint: oklch(0.68 0.173 253.301 / 0.16);
-    --annotation-highlight: oklch(0.84 0.11 98);
+    --annotation-highlight: oklch(0.32 0.05 98);
     --success: oklch(0.705 0.154 153.814);
+    --success-ink: var(--success);
     --success-surface: oklch(0.705 0.154 153.814 / 0.14);
     --danger: oklch(0.666 0.18 21.433);
+    --danger-ink: var(--danger);
     --danger-surface: oklch(0.666 0.18 21.433 / 0.14);
 
     --code-keyword: oklch(0.78 0.17 300);
@@ -191,7 +229,7 @@ body {
 }
 
 button[aria-pressed="true"] .toggle-track {
-  background: var(--accent);
+  background: var(--toggle-track-on);
 }
 
 .toggle-thumb {

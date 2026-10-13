@@ -46,7 +46,7 @@ export default async function BestPracticePage({
         <Link
           href="/best-practices"
           aria-label="Torna alle buone pratiche"
-          className="mb-2 inline-flex size-10 items-center justify-center text-text outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent xl:fixed xl:top-8 xl:left-6 xl:z-10 xl:mb-0"
+          className="mb-2 inline-flex size-10 items-center justify-center text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent xl:fixed xl:top-8 xl:left-6 xl:z-10 xl:mb-0"
         >
           <svg
             viewBox="0 0 24 24"

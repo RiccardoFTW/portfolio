@@ -4,7 +4,7 @@ export function FootnoteRef({ href, n }: { href: string; n: number }) {
             <a
                 href={href}
                 aria-label={`Fonte ${n}`}
-                className="rounded-sm px-px text-accent transition-[background-color,box-shadow] duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent/8 focus-visible:shadow-[0_0_0_2px_var(--accent)] focus-visible:outline-none"
+                className="rounded-sm px-px text-accent-ink transition-[background-color,box-shadow] duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink"
             >
                 {n}
             </a>

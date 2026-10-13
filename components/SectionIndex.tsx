@@ -23,7 +23,7 @@ export function SectionIndex({
         <hgroup className="flex flex-col tracking-[-0.5]">
           <Link
             href="/"
-            className="font-sans text-lg leading-6 text-zinc-300 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="font-sans text-lg leading-6 text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink"
           >
             Riccardo Ventura
           </Link>

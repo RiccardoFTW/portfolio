@@ -66,21 +66,21 @@ function ConcentricRadiusProblem() {
             <div className="flex min-h-64 flex-col items-center justify-center gap-6 p-6">
               <div
                 aria-hidden="true"
-                className="size-36 rounded-xl bg-inset p-2 ring-1 ring-border"
+                className="size-36 rounded-xl bg-inset p-2 ring-1 ring-demo-edge"
               >
-                <div className="size-full rounded-xl bg-surface" />
+                <div className="size-full rounded-xl bg-surface inset-ring-1 inset-ring-demo-edge" />
               </div>
-              <p className="text-sm font-medium text-danger">Sbagliato</p>
+              <p className="text-sm font-medium text-danger-ink">Sbagliato</p>
             </div>
 
             <div className="flex min-h-64 flex-col items-center justify-center gap-6 p-6">
               <div
                 aria-hidden="true"
-                className="size-36 rounded-[20px] bg-inset p-2 ring-1 ring-border"
+                className="size-36 rounded-[20px] bg-inset p-2 ring-1 ring-demo-edge"
               >
-                <div className="size-full rounded-xl bg-surface" />
+                <div className="size-full rounded-xl bg-surface inset-ring-1 inset-ring-demo-edge" />
               </div>
-              <p className="text-sm font-medium text-success">Giusto</p>
+              <p className="text-sm font-medium text-success-ink">Giusto</p>
             </div>
           </div>
         </DemoSurface>
@@ -158,7 +158,7 @@ function ConcentricRadiusFormula() {
         className="divide-y divide-black/8 dark:divide-white/8"
       >
         <div className="grid grid-cols-[2.75rem_1fr] items-center gap-3 px-4 py-3">
-          <dt className="font-handwriting text-2xl leading-none text-accent">
+          <dt className="font-handwriting text-2xl leading-none text-accent-ink">
             <strong>R</strong>
           </dt>
           <dd className="text-[14px] leading-5 tracking-[-0.005em] text-stone-600 dark:text-stone-400">
@@ -167,7 +167,7 @@ function ConcentricRadiusFormula() {
         </div>
 
         <div className="grid grid-cols-[2.75rem_1fr] items-center gap-3 px-4 py-3">
-          <dt className="font-handwriting text-2xl leading-none text-accent">
+          <dt className="font-handwriting text-2xl leading-none text-accent-ink">
             <strong>r</strong>
           </dt>
           <dd className="text-[14px] leading-5 tracking-[-0.005em] text-stone-600 dark:text-stone-400">
@@ -176,7 +176,7 @@ function ConcentricRadiusFormula() {
         </div>
 
         <div className="grid grid-cols-[2.75rem_1fr] items-center gap-3 px-4 py-3">
-          <dt className="font-handwriting text-2xl leading-none text-accent">
+          <dt className="font-handwriting text-2xl leading-none text-accent-ink">
             <Annotation
               type="circle"
               color="var(--accent)"
@@ -194,7 +194,7 @@ function ConcentricRadiusFormula() {
 
       <DemoSurface className="grid grid-cols-3 divide-x divide-black/8 dark:divide-white/8">
         <p className="px-4 py-3">
-          <span className="block font-handwriting text-2xl leading-none text-accent">
+          <span className="block font-handwriting text-2xl leading-none text-accent-ink">
             R
           </span>
           <span className="mt-1 block font-mono text-[20px] font-medium leading-none tabular-nums tracking-[-0.01em] text-foreground">
@@ -205,7 +205,7 @@ function ConcentricRadiusFormula() {
           </span>
         </p>
         <p className="px-4 py-3">
-          <span className="block font-handwriting text-2xl leading-none text-accent">
+          <span className="block font-handwriting text-2xl leading-none text-accent-ink">
             g
           </span>
           <span className="mt-1 block font-mono text-[20px] font-medium leading-none tabular-nums tracking-[-0.01em] text-foreground">
@@ -216,7 +216,7 @@ function ConcentricRadiusFormula() {
           </span>
         </p>
         <p className="px-4 py-3">
-          <span className="block font-handwriting text-2xl leading-none text-accent">
+          <span className="block font-handwriting text-2xl leading-none text-accent-ink">
             r
           </span>
           <span className="mt-1 block font-mono text-[20px] font-medium leading-none tabular-nums tracking-[-0.01em] text-foreground">

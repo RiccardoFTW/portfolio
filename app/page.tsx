@@ -4,7 +4,7 @@ import { Highlight } from "@/components/best-practices/Highlight";
 import { Footer } from "@/components/Footer";
 
 const inkLink =
-  "rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+  "rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink";
 
 export default function HomePage() {
   return (
@@ -12,7 +12,7 @@ export default function HomePage() {
       <main className="bg-background text-text">
         <section className="mx-auto w-full max-w-(--page-max-width) px-(--page-padding-inline) pt-16 pb-6 tracking-[-0.5]">
           <hgroup className="flex flex-col">
-            <h1 className="font-sans text-lg text-zinc-300 leading-6">
+            <h1 className="font-sans text-lg text-foreground leading-6">
               Riccardo Ventura
             </h1>
             <p className="text-body">Design Engineer</p>

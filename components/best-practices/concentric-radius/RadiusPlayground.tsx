@@ -23,7 +23,7 @@ function RadiusControl({ label, value, min, max, onChange }: RadiusControlProps)
             </div>
             <input
                 id={id}
-                className="w-full accent-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                className="w-full accent-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink"
                 type="range"
                 min={min}
                 max={max}

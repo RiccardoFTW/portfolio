@@ -20,8 +20,8 @@ export default function SidebarAlignment() {
     const [showGuides, setShowGuides] = useState(false);
     const guideVisibility = showGuides ? "opacity-100" : "opacity-0";
     const guideBoxClass = showGuides
-        ? "bg-accent-tint ring-1 ring-inset ring-accent/60"
-        : "bg-transparent ring-1 ring-inset ring-transparent";
+        ? "bg-accent-tint inset-ring-1 inset-ring-accent-ink"
+        : "bg-transparent inset-ring-1 inset-ring-transparent";
 
     return (
         <figure className="mb-16">
@@ -59,17 +59,17 @@ export default function SidebarAlignment() {
                     <div className={`pointer-events-none absolute inset-x-0 top-[64px] z-10 grid gap-2 [transition:opacity_150ms_cubic-bezier(0.23,1,0.32,1)] sm:top-[84px] ${guideVisibility}`}>
                         {navigationItems.map(({ label }) => (
                             <div key={label} className="relative h-11">
-                                <span className="absolute inset-x-0 top-3 h-5 border-y border-accent/75" />
+                                <span className="absolute inset-x-0 top-3 h-5 border-y border-accent-ink" />
                             </div>
                         ))}
                     </div>
                     <div
                         className={`pointer-events-none absolute inset-y-0 left-[42%] z-20 w-0 [transition:opacity_150ms_cubic-bezier(0.23,1,0.32,1)] sm:left-[41%] ${guideVisibility}`}
                     >
-                        <span className="absolute inset-y-0 left-[28px] w-px bg-accent/70 sm:left-[44px]" />
-                        <span className="absolute inset-y-0 left-[38px] w-px bg-accent/70 sm:left-[54px]" />
-                        <span className="absolute inset-y-0 left-[48px] w-px bg-accent/70 sm:left-[64px]" />
-                        <span className="absolute inset-y-0 left-[60px] w-px bg-accent/70 sm:left-[76px]" />
+                        <span className="absolute inset-y-0 left-[28px] w-px bg-accent-ink sm:left-[44px]" />
+                        <span className="absolute inset-y-0 left-[38px] w-px bg-accent-ink sm:left-[54px]" />
+                        <span className="absolute inset-y-0 left-[48px] w-px bg-accent-ink sm:left-[64px]" />
+                        <span className="absolute inset-y-0 left-[60px] w-px bg-accent-ink sm:left-[76px]" />
                     </div>
                 </div>
                 <div role="group" aria-label="Controlli della sidebar" className="flex flex-col items-center gap-6 pb-11 pt-4">

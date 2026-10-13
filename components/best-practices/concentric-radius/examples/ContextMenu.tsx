@@ -20,7 +20,7 @@ export default function ContextMenu() {
     return (
         <div className="mx-auto w-full max-w-xs space-y-6">
             <ExampleBracket label="Context menu" side="right">
-                <div aria-hidden="true" className="flex flex-col gap-1 rounded-3xl bg-surface p-2 shadow-[0_0_0_1px_oklch(0_0_0/0.06),0_1px_2px_-1px_oklch(0_0_0/0.06),0_2px_4px_0_oklch(0_0_0/0.04)] dark:shadow-[0_0_0_1px_oklch(1_0_0/0.08)]">
+                <div aria-hidden="true" className="flex flex-col gap-1 rounded-3xl bg-surface p-2 ring-1 ring-demo-edge shadow-[0_0_0_1px_oklch(0_0_0/0.06),0_1px_2px_-1px_oklch(0_0_0/0.06),0_2px_4px_0_oklch(0_0_0/0.04)] dark:shadow-[0_0_0_1px_oklch(1_0_0/0.08)]">
                     {actions.map((action, index) => {
                         const Icon = action.icon;
                         const iconMotion = "col-start-1 row-start-1 size-4 transition-[opacity,filter,scale] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:scale-100 motion-reduce:blur-none motion-reduce:transition-[opacity] motion-reduce:duration-200";
@@ -30,7 +30,7 @@ export default function ContextMenu() {
                             <div
                                 key={action.label}
                                 className={`flex min-h-10 w-full items-center gap-3 px-3 py-2.5 text-sm text-foreground [transition:background-color_150ms_ease,border-radius_200ms_cubic-bezier(0.77,0,0.175,1)] motion-reduce:transition-[background-color] ${itemRadius} ${action.preview
-                                    ? "bg-inset"
+                                    ? "bg-inset inset-ring-1 inset-ring-demo-edge"
                                     : "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-inset"
                                     }`}
                             >
@@ -43,13 +43,13 @@ export default function ContextMenu() {
                                     />
                                     <span
                                         style={{ transitionDelay: enterDelay }}
-                                        className={`${iconMotion} rounded bg-border-strong ${showFinished ? "scale-[0.95] opacity-0 blur-[2px]" : "scale-100 opacity-100 blur-none"}`}
+                                        className={`${iconMotion} rounded bg-demo-edge ${showFinished ? "scale-[0.95] opacity-0 blur-[2px]" : "scale-100 opacity-100 blur-none"}`}
                                     />
                                 </span>
                                 {showFinished ? (
                                     <span>{action.label}</span>
                                 ) : (
-                                    <span className={`h-2 rounded-full bg-border-strong ${action.wireframeWidth}`} />
+                                    <span className={`h-2 rounded-full bg-demo-edge ${action.wireframeWidth}`} />
                                 )}
                             </div>
                         );

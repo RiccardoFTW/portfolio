@@ -18,10 +18,10 @@ export default function RadiusFormulaExample() {
                 <div
                     role="img"
                     aria-label={`Contenitore con raggio esterno di ${outerRadius} pixel, spazio di ${GAP} pixel e raggio interno di ${INNER_RADIUS} pixel`}
-                    className="size-36 bg-inset p-2 ring-1 ring-border transition-[border-radius] duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] motion-reduce:transition-none"
+                    className="size-36 bg-inset p-2 ring-1 ring-demo-edge transition-[border-radius] duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] motion-reduce:transition-none"
                     style={{ borderRadius: outerRadius }}
                 >
-                    <div className="size-full rounded-xl bg-surface" />
+                    <div className="size-full rounded-xl bg-surface inset-ring-1 inset-ring-demo-edge" />
                 </div>
             </div>
             <div className="flex justify-center pt-4">
