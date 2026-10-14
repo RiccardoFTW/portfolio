@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { DisableThemeTransitions } from "@/components/DisableThemeTransitions";
+import { AppThemeProvider } from "@/components/theme";
 import { InkShow } from "@/components/InkShow";
 import "./globals.css";
+import "./main.css";
 
 const inter = localFont({
   src: "../public/fonts/InterVariable.ttf",
@@ -49,11 +50,13 @@ export default function RootLayout({
   return (
     <html
       lang="it"
+      suppressHydrationWarning
       className={`${inter.variable} ${caveat.variable} ${baskerville.variable} ${baskervilleItalic.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col antialiased bg-background text-foreground">
-        <DisableThemeTransitions />
-        <InkShow>{children}</InkShow>
+      <body className="min-h-dvh flex flex-col antialiased bg-background text-foreground">
+        <AppThemeProvider>
+          <InkShow>{children}</InkShow>
+        </AppThemeProvider>
       </body>
     </html>
   );

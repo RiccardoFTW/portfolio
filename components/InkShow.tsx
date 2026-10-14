@@ -13,6 +13,8 @@ import {
   type RefObject,
 } from "react";
 import { Volume2, VolumeX } from "lucide-react";
+import { cn } from "@/lib/cn";
+import { themeIconActiveClass, themeIconButtonClass, themeIconTrackClass } from "./theme";
 import { setEnabled } from "cuelume";
 import { AnimatePresence, LazyMotion, domAnimation, useReducedMotion } from "motion/react";
 import * as m from "motion/react-m";
@@ -70,9 +72,6 @@ const ERASER_VOLUME = 0.45;
 /** The file is a long rub. One wipe is enough for an instant erase. */
 const ERASER_MS = 900;
 const SOUND_KEY = "portfolio-sound";
-
-const inkControlClass =
-  "grid size-10 shrink-0 place-items-center rounded-full text-text transition-[color,background-color,scale] duration-150 ease-out pointer-fine:hover:bg-inset pointer-fine:hover:text-foreground active:scale-[0.96] motion-reduce:transition-[color,background-color] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 type Point = { x: number; y: number };
 
@@ -631,10 +630,11 @@ function EraserIcon() {
     <svg
       viewBox="0 0 24 24"
       aria-hidden="true"
-      className="size-4"
+      width={13}
+      height={13}
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.75"
+      strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -774,7 +774,12 @@ export function InkShow({ children }: { children: ReactNode }) {
       ) : null}
       <LazyMotion features={domAnimation}>
         {hold ? (
-          <div className="fixed top-14 z-40 flex items-center gap-1 right-[calc(max(var(--page-padding-inline),(100vw-var(--page-max-width))/2+var(--page-padding-inline))-0.75rem)]">
+          <div
+            className={cn(
+              themeIconTrackClass,
+              "fixed top-14 z-40 right-[max(var(--page-padding-inline),calc((100vw-var(--page-max-width))/2+var(--page-padding-inline)))]",
+            )}
+          >
             <AnimatePresence>
               {started ? (
                 <m.button
@@ -782,7 +787,7 @@ export function InkShow({ children }: { children: ReactNode }) {
                   type="button"
                   aria-label="Cancella le annotazioni"
                   onClick={erase}
-                  className={inkControlClass}
+                  className={themeIconButtonClass}
                   initial={reduceMotion ? false : { opacity: 0, scale: 0.25, filter: "blur(4px)" }}
                   animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                   exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.25, filter: "blur(4px)" }}
@@ -801,12 +806,12 @@ export function InkShow({ children }: { children: ReactNode }) {
               aria-pressed={soundOn}
               aria-label={soundOn ? "Disattiva i suoni" : "Attiva i suoni"}
               onClick={() => setSoundEnabled(!soundOn)}
-              className={inkControlClass}
+              className={cn(themeIconButtonClass, soundOn && themeIconActiveClass)}
             >
               <IconSwap
                 active={soundOn}
-                first={<VolumeX className="size-4" strokeWidth={1.75} />}
-                second={<Volume2 className="size-4" strokeWidth={1.75} />}
+                first={<VolumeX size={13} />}
+                second={<Volume2 size={13} />}
               />
             </button>
           </div>

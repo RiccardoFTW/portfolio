@@ -39,7 +39,7 @@ export default function HomePage() {
               , ciò che imparo lungo il percorso,{" "}
               <Annotation iterations={2} className="whitespace-nowrap">
                 <Link href="/best-practices" className={`${inkLink} group`}>
-                  buone pratiche
+                  best practices
                   <ArrowUpRight aria-hidden="true" className="size-2.5 shrink-0 transition-transform duration-150 ease-out-strong pointer-fine:group-hover:scale-110 motion-reduce:scale-100" />
                 </Link>
               </Annotation>{" "}

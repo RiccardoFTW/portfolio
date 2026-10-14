@@ -27,7 +27,7 @@ export function Annotation({
   className,
   style,
   type = "underline",
-  color = "var(--accent)",
+  color = "var(--annotation-ink)",
   animate = true,
   padding = 2,
   as = "span",

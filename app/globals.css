@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "./transitions.css";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   /* Surfaces */
   --background: oklch(0.985 0.001 286.376);
@@ -35,7 +37,10 @@
   --accent: oklch(0.669 0.184 248.807);
   --accent-ink: oklch(0.51 0.17 255.617);
   --accent-tint: oklch(0.96 0.019 252.878);
+  --annotation-ink: oklch(0.669 0.184 248.807);
   --annotation-highlight: oklch(0.94 0.08 101);
+  --pen-ink: oklch(0.669 0.184 248.807);
+  --pen-mark: var(--annotation-highlight);
   --success: oklch(0.603 0.155 150.883);
   --success-ink: oklch(0.5 0.13 150.883);
   --success-surface: oklch(0.958 0.017 159.118);
@@ -118,8 +123,7 @@
   --shadow-card: var(--card-shadow);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
+:root.dark {
     --background: oklch(0.209 0.004 264.477);
     --canvas: var(--background);
     --surface: oklch(0.26 0.006 271.191);
@@ -138,7 +142,10 @@
     --accent: oklch(0.68 0.173 253.301);
     --accent-ink: oklch(0.788 0.113 248.33);
     --accent-tint: oklch(0.68 0.173 253.301 / 0.16);
-    --annotation-highlight: oklch(0.32 0.05 98);
+    --annotation-ink: oklch(0.9 0.16 100);
+    --annotation-highlight: oklch(0.9 0.16 100);
+    --pen-ink: oklch(0.68 0.173 253.301);
+    --pen-mark: oklch(0.9 0.16 100);
     --success: oklch(0.705 0.154 153.814);
     --success-ink: var(--success);
     --success-surface: oklch(0.705 0.154 153.814 / 0.14);
@@ -161,7 +168,7 @@
     --code-utility-border: oklch(0.78 0.16 275);
     --code-utility-state: oklch(0.78 0.16 15);
   }
-}
+
 
 html {
   scroll-behavior: smooth;
@@ -274,4 +281,18 @@ button[aria-pressed="true"] .toggle-thumb {
   .toggle-thumb {
     transition: none;
   }
+}
+
+/* Utilities required by the supplied main.css reference. */
+@theme inline {
+  --color-muted: var(--muted);
+  --color-gray-2: var(--gray-2);
+  --color-gray-4: var(--gray-4);
+  --color-gray-a4: var(--gray-a4);
+  --color-highlight-background: var(--highlight-background);
+  --color-highlight-foreground: var(--highlight-foreground);
+  --text-default: 1rem;
+  --text-small: 0.75rem;
+  --radius-control: var(--radius-base);
+  --radius-window: var(--radius-large);
 }

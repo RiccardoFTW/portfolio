@@ -7,13 +7,13 @@
 }
 
 .illustration :global(.ink) {
-    fill: var(--accent);
-    stroke: var(--accent);
+    fill: var(--pen-ink);
+    stroke: var(--pen-ink);
 }
 
 .illustration :global(.mark) {
-    fill: var(--annotation-highlight);
-    stroke: var(--annotation-highlight);
+    fill: var(--pen-mark);
+    stroke: var(--pen-mark);
 }
 
 /* Kernel layout is unlayered, so the flying figure's box lives here, not in utilities. */

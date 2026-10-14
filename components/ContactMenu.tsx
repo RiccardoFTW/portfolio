@@ -4,6 +4,8 @@ import { Menu } from "@base-ui/react/menu";
 import { play } from "cuelume";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { contactLinks } from "@/data/contacts";
+import { cn } from "@/lib/cn";
+import { themeIconButtonClass, themeIconTrackClass } from "./theme";
 
 const itemClassName =
   "flex min-h-10 items-center justify-between gap-6 rounded-control px-3 py-2 text-sm text-ink outline-none data-highlighted:bg-hover data-highlighted:inset-ring-2 data-highlighted:inset-ring-accent-ink data-disabled:cursor-default data-disabled:text-ink-2";
@@ -16,13 +18,22 @@ export function ContactMenu() {
         play(open ? "open" : "close", { theme: "mech", emphasis: "strong", volume: 0.3 });
       }}
     >
-      <Menu.Trigger className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-control bg-surface data-pressed:scale-[0.97] px-3.5 py-2 text-sm font-medium text-ink shadow-btn focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-ink [@media(hover:hover)_and_(pointer:fine)]:hover:bg-hover data-popup-open:bg-hover">
-        Contatti
-      </Menu.Trigger>
+      <span className={themeIconTrackClass}>
+        <Menu.Trigger
+          aria-label="Contatti"
+          title="Contatti"
+          className={cn(
+            themeIconButtonClass,
+            "data-popup-open:bg-(--gray-4) data-popup-open:text-foreground",
+          )}
+        >
+          <Mail aria-hidden="true" size={13} />
+        </Menu.Trigger>
+      </span>
       <Menu.Portal>
         <Menu.Positioner
           side="top"
-          align="center"
+          align="start"
           sideOffset={8}
           collisionPadding={16}
           className="z-50 max-w-[calc(100vw-2rem)] outline-none"
