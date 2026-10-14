@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import ToggleButton from "../../ToggleButton";
 import ExampleBracket from "../ExampleBracket";
 import { useState } from "react";
+import { IconSwap } from "@/components/IconSwap";
 
 
 export default function SearchBar() {
@@ -26,12 +27,11 @@ export default function SearchBar() {
                     <span
                         className={`grid size-10 shrink-0 place-items-center ${buttonRadius} bg-inset inset-ring-1 inset-ring-demo-edge text-foreground transition-[border-radius] duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] motion-reduce:transition-none`}
                     >
-                        <Search
-                            aria-hidden="true"
-                            strokeWidth={1.5}
-                            className={`col-start-1 row-start-1 size-4 transition-[opacity,filter,scale] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:scale-100 motion-reduce:blur-none motion-reduce:transition-[opacity] motion-reduce:duration-200 ${showFinished ? "scale-100 opacity-100 blur-none" : "scale-[0.95] opacity-0 blur-[2px]"}`}
+                        <IconSwap
+                            active={showFinished}
+                            first={<span className="block size-4 rounded bg-demo-edge" />}
+                            second={<Search strokeWidth={1.5} className="size-4" />}
                         />
-                        <span className={`col-start-1 row-start-1 size-4 rounded bg-demo-edge transition-[opacity,filter,scale] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:scale-100 motion-reduce:blur-none motion-reduce:transition-[opacity] motion-reduce:duration-200 ${showFinished ? "scale-[0.95] opacity-0 blur-[2px]" : "scale-100 opacity-100 blur-none"}`} />
                     </span>
                 </div>
             </ExampleBracket>

@@ -117,8 +117,8 @@ export function ButtonThought() {
         </h2>
         <p className="mt-4">
           Qui il salvataggio è simulato, ma la sequenza è reale: un click avvia l&apos;attesa, blocca il
-          doppio invio e comunica la riuscita. La transizione tra label è istantanea: è un&apos;azione
-          che può essere ripetuta e non deve sembrare lenta, soprattutto da tastiera.
+          doppio invio e comunica la riuscita. La label esce in 150ms e quella nuova entra in altri
+          150ms. Lo stato dell&apos;azione e il messaggio accessibile cambiano subito.
         </p>
         <div className="mt-6">
           <ButtonStateDemo />
@@ -132,12 +132,12 @@ export function ButtonThought() {
         <p className="mt-4">
           La piccola compressione al pointer press dice “ti ho sentito”. Dura 150ms, anima solo
           <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-sm text-(--text)">transform</code> e
-          non viene applicata quando l&apos;azione parte da tastiera. Non c&apos;è una morphing animation
-          tra loading e successo: in questo caso aggiungerebbe ritardo senza spiegare nulla.
+          non viene applicata quando l&apos;azione parte da tastiera. Il testo scorre di pochi pixel
+          e sfuma quando cambia stato, mantenendo fermo il contenitore del pulsante.
         </p>
         <p className="mt-4">
-          Con reduced motion il feedback di scala scompare, mentre label e messaggio di stato
-          restano: riduciamo il movimento, non la chiarezza.
+          Con reduced motion il feedback di scala scompare e la label cambia senza transizione,
+          mentre il messaggio di stato resta: riduciamo il movimento, non la chiarezza.
         </p>
       </section>
 

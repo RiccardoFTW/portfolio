@@ -22,6 +22,7 @@ import { revealAnnotations } from "./revealAnnotations";
 import { createEvidenziatore } from "./best-practices/hairline/evidenziatore";
 import { createStilografica } from "./best-practices/hairline/stilografica";
 import styles from "./best-practices/hairline/ChapterIllustration.module.css";
+import { IconSwap } from "./IconSwap";
 
 type ToolName = "stilografica" | "evidenziatore";
 
@@ -802,11 +803,11 @@ export function InkShow({ children }: { children: ReactNode }) {
               onClick={() => setSoundEnabled(!soundOn)}
               className={inkControlClass}
             >
-              {soundOn ? (
-                <Volume2 aria-hidden="true" className="size-4" strokeWidth={1.75} />
-              ) : (
-                <VolumeX aria-hidden="true" className="size-4" strokeWidth={1.75} />
-              )}
+              <IconSwap
+                active={soundOn}
+                first={<VolumeX className="size-4" strokeWidth={1.75} />}
+                second={<Volume2 className="size-4" strokeWidth={1.75} />}
+              />
             </button>
           </div>
         ) : null}

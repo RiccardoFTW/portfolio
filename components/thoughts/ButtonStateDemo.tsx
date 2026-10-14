@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { TransitionText } from "@/components/TransitionText"
 
 type SaveState = "idle" | "loading" | "success"
 
@@ -67,6 +68,7 @@ export function ButtonStateDemo() {
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
+            aria-label={label}
             disabled={isLoading}
             onClick={handleSave}
             onPointerDown={() => setIsPointerPressed(true)}
@@ -75,7 +77,7 @@ export function ButtonStateDemo() {
             onPointerLeave={() => setIsPointerPressed(false)}
             className={`min-h-11 min-w-44 rounded-full bg-(--accent) px-5 py-2.5 text-sm font-medium text-white outline-none transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-(--accent) focus-visible:ring-offset-2 focus-visible:ring-offset-(--canvas) pointer-fine:hover:brightness-95 disabled:cursor-wait disabled:opacity-70 ${isPointerPressed ? "scale-[0.97]" : "scale-100"}`}
           >
-            {label}
+            <TransitionText text={label} />
           </button>
 
           {isSuccess ? (

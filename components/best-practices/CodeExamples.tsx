@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import { AnimatePresence, LazyMotion, domMax, useReducedMotion } from "motion/react";
 import * as m from "motion/react-m";
+import { IconSwap } from "@/components/IconSwap";
 
 export type CodeExample = {
   label: string;
@@ -114,32 +115,17 @@ export default function CodeExamples({
           <CopyCode value={currentCode} />
         </div>
 
-        <m.div
+        <div
           role="tabpanel"
           id={`${id}-panel`}
           aria-labelledby={`${id}-tab-${selectedIndex}`}
           tabIndex={0}
-          layout
-          initial={false}
           style={{ height: panelHeight }}
-          transition={{
-            layout: {
-              duration: reduceMotion ? 0 : 0.28,
-              ease: [0.23, 1, 0.32, 1],
-            },
-          }}
-          className="overflow-x-auto overflow-y-clip [scrollbar-width:none] [&::-webkit-scrollbar]:hidden outline-hidden focus-visible:outline-2 focus-visible:outline-solid focus-visible:-outline-offset-2 focus-visible:outline-foreground"
+          className="t-resize overflow-x-auto overflow-y-clip [scrollbar-width:none] [&::-webkit-scrollbar]:hidden outline-hidden focus-visible:outline-2 focus-visible:outline-solid focus-visible:-outline-offset-2 focus-visible:outline-foreground"
         >
-          <m.div
-            layout
+          <div
             className="relative"
             style={{ height: panelHeight }}
-            transition={{
-              layout: {
-                duration: reduceMotion ? 0 : 0.28,
-                ease: [0.23, 1, 0.32, 1],
-              },
-            }}
           >
             <AnimatePresence initial={false}>
               <m.pre
@@ -166,15 +152,14 @@ export default function CodeExamples({
                 <code>{currentCode}</code>
               </m.pre>
             </AnimatePresence>
-          </m.div>
-        </m.div>
+          </div>
+        </div>
       </div>
     </LazyMotion>
   );
 }
 
 function CopyCode({ value }: { value: string }) {
-  const reduceMotion = Boolean(useReducedMotion());
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const attempt = useRef(0);
@@ -209,44 +194,20 @@ function CopyCode({ value }: { value: string }) {
         aria-label={copied ? "Codice copiato" : "Copia il codice di questo esempio"}
         className="relative grid size-9 shrink-0 touch-manipulation place-items-center rounded-lg text-text outline-hidden hover:text-foreground transition-[scale,color] duration-150 ease-out active:scale-[0.96] motion-reduce:transition-[color] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-1 focus-visible:outline-foreground"
       >
-        <AnimatePresence initial={false}>
-          <m.svg
-            key={copied ? "check" : "copy"}
-            initial={{
-              opacity: 0,
-              scale: reduceMotion ? 1 : 0.25,
-              filter: reduceMotion ? "none" : "blur(4px)",
-            }}
-            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-            exit={{
-              opacity: 0,
-              scale: reduceMotion ? 1 : 0.25,
-              filter: reduceMotion ? "none" : "blur(4px)",
-            }}
-            transition={
-              reduceMotion
-                ? { duration: 0.15, ease: "easeOut" }
-                : { type: "spring", visualDuration: 0.3, bounce: 0 }
-            }
-            viewBox="0 0 16 16"
-            className="col-start-1 row-start-1 size-4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            {copied ? (
-              <path d="M3.5 8.5 6.5 11.5 12.5 4.5" />
-            ) : (
-              <>
+        <IconSwap
+          active={copied}
+          first={
+            <svg viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
                 <rect x="5.25" y="5.25" width="8" height="8" rx="1.75" />
                 <path d="M10.75 5.25V4a1.25 1.25 0 0 0-1.25-1.25H4A1.25 1.25 0 0 0 2.75 4v5.5A1.25 1.25 0 0 0 4 10.75h1.25" />
-              </>
-            )}
-          </m.svg>
-        </AnimatePresence>
+            </svg>
+          }
+          second={
+            <svg viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3.5 8.5 6.5 11.5 12.5 4.5" />
+            </svg>
+          }
+        />
       </button>
       <span role="status" className="sr-only">
         {status === "copied"

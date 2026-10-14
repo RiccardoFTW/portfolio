@@ -16,6 +16,7 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from "react";
+import { IconSwap } from "@/components/IconSwap";
 
 type Phase = "idle" | "filling" | "filled";
 
@@ -176,7 +177,6 @@ export function HoldToDeleteButton() {
 
   const isDeleted = phase === "filled";
   const label = isDeleted ? "Deleted" : "Hold to delete";
-  const Icon = isDeleted ? CheckIcon : TrashIcon;
 
   return (
     <LazyMotion features={domAnimation} strict>
@@ -197,7 +197,7 @@ export function HoldToDeleteButton() {
           <span
             className={`${contentClassName} pointer-events-none relative bg-[#f6f5f5] text-[#21201c] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]`}
           >
-            <Icon />
+            <IconSwap active={isDeleted} first={<TrashIcon />} second={<CheckIcon />} />
             {label}
           </span>
           <span className="pointer-events-none absolute inset-0 z-10 overflow-hidden rounded-full">
@@ -205,7 +205,7 @@ export function HoldToDeleteButton() {
               style={{ clipPath: fillClipPath }}
               className={`${contentClassName} absolute inset-0 bg-[#ffdbdc] text-[#e5484d]`}
             >
-              <Icon />
+              <IconSwap active={isDeleted} first={<TrashIcon />} second={<CheckIcon />} />
               {label}
             </m.span>
           </span>

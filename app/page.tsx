@@ -31,23 +31,23 @@ export default function HomePage() {
               Mi piace progettare e sviluppare <Highlight>componenti UI</Highlight> e <Highlight>interfacce</Highlight>, esplorando il punto d&apos;incontro tra design e tecnologia. Dedico particolare attenzione alle <Annotation type="circle" padding={7} className="whitespace-nowrap">micro-interazioni</Annotation>, all&apos;<Annotation type="circle" padding={7} className="whitespace-nowrap">accessibilità</Annotation> e a tutti quei piccoli accorgimenti che rendono un&apos;interfaccia intuitiva e piacevole da utilizzare.<br />
               In questo spazio condivido i miei{" "}
               <Annotation iterations={2} className="whitespace-nowrap">
-                <Link href="/lab" className={inkLink}>
+                <Link href="/lab" className={`${inkLink} group`}>
                   esperimenti
-                  <ArrowUpRight aria-hidden="true" className="size-2.5 shrink-0" />
+                  <ArrowUpRight aria-hidden="true" className="size-2.5 shrink-0 transition-transform duration-150 ease-out-strong pointer-fine:group-hover:scale-110 motion-reduce:scale-100" />
                 </Link>
               </Annotation>
               , ciò che imparo lungo il percorso,{" "}
               <Annotation iterations={2} className="whitespace-nowrap">
-                <Link href="/best-practices" className={inkLink}>
+                <Link href="/best-practices" className={`${inkLink} group`}>
                   buone pratiche
-                  <ArrowUpRight aria-hidden="true" className="size-2.5 shrink-0" />
+                  <ArrowUpRight aria-hidden="true" className="size-2.5 shrink-0 transition-transform duration-150 ease-out-strong pointer-fine:group-hover:scale-110 motion-reduce:scale-100" />
                 </Link>
               </Annotation>{" "}
               e{" "}
               <Annotation iterations={2} className="whitespace-nowrap">
-                <Link href="/thoughts" className={inkLink}>
+                <Link href="/thoughts" className={`${inkLink} group`}>
                   riflessioni personali.
-                  <ArrowUpRight aria-hidden="true" className="size-2.5 shrink-0" />
+                  <ArrowUpRight aria-hidden="true" className="size-2.5 shrink-0 transition-transform duration-150 ease-out-strong pointer-fine:group-hover:scale-110 motion-reduce:scale-100" />
                 </Link>
               </Annotation>{" "}
             </p>

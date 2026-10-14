@@ -4,6 +4,7 @@ import { Activity, PcCase, FolderGit2, GitCommitHorizontal } from "lucide-react"
 import ToggleButton from "../../ToggleButton";
 import ExampleBracket from "../ExampleBracket";
 import { useState } from "react";
+import { IconSwap } from "@/components/IconSwap";
 
 
 const actions = [
@@ -21,10 +22,8 @@ export default function ContextMenu() {
         <div className="mx-auto w-full max-w-xs space-y-6">
             <ExampleBracket label="Context menu" side="right">
                 <div aria-hidden="true" className="flex flex-col gap-1 rounded-3xl bg-surface p-2 ring-1 ring-demo-edge shadow-[0_0_0_1px_oklch(0_0_0/0.06),0_1px_2px_-1px_oklch(0_0_0/0.06),0_2px_4px_0_oklch(0_0_0/0.04)] dark:shadow-[0_0_0_1px_oklch(1_0_0/0.08)]">
-                    {actions.map((action, index) => {
+                    {actions.map((action) => {
                         const Icon = action.icon;
-                        const iconMotion = "col-start-1 row-start-1 size-4 transition-[opacity,filter,scale] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:scale-100 motion-reduce:blur-none motion-reduce:transition-[opacity] motion-reduce:duration-200";
-                        const enterDelay = showFinished ? `${index * 40}ms` : "0ms";
 
                         return (
                             <div
@@ -34,18 +33,11 @@ export default function ContextMenu() {
                                     : "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-inset"
                                     }`}
                             >
-                                <span className="grid size-4 shrink-0 place-items-center">
-                                    <Icon
-                                        aria-hidden="true"
-                                        strokeWidth={1.5}
-                                        style={{ transitionDelay: enterDelay }}
-                                        className={`${iconMotion} ${showFinished ? "scale-100 opacity-100 blur-none" : "scale-[0.95] opacity-0 blur-[2px]"}`}
-                                    />
-                                    <span
-                                        style={{ transitionDelay: enterDelay }}
-                                        className={`${iconMotion} rounded bg-demo-edge ${showFinished ? "scale-[0.95] opacity-0 blur-[2px]" : "scale-100 opacity-100 blur-none"}`}
-                                    />
-                                </span>
+                                <IconSwap
+                                    active={showFinished}
+                                    first={<span className="block size-4 rounded bg-demo-edge" />}
+                                    second={<Icon strokeWidth={1.5} className="size-4" />}
+                                />
                                 {showFinished ? (
                                     <span>{action.label}</span>
                                 ) : (

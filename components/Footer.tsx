@@ -71,9 +71,7 @@ export function Footer() {
         />
       </button>
       <div className="relative mt-auto flex flex-col items-center gap-3 pt-10 sm:block sm:pt-0.5 translate-1">
-        <Annotation as="div">
-          <ContactMenu />
-        </Annotation>
+        <ContactMenu />
       </div>
     </footer>
   );
