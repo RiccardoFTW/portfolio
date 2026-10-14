@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { Annotation } from "@/components/Annotation";
 import { Highlight } from "@/components/best-practices/Highlight";
 import { Footer } from "@/components/Footer";
 
 const inkLink =
-  "rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink";
+  "inline-flex items-baseline gap-0.5 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink";
 
 export default function HomePage() {
   return (
@@ -20,7 +21,7 @@ export default function HomePage() {
 
           <section className="mt-20 max-w-[66ch] font-sans leading-6">
             <p className="text-pretty">
-              Ciao! Sono un{" "}
+              Ciao!<br /> Sono un{" "}
               <Annotation type="box" padding={5} className="whitespace-nowrap">
                 designer
               </Annotation>
@@ -28,8 +29,27 @@ export default function HomePage() {
               Ricerco la <Highlight>bellezza nel software</Highlight>, convinto che spesso si nasconda nei dettagli più piccoli. Un
               po&apos; come la felicità, che troviamo nelle piccole cose.<br />
               Mi piace progettare e sviluppare <Highlight>componenti UI</Highlight> e <Highlight>interfacce</Highlight>, esplorando il punto d&apos;incontro tra design e tecnologia. Dedico particolare attenzione alle <Annotation type="circle" padding={7} className="whitespace-nowrap">micro-interazioni</Annotation>, all&apos;<Annotation type="circle" padding={7} className="whitespace-nowrap">accessibilità</Annotation> e a tutti quei piccoli accorgimenti che rendono un&apos;interfaccia intuitiva e piacevole da utilizzare.<br />
-              Nel mio piccolo, cerco di contribuire a rendere Internet un posto migliore.<br />
-              In questo spazio condivido i miei <Annotation iterations={2} className="whitespace-nowrap"><Link href="/lab" className={inkLink}>esperimenti</Link></Annotation>, ciò che imparo lungo il percorso, <Annotation iterations={2} className="whitespace-nowrap"><Link href="/best-practices" className={inkLink}>buone pratiche</Link></Annotation> e <Annotation iterations={2} className="whitespace-nowrap"><Link href="/thoughts" className={inkLink}>riflessioni personali</Link></Annotation> sul mondo del design e dello sviluppo.
+              In questo spazio condivido i miei{" "}
+              <Annotation iterations={2} className="whitespace-nowrap">
+                <Link href="/lab" className={inkLink}>
+                  esperimenti
+                  <ArrowUpRight aria-hidden="true" className="size-2.5 shrink-0" />
+                </Link>
+              </Annotation>
+              , ciò che imparo lungo il percorso,{" "}
+              <Annotation iterations={2} className="whitespace-nowrap">
+                <Link href="/best-practices" className={inkLink}>
+                  buone pratiche
+                  <ArrowUpRight aria-hidden="true" className="size-2.5 shrink-0" />
+                </Link>
+              </Annotation>{" "}
+              e{" "}
+              <Annotation iterations={2} className="whitespace-nowrap">
+                <Link href="/thoughts" className={inkLink}>
+                  riflessioni personali.
+                  <ArrowUpRight aria-hidden="true" className="size-2.5 shrink-0" />
+                </Link>
+              </Annotation>{" "}
             </p>
           </section>
         </section>

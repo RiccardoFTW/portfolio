@@ -8,9 +8,12 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
   type ReactNode,
   type RefObject,
 } from "react";
+import { Volume2, VolumeX } from "lucide-react";
+import { setEnabled } from "cuelume";
 import { AnimatePresence, LazyMotion, domAnimation, useReducedMotion } from "motion/react";
 import * as m from "motion/react-m";
 import { usePathname } from "next/navigation";
@@ -50,6 +53,25 @@ export function useInkShow() {
 const LIFT_MS = 820;
 const TRAVEL_MS = 320;
 const HOP_MS = 240;
+
+const STROKE_SRC: Record<ToolName, string> = {
+  stilografica: "/sounds/pen.mp3",
+  evidenziatore: "/sounds/highlighter.mp3",
+};
+
+const STROKE_VOLUME: Record<ToolName, number> = {
+  stilografica: 0.4,
+  evidenziatore: 0.45,
+};
+
+const ERASER_SRC = "/sounds/eraser.mp3";
+const ERASER_VOLUME = 0.45;
+/** The file is a long rub. One wipe is enough for an instant erase. */
+const ERASER_MS = 900;
+const SOUND_KEY = "portfolio-sound";
+
+const inkControlClass =
+  "grid size-10 shrink-0 place-items-center rounded-full text-text transition-[color,background-color,scale] duration-150 ease-out pointer-fine:hover:bg-inset pointer-fine:hover:text-foreground active:scale-[0.96] motion-reduce:transition-[color,background-color] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 type Point = { x: number; y: number };
 
@@ -362,6 +384,190 @@ function silenceRunning(current: InkEntry, entries: InkEntry[]) {
   }
 }
 
+/**
+ * Stroke audio has to be unlocked from the click that starts the show.
+ * A later `play()` sits behind font and travel awaits, past the gesture.
+ */
+let strokeClips: Record<ToolName, HTMLAudioElement> | null = null;
+let strokeFade = 0;
+let soundEnabled = true;
+let eraserClip: HTMLAudioElement | null = null;
+let eraserToken = 0;
+const soundListeners = new Set<() => void>();
+
+function clipsForStrokes() {
+  if (strokeClips) return strokeClips;
+  if (typeof Audio === "undefined") return null;
+  strokeClips = {
+    stilografica: Object.assign(new Audio(STROKE_SRC.stilografica), {
+      preload: "auto",
+      loop: true,
+    }),
+    evidenziatore: Object.assign(new Audio(STROKE_SRC.evidenziatore), {
+      preload: "auto",
+      loop: false,
+    }),
+  };
+  return strokeClips;
+}
+
+function primeStrokeAudio() {
+  if (!soundEnabled) return;
+  const clips = clipsForStrokes();
+  if (!clips) return;
+  const token = strokeFade;
+  for (const audio of Object.values(clips)) {
+    if (!audio.paused) continue;
+    audio.muted = true;
+    void audio.play().then(() => {
+      if (strokeFade !== token) {
+        audio.muted = false;
+        return;
+      }
+      audio.pause();
+      if (audio.readyState >= 1) audio.currentTime = 0;
+      audio.muted = false;
+    }).catch(() => {
+      audio.muted = false;
+    });
+  }
+}
+
+function stopStrokeAudio() {
+  strokeFade += 1;
+  const clips = strokeClips;
+  if (!clips) return;
+  for (const audio of Object.values(clips)) {
+    audio.pause();
+    if (audio.readyState >= 1) audio.currentTime = 0;
+  }
+}
+
+function fadePause(audio: HTMLAudioElement) {
+  if (audio.paused) return;
+  const token = ++strokeFade;
+  const from = audio.volume;
+  const started = performance.now();
+  const step = (now: number) => {
+    if (token !== strokeFade) return;
+    const t = Math.min(1, (now - started) / 90);
+    audio.volume = from * (1 - t);
+    if (t < 1) {
+      requestAnimationFrame(step);
+      return;
+    }
+    audio.pause();
+  };
+  requestAnimationFrame(step);
+}
+
+function beginStroke(tool: ToolName) {
+  if (!soundEnabled) return;
+  const clips = clipsForStrokes();
+  if (!clips) return;
+  strokeFade += 1;
+  const audio = clips[tool];
+  const other = clips[tool === "stilografica" ? "evidenziatore" : "stilografica"];
+  other.pause();
+  if (other.readyState >= 1) other.currentTime = 0;
+  audio.volume = STROKE_VOLUME[tool];
+  if (tool === "evidenziatore" && audio.readyState >= 1) audio.currentTime = 0;
+  void audio.play().catch(() => {});
+}
+
+function endStroke(tool: ToolName) {
+  const clips = strokeClips;
+  if (!clips || tool === "evidenziatore") return;
+  fadePause(clips.stilografica);
+}
+
+function eraserAudio() {
+  if (eraserClip) return eraserClip;
+  if (typeof Audio === "undefined") return null;
+  eraserClip = Object.assign(new Audio(ERASER_SRC), { preload: "auto" });
+  return eraserClip;
+}
+
+function stopEraserAudio() {
+  eraserToken += 1;
+  const audio = eraserClip;
+  if (!audio) return;
+  audio.pause();
+  if (audio.readyState >= 1) audio.currentTime = 0;
+}
+
+function playEraser() {
+  if (!soundEnabled) return;
+  const audio = eraserAudio();
+  if (!audio) return;
+  const token = ++eraserToken;
+  audio.volume = ERASER_VOLUME;
+  if (audio.readyState >= 1) audio.currentTime = 0;
+  void audio.play().catch(() => {});
+  const started = performance.now();
+  const step = (now: number) => {
+    if (token !== eraserToken) return;
+    const elapsed = now - started;
+    if (elapsed < ERASER_MS) {
+      requestAnimationFrame(step);
+      return;
+    }
+    const t = Math.min(1, (elapsed - ERASER_MS) / 140);
+    audio.volume = ERASER_VOLUME * (1 - t);
+    if (t < 1) {
+      requestAnimationFrame(step);
+      return;
+    }
+    audio.pause();
+    if (audio.readyState >= 1) audio.currentTime = 0;
+  };
+  requestAnimationFrame(step);
+}
+
+function notifySound() {
+  for (const listener of soundListeners) listener();
+}
+
+let preferenceReady = false;
+
+function subscribeSound(listener: () => void) {
+  soundListeners.add(listener);
+  return () => soundListeners.delete(listener);
+}
+
+function getSoundEnabled() {
+  if (!preferenceReady && typeof window !== "undefined") {
+    preferenceReady = true;
+    try {
+      soundEnabled = localStorage.getItem(SOUND_KEY) !== "off";
+    } catch {
+      soundEnabled = true;
+    }
+  }
+  return soundEnabled;
+}
+
+function getServerSoundEnabled() {
+  return true;
+}
+
+function setSoundEnabled(next: boolean) {
+  soundEnabled = next;
+  try {
+    localStorage.setItem(SOUND_KEY, next ? "on" : "off");
+  } catch {
+    // Preference storage is optional.
+  }
+  setEnabled(next);
+  if (!next) {
+    stopStrokeAudio();
+    stopEraserAudio();
+  } else {
+    primeStrokeAudio();
+  }
+  notifySound();
+}
+
 /** Keep the stroke invisible until the nib draws it. The CSS animation would run on its own. */
 function holdStroke(path: SVGPathElement) {
   const len = path.getTotalLength();
@@ -402,6 +608,23 @@ async function trace(
   return last;
 }
 
+async function traceStroke(
+  tool: ToolName,
+  cursor: Cursor,
+  paths: SVGPathElement[],
+  duration: number,
+  signal: AbortSignal,
+) {
+  if (!paths.some((path) => path.getTotalLength() > 0)) return null;
+  beginStroke(tool);
+  try {
+    return await trace(cursor, paths, duration, signal);
+  } finally {
+    if (signal.aborted) stopStrokeAudio();
+    else endStroke(tool);
+  }
+}
+
 function EraserIcon() {
   return (
     <svg
@@ -434,6 +657,7 @@ export function InkShow({ children }: { children: ReactNode }) {
   const runRef = useRef<AbortController | null>(null);
   const playingRef = useRef(false);
   const [started, setStarted] = useState(false);
+  const soundOn = useSyncExternalStore(subscribeSound, getSoundEnabled, getServerSoundEnabled);
   const reduceMotion = useReducedMotion();
 
   const register = useCallback((entry: InkEntry) => {
@@ -449,6 +673,8 @@ export function InkShow({ children }: { children: ReactNode }) {
 
   const erase = useCallback(() => {
     runRef.current?.abort();
+    stopStrokeAudio();
+    playEraser();
     for (const entry of entriesRef.current) {
       if (entry.annotation.isShowing()) entry.annotation.hide();
       delete entry.element.dataset.annotated;
@@ -462,6 +688,8 @@ export function InkShow({ children }: { children: ReactNode }) {
     if (!pending) return;
 
     runRef.current?.abort();
+    stopEraserAudio();
+    primeStrokeAudio();
     const run = new AbortController();
     runRef.current = run;
     playingRef.current = true;
@@ -488,6 +716,10 @@ export function InkShow({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
+    setEnabled(getSoundEnabled());
+  }, []);
+
+  useEffect(() => {
     if (!hold) return;
     const penStage = penStageRef.current;
     const penSvg = penSvgRef.current;
@@ -511,6 +743,8 @@ export function InkShow({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (hold) return;
     runRef.current?.abort();
+    stopStrokeAudio();
+    stopEraserAudio();
     setStarted(false);
   }, [hold]);
 
@@ -538,31 +772,44 @@ export function InkShow({ children }: { children: ReactNode }) {
         </>
       ) : null}
       <LazyMotion features={domAnimation}>
-        <AnimatePresence>
-          {hold && started ? (
-            <m.div
-              key="eraser"
-              className="fixed top-14 z-40 right-[calc(max(var(--page-padding-inline),(100vw-var(--page-max-width))/2+var(--page-padding-inline))-0.75rem)]"
-              initial={reduceMotion ? false : { opacity: 0, scale: 0.25, filter: "blur(4px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.25, filter: "blur(4px)" }}
-              transition={
-                reduceMotion
-                  ? { duration: 0 }
-                  : { type: "spring", duration: 0.3, bounce: 0 }
-              }
+        {hold ? (
+          <div className="fixed top-14 z-40 flex items-center gap-1 right-[calc(max(var(--page-padding-inline),(100vw-var(--page-max-width))/2+var(--page-padding-inline))-0.75rem)]">
+            <AnimatePresence>
+              {started ? (
+                <m.button
+                  key="eraser"
+                  type="button"
+                  aria-label="Cancella le annotazioni"
+                  onClick={erase}
+                  className={inkControlClass}
+                  initial={reduceMotion ? false : { opacity: 0, scale: 0.25, filter: "blur(4px)" }}
+                  animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                  exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.25, filter: "blur(4px)" }}
+                  transition={
+                    reduceMotion
+                      ? { duration: 0 }
+                      : { type: "spring", duration: 0.3, bounce: 0 }
+                  }
+                >
+                  <EraserIcon />
+                </m.button>
+              ) : null}
+            </AnimatePresence>
+            <button
+              type="button"
+              aria-pressed={soundOn}
+              aria-label={soundOn ? "Disattiva i suoni" : "Attiva i suoni"}
+              onClick={() => setSoundEnabled(!soundOn)}
+              className={inkControlClass}
             >
-              <button
-                type="button"
-                aria-label="Cancella le annotazioni"
-                onClick={erase}
-                className="grid size-10 place-items-center rounded-full text-text transition-[color,background-color,scale] duration-150 ease-out pointer-fine:hover:bg-inset pointer-fine:hover:text-foreground active:scale-[0.96] motion-reduce:transition-[color,background-color] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              >
-                <EraserIcon />
-              </button>
-            </m.div>
-          ) : null}
-        </AnimatePresence>
+              {soundOn ? (
+                <Volume2 aria-hidden="true" className="size-4" strokeWidth={1.75} />
+              ) : (
+                <VolumeX aria-hidden="true" className="size-4" strokeWidth={1.75} />
+              )}
+            </button>
+          </div>
+        ) : null}
       </LazyMotion>
     </InkShowContext.Provider>
   );
@@ -683,7 +930,7 @@ async function playScrolled(
       entry.element.dataset.annotated = "true";
 
       paths = heldPaths(entry);
-      const end = await trace(cursor, paths, duration, signal);
+      const end = await traceStroke(toolFor(entry.type), cursor, paths, duration, signal);
       if (end) pos = end;
     }
 
@@ -797,7 +1044,7 @@ async function play(
       entry.element.dataset.annotated = "true";
 
       paths = heldPaths(entry);
-      const end = await trace(cursor, paths, duration, signal);
+      const end = await traceStroke(tool, cursor, paths, duration, signal);
       if (end) pos = end;
     }
 
