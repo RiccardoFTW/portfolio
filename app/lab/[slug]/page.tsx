@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { notFound } from "next/navigation";
+import { PageFrame } from "@/components/PageFrame";
+import { pageArrowClass, pageBodyClass, pageLinkClass, pageTitleClass } from "@/components/pageStyle";
 import { findLabItem, labItems } from "@/data/lab";
 
 export function generateStaticParams() {
@@ -37,33 +40,18 @@ export default async function LabItemPage({
   const Demo = item.Demo;
 
   return (
-    <main className="bg-(--canvas) text-(--text)">
-      <article className="mx-auto flex w-full max-w-xl flex-col px-6 pt-10 pb-20">
-        <Link
-          href="/lab"
-          aria-label="Torna agli esperimenti"
-          className="mb-6 inline-flex size-10 items-center justify-center text-text outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinejoin="round"
-            className="size-6"
-            aria-hidden="true"
-          >
-            <path d="M11 8.5H10.5V4.7C10.5 4.31 10.19 4 9.8 4C9.61 4 9.43 4.08 9.29 4.22L3.34 10.63C3.12 10.87 3 11.18 3 11.5C3 11.82 3.12 12.13 3.34 12.37L9.29 18.78C9.43 18.92 9.61 19 9.8 19C10.19 19 10.5 18.69 10.5 18.3V14.5C16.05 14.5 19.05 18.52 19.81 19.68C19.93 19.88 20.14 20 20.37 20C20.72 20 21 19.72 21 19.37V18.5C21 12.98 16.52 8.5 11 8.5Z" />
-          </svg>
+    <PageFrame>
+      <article className="mt-20">
+        <Link href="/lab" className={pageLinkClass}>
+          Esperimenti
+          <ArrowUpRight aria-hidden="true" className={pageArrowClass} />
         </Link>
-
-        <h1 className="font-display text-display text-(--accent)">{item.title}</h1>
-        <p className="text-body">{item.description}</p>
-
+        <h1 className={`mt-4 ${pageTitleClass}`}>{item.title}</h1>
+        <p className={`mt-4 max-w-[66ch] ${pageBodyClass}`}>{item.description}</p>
         <section className="mt-16 flex w-full justify-center">
           <Demo />
         </section>
       </article>
-    </main>
+    </PageFrame>
   );
 }

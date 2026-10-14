@@ -94,8 +94,6 @@
       @apply font-medium;
     }
 
-    h2,
-    h3,
     sub,
     sup {
       @apply text-muted;
@@ -337,8 +335,18 @@
   --pen-mark: var(--annotation-highlight);
 }
 :root.dark {
-  --annotation-ink: oklch(0.9 0.16 100);
   --annotation-highlight: oklch(0.9 0.16 100);
   --pen-ink: oklch(0.68 0.173 253.301);
   --pen-mark: oklch(0.9 0.16 100);
+  --annotation-ink: oklch(0.68 0.173 253.301);
+}
+
+/* Article marks stay blue after the UI accent is neutralized to gray. */
+:root {
+  --article-accent: oklch(0.669 0.184 248.807);
+  --article-accent-tint: color-mix(in oklab, var(--article-accent) 16%, transparent);
+}
+:root.dark {
+  --article-accent: oklch(0.68 0.173 253.301);
+  --article-accent-tint: color-mix(in oklab, var(--article-accent) 18%, transparent);
 }

@@ -20,7 +20,7 @@ export default function SidebarAlignment() {
     const [showGuides, setShowGuides] = useState(false);
     const guideVisibility = showGuides ? "opacity-100" : "opacity-0";
     const guideBoxClass = showGuides
-        ? "bg-accent-tint inset-ring-1 inset-ring-accent-ink"
+        ? "bg-article-accent-tint inset-ring-1 inset-ring-article-accent"
         : "bg-transparent inset-ring-1 inset-ring-transparent";
 
     return (
@@ -33,7 +33,7 @@ export default function SidebarAlignment() {
                                 {navigationItems.map(({ label, Icon, offsetX }) => (
                                     <div
                                         key={label}
-                                        className="relative grid min-h-11 grid-cols-[20px_minmax(0,1fr)] items-center gap-3 rounded-xl px-3 text-sm font-medium text-foreground"
+                                        className="relative grid min-h-11 grid-cols-[20px_minmax(0,1fr)] items-center gap-3 rounded-xl px-3 font-sans text-lg leading-6 font-medium text-foreground"
                                     >
                                         <span
                                             className={`relative grid size-5 place-items-center [transition:transform_200ms_cubic-bezier(0.77,0,0.175,1),background-color_150ms_ease,box-shadow_150ms_ease] motion-reduce:[transition:background-color_150ms_ease,box-shadow_150ms_ease] ${guideBoxClass}`}

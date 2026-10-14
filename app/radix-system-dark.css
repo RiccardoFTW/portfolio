@@ -1,5 +1,3 @@
-/* Radix dark palettes adapted to the existing system theme.
-   Source: @radix-ui/colors; preserves its sRGB and Display P3 values. */
 @media (prefers-color-scheme: dark) {
 :root:not(.light):not(.light-theme) {
   --gray-1: #111111;

@@ -22,7 +22,7 @@ export function Button({
   buttonRef,
 }: ButtonProps) {
   const color = variant === "overlay" ? "text-white" : "text-[var(--text-secondary)]";
-  const className = `flex h-11 items-center rounded-(--radius-tab) px-4 text-sm font-medium ${color}`;
+  const className = `flex h-11 items-center rounded-(--radius-tab) px-4 font-sans text-lg leading-6 font-medium ${color}`;
 
   if (as === "span") {
     return <span className={className}>{label}</span>;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { pageBodyClass, pageTitleClass } from "@/components/pageStyle";
 
 type RadiusControlProps = {
     label: string;
@@ -15,15 +16,15 @@ function RadiusControl({ label, value, min, max, onChange }: RadiusControlProps)
 
     return (
         <div className="grid gap-2">
-            <div className="flex items-center justify-between text-sm text-text">
+            <div className={`flex items-center justify-between ${pageBodyClass}`}>
                 <label htmlFor={id}>{label}</label>
-                <output htmlFor={id} className="font-mono text-xs tabular-nums text-foreground">
+                <output htmlFor={id} className="font-sans text-lg leading-6 tabular-nums text-foreground">
                     {value}px
                 </output>
             </div>
             <input
                 id={id}
-                className="w-full accent-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink"
+                className="w-full accent-article-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-article-accent"
                 type="range"
                 min={min}
                 max={max}
@@ -47,7 +48,7 @@ export default function RadiusPlayground() {
                 <div className="flex min-h-56 items-center justify-center px-2 py-5">
                     <div
                         aria-hidden="true"
-                        className="h-52 w-full max-w-72 bg-accent-tint ring-1 ring-border"
+                        className="h-52 w-full max-w-72 bg-article-accent-tint ring-1 ring-border"
                         style={{ borderRadius: outerRadius, padding: inset }}
                     >
                         <div
@@ -58,7 +59,7 @@ export default function RadiusPlayground() {
                 </div>
 
                 <fieldset className="min-w-0 space-y-6 border-0 p-0">
-                    <legend className="text-sm font-medium text-heading">
+                    <legend className={pageTitleClass}>
                         Regola i tre valori
                     </legend>
                     <div className="grid gap-6">
@@ -84,7 +85,7 @@ export default function RadiusPlayground() {
                             onChange={setInset}
                         />
                     </div>
-                    <p role="status" className={`text-sm leading-6 ${isConcentric ? "text-success" : "text-danger"}`}>
+                    <p role="status" className={`font-sans text-lg leading-6 ${isConcentric ? "text-success" : "text-danger"}`}>
                         {isConcentric
                             ? "Le curve sono concentriche."
                             : `Per renderle concentriche, imposta il raggio interno a ${expectedInnerRadius}px.`}
@@ -92,8 +93,8 @@ export default function RadiusPlayground() {
                 </fieldset>
             </div>
 
-            <figcaption className="border-t border-border pt-6 text-sm leading-6 text-text">
-                <span className="font-medium text-foreground">r = max(R − p, 0).</span> Qui il contenitore non ha un bordo, quindi il padding coincide con lo spazio tra gli elementi.
+            <figcaption className={`border-t border-border pt-6 ${pageBodyClass}`}>
+                <span className={pageTitleClass}>r = max(R − p, 0).</span> Qui il contenitore non ha un bordo, quindi il padding coincide con lo spazio tra gli elementi.
             </figcaption>
         </figure>
     );

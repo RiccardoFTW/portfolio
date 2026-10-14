@@ -1,6 +1,7 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
 import { BracketList } from "@/components/BracketList";
+import { PageFrame } from "@/components/PageFrame";
+import { pageBodyClass, pageTitleClass } from "@/components/pageStyle";
 
 type SectionEntry = {
   href: string;
@@ -18,23 +19,10 @@ export function SectionIndex({
   entries: readonly SectionEntry[];
 }) {
   return (
-    <main className="bg-background text-text">
-      <section className="mx-auto w-full max-w-(--page-max-width) px-(--page-padding-inline) pt-16 pb-20">
-        <hgroup className="flex flex-col tracking-[-0.5]">
-          <Link
-            href="/"
-            className="font-sans text-lg leading-6 text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink"
-          >
-            Riccardo Ventura
-          </Link>
-          <p className="text-body">Design Engineer</p>
-        </hgroup>
-
-        <h1 className="mt-20 font-sans text-lg leading-6 text-foreground">{title}</h1>
-        <p className="mt-4 max-w-[66ch] font-sans leading-6 text-pretty">{lede}</p>
-
-        <BracketList entries={entries} />
-      </section>
-    </main>
+    <PageFrame>
+      <h1 className={`mt-20 ${pageTitleClass}`}>{title}</h1>
+      <p className={`mt-4 max-w-[66ch] text-pretty ${pageBodyClass}`}>{lede}</p>
+      <BracketList entries={entries} />
+    </PageFrame>
   );
 }

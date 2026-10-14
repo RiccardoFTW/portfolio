@@ -90,7 +90,7 @@ export default function CodeExamples({
                   tabIndex={isSelected ? 0 : -1}
                   onClick={() => selectExample(index)}
                   className={classNames(
-                    "relative h-9 shrink-0 touch-manipulation rounded-lg px-3 text-sm font-medium outline-hidden select-none",
+                    "relative h-11 shrink-0 touch-manipulation rounded-lg px-3 font-sans text-lg leading-6 font-medium outline-hidden select-none",
                     "transition-[scale,color] duration-150 ease-out active:scale-[0.96] motion-reduce:transition-[color]",
                     "focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-1 focus-visible:outline-foreground",
                     isSelected ? "text-foreground" : "text-text hover:text-foreground",
@@ -147,7 +147,7 @@ export default function CodeExamples({
                     ease: "easeOut",
                   },
                 }}
-                className="absolute top-0 left-0 m-0 w-max min-w-full px-4 py-4 font-mono text-[13px] leading-[22px] text-foreground"
+                className="absolute top-0 left-0 m-0 w-max min-w-full px-4 py-4 font-mono text-lg leading-6 text-foreground"
               >
                 <code>{currentCode}</code>
               </m.pre>

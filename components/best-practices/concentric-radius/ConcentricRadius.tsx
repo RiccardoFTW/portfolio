@@ -18,6 +18,7 @@ import RadiusFormulaExample from "./RadiusFormulaExample";
 import SearchBar from "./examples/SearchBar";
 import { Annotation } from "@/components/Annotation";
 import { AnnotationGroup } from "@/components/AnnotationGroup";
+import { pageAccentClass, pageBodyClass } from "@/components/pageStyle";
 import ConcentricArcs from "./ConcentricArcs";
 import ConcentricRadiusIntro from "./ConcentricRadiusIntro";
 import { FootnoteRef } from "../FootnoteRef";
@@ -70,7 +71,7 @@ function ConcentricRadiusProblem() {
               >
                 <div className="size-full rounded-xl bg-surface inset-ring-1 inset-ring-demo-edge" />
               </div>
-              <p className="text-sm font-medium text-danger-ink">Sbagliato</p>
+              <p className="font-sans text-lg leading-6 font-medium text-danger-ink">Sbagliato</p>
             </div>
 
             <div className="flex min-h-64 flex-col items-center justify-center gap-6 p-6">
@@ -80,7 +81,7 @@ function ConcentricRadiusProblem() {
               >
                 <div className="size-full rounded-xl bg-surface inset-ring-1 inset-ring-demo-edge" />
               </div>
-              <p className="text-sm font-medium text-success-ink">Giusto</p>
+              <p className="font-sans text-lg leading-6 font-medium text-success-ink">Giusto</p>
             </div>
           </div>
         </DemoSurface>
@@ -145,7 +146,7 @@ function ConcentricRadiusFormula() {
         Qui <Symbol>R</Symbol> è il raggio esterno, <Symbol>r</Symbol> quello
         interno e <Symbol>g</Symbol> la distanza fra i due bordi. Letta al
         contrario, la relazione diventa <Measure>R = r + g</Measure>. Se il
-        contenitore non ha un bordo, <Symbol>g</Symbol> coincide con il
+        contenitore non ha un bordo, <Symbol>g</Symbol>{" "}coincide con il
         padding; se ce l&apos;ha, <Symbol>g</Symbol> comprende anche il suo
         spessore. Il <Measure>max(…, 0)</Measure> viene dalla specifica CSS
         <FootnoteRef href="#concentric-radius-source-3" n={3} />: quando la
@@ -158,35 +159,35 @@ function ConcentricRadiusFormula() {
         className="divide-y divide-black/8 dark:divide-white/8"
       >
         <div className="grid grid-cols-[2.75rem_1fr] items-center gap-3 px-4 py-3">
-          <dt className="font-handwriting text-2xl leading-none text-accent-ink">
+          <dt className={pageAccentClass}>
             <strong>R</strong>
           </dt>
-          <dd className="text-[14px] leading-5 tracking-[-0.005em] text-stone-600 dark:text-stone-400">
+          <dd className={pageBodyClass}>
             raggio del bordo esterno
           </dd>
         </div>
 
         <div className="grid grid-cols-[2.75rem_1fr] items-center gap-3 px-4 py-3">
-          <dt className="font-handwriting text-2xl leading-none text-accent-ink">
+          <dt className={pageAccentClass}>
             <strong>r</strong>
           </dt>
-          <dd className="text-[14px] leading-5 tracking-[-0.005em] text-stone-600 dark:text-stone-400">
+          <dd className={pageBodyClass}>
             raggio del bordo interno
           </dd>
         </div>
 
         <div className="grid grid-cols-[2.75rem_1fr] items-center gap-3 px-4 py-3">
-          <dt className="font-handwriting text-2xl leading-none text-accent-ink">
+          <dt className={pageAccentClass}>
             <Annotation
               type="circle"
-              color="var(--accent)"
+              color="var(--article-accent)"
               padding={4}
               animationDuration={350}
             >
               <strong>g</strong>
             </Annotation>
           </dt>
-          <dd className="text-[14px] leading-5 tracking-[-0.005em] text-stone-600 dark:text-stone-400">
+          <dd className={pageBodyClass}>
             distanza tra i due bordi
           </dd>
         </div>
@@ -194,34 +195,34 @@ function ConcentricRadiusFormula() {
 
       <DemoSurface className="grid grid-cols-3 divide-x divide-black/8 dark:divide-white/8">
         <p className="px-4 py-3">
-          <span className="block font-handwriting text-2xl leading-none text-accent-ink">
+          <span className={`block ${pageAccentClass}`}>
             R
           </span>
-          <span className="mt-1 block font-mono text-[20px] font-medium leading-none tabular-nums tracking-[-0.01em] text-foreground">
+          <span className="mt-1 block font-sans text-lg leading-6 tabular-nums text-foreground">
             32
-            <span className="ml-1 text-[11px] font-medium text-stone-500 dark:text-stone-400">
+            <span className="ml-1 text-text">
               px
             </span>
           </span>
         </p>
         <p className="px-4 py-3">
-          <span className="block font-handwriting text-2xl leading-none text-accent-ink">
+          <span className={`block ${pageAccentClass}`}>
             g
           </span>
-          <span className="mt-1 block font-mono text-[20px] font-medium leading-none tabular-nums tracking-[-0.01em] text-foreground">
+          <span className="mt-1 block font-sans text-lg leading-6 tabular-nums text-foreground">
             12
-            <span className="ml-1 text-[11px] font-medium text-stone-500 dark:text-stone-400">
+            <span className="ml-1 text-text">
               px
             </span>
           </span>
         </p>
         <p className="px-4 py-3">
-          <span className="block font-handwriting text-2xl leading-none text-accent-ink">
+          <span className={`block ${pageAccentClass}`}>
             r
           </span>
-          <span className="mt-1 block font-mono text-[20px] font-medium leading-none tabular-nums tracking-[-0.01em] text-foreground">
+          <span className="mt-1 block font-sans text-lg leading-6 tabular-nums text-foreground">
             20
-            <span className="ml-1 text-[11px] font-medium text-stone-500 dark:text-stone-400">
+            <span className="ml-1 text-text">
               px
             </span>
           </span>

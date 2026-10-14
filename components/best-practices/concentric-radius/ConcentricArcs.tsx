@@ -57,7 +57,7 @@ function ArcGuides() {
                 strokeDasharray="4 5"
             />
             <circle cx="64" cy="232" r="4" fill="var(--foreground)" />
-            <text x="76" y="255" fill="var(--text)" fontSize="24">
+            <text x="76" y="255" fill="var(--text)" fontSize="18">
                 centro
             </text>
         </>
@@ -80,7 +80,7 @@ export default function ConcentricArcs() {
                     aria-labelledby={titleId}
                     aria-describedby={descriptionId}
                     viewBox="0 0 320 288"
-                    className="mx-auto block h-auto w-full max-w-[340px] font-handwriting"
+                    className="mx-auto block h-auto w-full max-w-[340px] font-sans"
                     initial={motion.initial}
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.6 }}
@@ -95,7 +95,7 @@ export default function ConcentricArcs() {
                     <m.path
                         d="M64 56A176 176 0 0 1 240 232"
                         fill="none"
-                        stroke="var(--accent-ink)"
+                        stroke="var(--article-accent)"
                         strokeWidth="4"
                         strokeLinecap="round"
                         variants={draw}
@@ -104,8 +104,8 @@ export default function ConcentricArcs() {
                     <m.text
                         x="250"
                         y="234"
-                        fill="var(--accent-ink)"
-                        fontSize="24"
+                        fill="var(--article-accent)"
+                        fontSize="18"
                         fontWeight="600"
                         variants={fade}
                         transition={motion.outerLabel}
@@ -126,7 +126,7 @@ export default function ConcentricArcs() {
                         x="194"
                         y="214"
                         fill="var(--foreground)"
-                        fontSize="24"
+                        fontSize="18"
                         fontWeight="600"
                         variants={fade}
                         transition={motion.innerLabel}
@@ -137,7 +137,7 @@ export default function ConcentricArcs() {
                     <m.path
                         d="M64 112V56"
                         fill="none"
-                        stroke="var(--accent-ink)"
+                        stroke="var(--article-accent)"
                         strokeWidth="5"
                         strokeLinecap="round"
                         variants={draw}
@@ -146,7 +146,7 @@ export default function ConcentricArcs() {
                     <m.path
                         d="M184 232H240"
                         fill="none"
-                        stroke="var(--accent-ink)"
+                        stroke="var(--article-accent)"
                         strokeWidth="5"
                         strokeLinecap="round"
                         variants={draw}
@@ -155,8 +155,8 @@ export default function ConcentricArcs() {
                     <m.text
                         x="77"
                         y="89"
-                        fill="var(--accent-ink)"
-                        fontSize="24"
+                        fill="var(--article-accent)"
+                        fontSize="18"
                         fontWeight="600"
                         variants={fade}
                         transition={motion.gapLabel}

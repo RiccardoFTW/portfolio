@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { TransitionText } from "@/components/TransitionText"
+import { pageBodyClass, pageTitleClass } from "@/components/pageStyle"
 
 type SaveState = "idle" | "loading" | "success"
 
@@ -57,10 +58,10 @@ export function ButtonStateDemo() {
     >
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 id="button-demo-title" className="font-medium text-(--text)">
+          <h3 id="button-demo-title" className={pageTitleClass}>
             Prova la sequenza
           </h3>
-          <p className="mt-1 text-sm text-(--text)">
+          <p className={`mt-1 ${pageBodyClass}`}>
             Un&apos;azione asincrona simulata: l&apos;interfaccia conferma subito cosa sta accadendo.
           </p>
         </div>
@@ -75,7 +76,7 @@ export function ButtonStateDemo() {
             onPointerUp={() => setIsPointerPressed(false)}
             onPointerCancel={() => setIsPointerPressed(false)}
             onPointerLeave={() => setIsPointerPressed(false)}
-            className={`min-h-11 min-w-44 rounded-full bg-(--accent) px-5 py-2.5 text-sm font-medium text-white outline-none transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-(--accent) focus-visible:ring-offset-2 focus-visible:ring-offset-(--canvas) pointer-fine:hover:brightness-95 disabled:cursor-wait disabled:opacity-70 ${isPointerPressed ? "scale-[0.97]" : "scale-100"}`}
+            className={`min-h-11 min-w-44 rounded-full bg-article-accent px-5 py-2.5 font-sans text-lg leading-6 font-medium text-white outline-none transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none focus-visible:ring-2 focus-visible:ring-article-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--canvas) pointer-fine:hover:brightness-95 disabled:cursor-wait disabled:opacity-70 ${isPointerPressed ? "scale-[0.97]" : "scale-100"}`}
           >
             <TransitionText text={label} />
           </button>
@@ -84,7 +85,7 @@ export function ButtonStateDemo() {
             <button
               type="button"
               onClick={handleReset}
-              className="min-h-11 rounded-full px-3 text-sm font-medium text-(--accent) underline decoration-1 underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-(--accent) focus-visible:ring-offset-2 focus-visible:ring-offset-(--canvas) pointer-fine:hover:text-(--text)"
+              className="min-h-11 rounded-full px-3 font-sans text-lg leading-6 font-medium text-article-accent outline-none focus-visible:ring-2 focus-visible:ring-article-accent focus-visible:ring-offset-2 focus-visible:ring-offset-(--canvas) pointer-fine:hover:text-foreground"
             >
               Riprova
             </button>
@@ -92,7 +93,7 @@ export function ButtonStateDemo() {
         </div>
       </div>
 
-      <p aria-live="polite" className="mt-4 text-sm text-(--text)">
+      <p aria-live="polite" className={`mt-4 ${pageBodyClass}`}>
         {announcement || "Pronto a salvare le modifiche."}
       </p>
     </section>

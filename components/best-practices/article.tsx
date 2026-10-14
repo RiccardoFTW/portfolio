@@ -1,17 +1,16 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 import { Annotation } from "@/components/Annotation";
+import { pageBodyClass, pageTitleClass } from "@/components/pageStyle";
 
 const surface =
   "bg-black/[0.03] shadow-[0_0_0_1px_oklch(0_0_0/0.06)] dark:bg-white/[0.03] dark:shadow-[0_0_0_1px_oklch(1_0_0/0.08)]";
 
-const headingClass =
-  "relative text-2xl font-medium tracking-[-2px] font-baskerville text-stone-900 dark:text-stone-100";
+const headingClass = `relative ${pageTitleClass}`;
 
-const proseClass =
-  "relative text-[16px] leading-6 text-stone-600 dark:text-stone-400";
+const proseClass = `relative ${pageBodyClass}`;
 
 const sourceLinkClass =
-  "rounded-md px-1 font-handwriting text-xl text-accent-ink transition-[background-color,box-shadow] duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent/4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink";
+  "rounded-sm text-foreground outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink";
 
 function cx(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -19,7 +18,7 @@ function cx(...parts: Array<string | false | null | undefined>) {
 
 export function Measure({ children }: { children: ReactNode }) {
   return (
-    <code className="font-mono text-[13px] font-semibold tabular-nums tracking-[-0.01em] text-foreground">
+    <code className="font-sans text-lg leading-6 font-medium tabular-nums text-foreground">
       {children}
     </code>
   );
@@ -27,7 +26,7 @@ export function Measure({ children }: { children: ReactNode }) {
 
 export function Symbol({ children }: { children: ReactNode }) {
   return (
-    <strong className="font-handwriting text-xl leading-none text-accent-ink">
+    <strong className="font-medium text-foreground">
       {children}
     </strong>
   );
@@ -56,10 +55,10 @@ export function ArticleTitle({
 
   return (
     <div className="flex items-baseline justify-between pt-16">
-      <h2 id={id} className={headingClass}>
+      <h1 id={id} className={headingClass}>
         {children}
-      </h2>
-      <p className="flex items-center gap-1.5 text-sm font-semibold leading-none tabular-nums text-accent-ink">
+      </h1>
+      <p className="flex items-center gap-1.5 font-sans text-lg leading-6 tabular-nums text-text">
         <span className="grid place-items-center">
           <span className="invisible col-start-1 row-start-1" aria-hidden="true">
             {label}
@@ -104,16 +103,16 @@ export function ArticleHeading({
   children: ReactNode;
 }) {
   return (
-    <h3 id={id} className={cx(headingClass, "scroll-mt-24 pb-2 pt-16")}>
+    <h2 id={id} className={cx(headingClass, "scroll-mt-24 pb-2 pt-16")}>
       <Annotation animationDuration={250}>{children}</Annotation>
-    </h3>
+    </h2>
   );
 }
 
 export function FormulaCallout({ children }: { children: ReactNode }) {
   return (
-    <p className="relative p-6 text-center text-3xl font-handwriting text-accent-ink">
-      <Annotation type="box" color="var(--accent)" padding={6} animationDuration={350}>
+    <p className={`relative p-6 text-center ${pageTitleClass}`}>
+      <Annotation type="box" padding={6} animationDuration={350}>
         {children}
       </Annotation>
     </p>
@@ -156,7 +155,7 @@ export function DemoStage({
 
 export function SourceList({ children }: { children: ReactNode }) {
   return (
-    <ol className="list-decimal space-y-6 pl-6 text-[16px] leading-6 text-stone-600 dark:text-stone-400 marker:text-[13px] marker:font-semibold marker:text-accent-ink">
+    <ol className={`list-decimal space-y-6 pl-6 marker:font-medium marker:text-text ${pageBodyClass}`}>
       {children}
     </ol>
   );

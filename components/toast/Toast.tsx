@@ -85,13 +85,13 @@ export function Toast({ index, reduceMotion, title, description, titleColor }: T
     >
       <article className="flex w-max max-w-[calc(100vw-2rem)] flex-col gap-1 rounded-2xl bg-white px-3.5 pt-2.5 pb-3 font-sans shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_1px_2px_-1px_rgba(0,0,0,0.08),0_2px_4px_rgba(0,0,0,0.04)]">
         <span
-          className="toast-card__title text-(--accent)"
+          className="toast-card__title font-sans text-lg leading-6 text-article-accent"
           style={titleColor ? { color: titleColor } : undefined}
         >
           {title}
         </span>
         {description ? (
-          <span className="toast-card__description text-zinc-500">{description}</span>
+          <span className="toast-card__description font-sans leading-6 text-text">{description}</span>
         ) : null}
       </article>
     </m.div>

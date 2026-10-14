@@ -1,4 +1,5 @@
 import { Annotation } from "@/components/Annotation"
+import { pageBodyClass, pageLinkClass, pageTitleClass } from "@/components/pageStyle"
 import { ButtonStateDemo } from "@/components/thoughts/ButtonStateDemo"
 
 const nativeButtonExample = `<button type="button" onClick={handleSave}>
@@ -20,7 +21,7 @@ const states = [
 
 function CodeBlock({ children }: { children: string }) {
   return (
-    <pre className="mt-5 overflow-x-auto rounded-2xl bg-black/[0.04] p-4 text-left text-sm leading-6 text-(--text) shadow-[0_0_0_1px_color-mix(in_oklab,var(--border),transparent_25%)]">
+    <pre className={`mt-5 overflow-x-auto rounded-2xl bg-black/[0.04] p-4 text-left shadow-[0_0_0_1px_color-mix(in_oklab,var(--border),transparent_25%)] ${pageBodyClass}`}>
       <code>{children}</code>
     </pre>
   )
@@ -28,9 +29,9 @@ function CodeBlock({ children }: { children: string }) {
 
 export function ButtonThought() {
   return (
-    <div className="mt-16 space-y-16 text-pretty">
+    <div className={`mt-16 space-y-16 text-pretty ${pageBodyClass}`}>
       <section aria-labelledby="intent-title">
-        <h2 id="intent-title" className="font-display text-4xl leading-none text-(--accent) text-balance">
+        <h2 id="intent-title" className={`${pageTitleClass} text-balance`}>
           Prima dell&apos;estetica, l&apos;intenzione
         </h2>
         <p className="mt-4">
@@ -46,23 +47,23 @@ export function ButtonThought() {
       </section>
 
       <section aria-labelledby="link-or-button-title">
-        <h2 id="link-or-button-title" className="font-display text-4xl leading-none text-(--accent) text-balance">
+        <h2 id="link-or-button-title" className={`${pageTitleClass} text-balance`}>
           Link o button?
         </h2>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           <article className="rounded-2xl bg-black/[0.025] p-5 shadow-[0_0_0_1px_color-mix(in_oklab,var(--border),transparent_25%)]">
-            <h3 className="font-medium text-(--text)">Usa un link</h3>
-            <p className="mt-2 text-sm">Quando l&apos;utente naviga verso un URL: “Leggi l&apos;articolo”, “Vai al profilo”.</p>
+            <h3 className={pageTitleClass}>Usa un link</h3>
+            <p className="mt-2">Quando l&apos;utente naviga verso un URL: “Leggi l&apos;articolo”, “Vai al profilo”.</p>
           </article>
           <article className="rounded-2xl bg-black/[0.025] p-5 shadow-[0_0_0_1px_color-mix(in_oklab,var(--border),transparent_25%)]">
-            <h3 className="font-medium text-(--text)">Usa un button</h3>
-            <p className="mt-2 text-sm">Quando l&apos;utente agisce nella UI: “Salva”, “Invia”, “Apri menu”.</p>
+            <h3 className={pageTitleClass}>Usa un button</h3>
+            <p className="mt-2">Quando l&apos;utente agisce nella UI: “Salva”, “Invia”, “Apri menu”.</p>
           </article>
         </div>
       </section>
 
       <section aria-labelledby="states-title">
-        <h2 id="states-title" className="font-display text-4xl leading-none text-(--accent) text-balance">
+        <h2 id="states-title" className={`${pageTitleClass} text-balance`}>
           Gli stati non sono decorazione
         </h2>
         <p className="mt-4">
@@ -72,7 +73,7 @@ export function ButtonThought() {
         <dl className="mt-5 divide-y divide-(--border) border-y border-(--border)">
           {states.map(([name, description]) => (
             <div key={name} className="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-4">
-              <dt className="font-medium text-(--text)">{name}</dt>
+              <dt className={pageTitleClass}>{name}</dt>
               <dd>{description}</dd>
             </div>
           ))}
@@ -80,7 +81,7 @@ export function ButtonThought() {
       </section>
 
       <section aria-labelledby="hierarchy-title">
-        <h2 id="hierarchy-title" className="font-display text-4xl leading-none text-(--accent) text-balance">
+        <h2 id="hierarchy-title" className={`${pageTitleClass} text-balance`}>
           Progetta la gerarchia, non solo la forma
         </h2>
         <p className="mt-4">
@@ -95,12 +96,12 @@ export function ButtonThought() {
       </section>
 
       <section aria-labelledby="code-title">
-        <h2 id="code-title" className="font-display text-4xl leading-none text-(--accent) text-balance">
+        <h2 id="code-title" className={`${pageTitleClass} text-balance`}>
           Parti dal button nativo
         </h2>
         <p className="mt-4">
-          Il tag <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-sm text-(--text)">&lt;button&gt;</code>{" "}
-          porta già con sé tastiera, focus e semantica. Ricostruirli con un <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-sm text-(--text)">&lt;div onClick&gt;</code>{" "}
+          Il tag <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-foreground">&lt;button&gt;</code>{" "}
+          porta già con sé tastiera, focus e semantica. Ricostruirli con un <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-foreground">&lt;div onClick&gt;</code>{" "}
           significa assumersi lavoro extra e rischiare di farlo in modo incompleto.
         </p>
         <CodeBlock>{nativeButtonExample}</CodeBlock>
@@ -112,7 +113,7 @@ export function ButtonThought() {
       </section>
 
       <section aria-labelledby="demo-title">
-        <h2 id="demo-title" className="font-display text-4xl leading-none text-(--accent) text-balance">
+        <h2 id="demo-title" className={`${pageTitleClass} text-balance`}>
           Il feedback chiude il loop
         </h2>
         <p className="mt-4">
@@ -126,12 +127,12 @@ export function ButtonThought() {
       </section>
 
       <section aria-labelledby="motion-title">
-        <h2 id="motion-title" className="font-display text-4xl leading-none text-(--accent) text-balance">
+        <h2 id="motion-title" className={`${pageTitleClass} text-balance`}>
           La decisione di motion
         </h2>
         <p className="mt-4">
           La piccola compressione al pointer press dice “ti ho sentito”. Dura 150ms, anima solo
-          <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-sm text-(--text)">transform</code> e
+          <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-foreground">transform</code> e
           non viene applicata quando l&apos;azione parte da tastiera. Il testo scorre di pochi pixel
           e sfuma quando cambia stato, mantenendo fermo il contenitore del pulsante.
         </p>
@@ -142,10 +143,10 @@ export function ButtonThought() {
       </section>
 
       <section aria-labelledby="checklist-title">
-        <h2 id="checklist-title" className="font-display text-4xl leading-none text-(--accent) text-balance">
+        <h2 id="checklist-title" className={`${pageTitleClass} text-balance`}>
           Checklist prima di pubblicare
         </h2>
-        <ul className="mt-5 list-inside list-disc space-y-2 marker:text-(--accent)">
+        <ul className="mt-5 list-inside list-disc space-y-2 marker:text-text">
           <li>La label descrive l&apos;azione e non il gesto.</li>
           <li>Il markup semantico corrisponde al comportamento: link per navigare, button per agire.</li>
           <li>Focus, stato disabled e loading sono visibili e verificabili da tastiera.</li>
@@ -155,13 +156,13 @@ export function ButtonThought() {
       </section>
 
       <section aria-labelledby="resources-title" className="border-t border-(--border) pt-8">
-        <h2 id="resources-title" className="font-display text-4xl leading-none text-(--accent)">
+        <h2 id="resources-title" className={pageTitleClass}>
           Per approfondire
         </h2>
         <ul className="mt-5 space-y-2">
-          <li><a className="underline decoration-1 underline-offset-4 pointer-fine:hover:text-(--accent)" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button" target="_blank" rel="noreferrer">MDN: l&apos;elemento button</a></li>
-          <li><a className="underline decoration-1 underline-offset-4 pointer-fine:hover:text-(--accent)" href="https://www.w3.org/WAI/ARIA/apg/patterns/button/" target="_blank" rel="noreferrer">W3C: Button Pattern</a></li>
-          <li><a className="underline decoration-1 underline-offset-4 pointer-fine:hover:text-(--accent)" href="https://uiplaybook.dev/play/button" target="_blank" rel="noreferrer">UI Playbook: Button</a></li>
+          <li><a className={pageLinkClass} href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button" target="_blank" rel="noreferrer">MDN: l&apos;elemento button</a></li>
+          <li><a className={pageLinkClass} href="https://www.w3.org/WAI/ARIA/apg/patterns/button/" target="_blank" rel="noreferrer">W3C: Button Pattern</a></li>
+          <li><a className={pageLinkClass} href="https://uiplaybook.dev/play/button" target="_blank" rel="noreferrer">UI Playbook: Button</a></li>
         </ul>
       </section>
     </div>

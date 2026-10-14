@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
+import { ArrowUpRight } from "lucide-react";
 import { Annotation } from "@/components/Annotation";
+import { pageArrowClass, pageBodyClass, pageLinkClass, pageTitleClass } from "@/components/pageStyle";
 
 const SM_QUERY = "(min-width: 40rem)";
 
@@ -40,14 +42,12 @@ export function BracketList({ entries }: { entries: readonly BracketEntry[] }) {
             padding={8}
             className="shrink-0 sm:max-w-[28ch]"
           >
-            <Link
-              href={entry.href}
-              className="inline-block px-1 font-sans text-lg leading-6 text-foreground outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
+            <Link href={entry.href} className={`${pageLinkClass} ${pageTitleClass} px-1`}>
               {entry.title}
+              <ArrowUpRight aria-hidden="true" className={pageArrowClass} />
             </Link>
           </Annotation>
-          <p className="order-first font-handwriting text-lg leading-6 text-accent sm:order-none sm:max-w-[24ch]">
+          <p className={`order-first sm:order-none sm:max-w-[24ch] ${pageBodyClass}`}>
             {entry.description}
           </p>
         </li>

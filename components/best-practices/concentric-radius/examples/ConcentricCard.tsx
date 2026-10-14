@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useState } from "react";
 import ToggleButton from "../../ToggleButton";
 import ExampleBracket from "../ExampleBracket";
+import { pageBodyClass, pageTitleClass } from "@/components/pageStyle";
 
 export default function ConcentricCard() {
     const [showFinished, setShowFinished] = useState(false)
@@ -33,11 +34,11 @@ export default function ConcentricCard() {
                     <div className="flex min-w-0 flex-col justify-end px-2">
                         {showFinished ? (
                             <>
-                                <h4 className="mt-2 text-xl font-medium text-foreground">
+                                <h4 className={`mt-2 ${pageTitleClass}`}>
                                     Ship on Stormy Seas
                                 </h4>
 
-                                <p className="mt-0.5 text-sm leading-6 text-text">
+                                <p className={`mt-0.5 ${pageBodyClass}`}>
                                     Ivan Aivazovsky
                                 </p>
                             </>

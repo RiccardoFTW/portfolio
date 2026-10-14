@@ -647,7 +647,7 @@ function EraserIcon() {
 
 export function InkShow({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const hold = pathname === "/";
+  const home = pathname === "/";
   const entriesRef = useRef<InkEntry[]>([]);
   const figureRef = useRef<InkFigure | null>(null);
   const writersRef = useRef<Writers | null>(null);
@@ -721,7 +721,7 @@ export function InkShow({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (!hold) return;
+    if (!home) return;
     const penStage = penStageRef.current;
     const penSvg = penSvgRef.current;
     const markStage = markStageRef.current;
@@ -739,42 +739,38 @@ export function InkShow({ children }: { children: ReactNode }) {
       pen.destroy();
       mark.destroy();
     };
-  }, [hold]);
+  }, [home]);
 
   useEffect(() => {
-    if (hold) return;
     runRef.current?.abort();
     stopStrokeAudio();
     stopEraserAudio();
     setStarted(false);
-  }, [hold]);
+  }, [pathname]);
 
   return (
-    <InkShowContext.Provider value={hold ? controller : null}>
+    <InkShowContext.Provider value={home ? controller : null}>
       {children}
-      {hold ? (
+      {home ? (
         <>
-          <div
-            ref={penStageRef}
-            aria-hidden="true"
-            data-hairline="stilografica"
-            className={`${styles.illustration} ${styles.writer}`}
-          >
-            <svg ref={penSvgRef} viewBox="0 0 400 320" className="size-full" />
-          </div>
-          <div
-            ref={markStageRef}
-            aria-hidden="true"
-            data-hairline="evidenziatore"
-            className={`${styles.illustration} ${styles.marker} ${styles.writer}`}
-          >
-            <svg ref={markSvgRef} viewBox="0 0 400 320" className="size-full" />
-          </div>
-        </>
-      ) : null}
+      <div
+        ref={penStageRef}
+        aria-hidden="true"
+        data-hairline="stilografica"
+        className={`${styles.illustration} ${styles.writer}`}
+      >
+        <svg ref={penSvgRef} viewBox="0 0 400 320" className="size-full" />
+      </div>
+      <div
+        ref={markStageRef}
+        aria-hidden="true"
+        data-hairline="evidenziatore"
+        className={`${styles.illustration} ${styles.marker} ${styles.writer}`}
+      >
+        <svg ref={markSvgRef} viewBox="0 0 400 320" className="size-full" />
+      </div>
       <LazyMotion features={domAnimation}>
-        {hold ? (
-          <div
+        <div
             className={cn(
               themeIconTrackClass,
               "fixed top-14 z-40 right-[max(var(--page-padding-inline),calc((100vw-var(--page-max-width))/2+var(--page-padding-inline)))]",
@@ -815,8 +811,9 @@ export function InkShow({ children }: { children: ReactNode }) {
               />
             </button>
           </div>
-        ) : null}
       </LazyMotion>
+        </>
+      ) : null}
     </InkShowContext.Provider>
   );
 }

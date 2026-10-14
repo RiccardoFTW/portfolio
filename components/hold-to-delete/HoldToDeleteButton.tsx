@@ -54,7 +54,7 @@ function CheckIcon() {
 }
 
 const contentClassName =
-  "flex h-12 items-center gap-2.5 rounded-full px-7 text-base font-medium";
+  "flex h-12 items-center gap-2.5 rounded-full px-7 font-sans text-lg leading-6 font-medium";
 
 export function HoldToDeleteButton() {
   const reduceMotion = useReducedMotion();

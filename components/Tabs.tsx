@@ -215,7 +215,7 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
                 scaleX: shouldReduceMotion ? 1 : widthScale,
                 originX: 0,
               }}
-              className="h-full overflow-hidden rounded-(--radius-tab) bg-(--accent)"
+              className="h-full overflow-hidden rounded-(--radius-tab) bg-article-accent"
             >
               <m.div
                 className="flex w-max justify-center gap-1 pl-1"

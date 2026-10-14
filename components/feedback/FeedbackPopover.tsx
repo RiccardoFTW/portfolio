@@ -53,7 +53,7 @@ export function FeedbackPopover({
             transition={contentTransition}
             className="flex h-full items-center justify-center"
           >
-            <p className="text-base font-medium">Feedback received. Thank you!</p>
+            <p className="font-sans text-lg leading-6 font-medium text-foreground">Feedback received. Thank you!</p>
           </m.div>
         ) : (
           <m.form
@@ -89,7 +89,7 @@ export function FeedbackPopover({
               <button
                 type="submit"
                 disabled={isLoading || feedback.trim().length === 0}
-                className="relative ml-auto inline-flex h-8 w-[128px] items-center justify-center overflow-hidden rounded-lg bg-(--accent) text-sm font-medium text-white"
+                className="relative ml-auto inline-flex h-8 w-[128px] items-center justify-center overflow-hidden rounded-lg bg-article-accent font-sans text-lg leading-6 font-medium text-white"
               >
                 <AnimatePresence initial={false} mode="popLayout">
                   <m.span

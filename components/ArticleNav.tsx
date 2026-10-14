@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { domAnimation, LazyMotion, m, useReducedMotion } from "motion/react";
+import { pageBodyClass } from "@/components/pageStyle";
 
 const easeOut = [0.23, 1, 0.32, 1] as const;
 
@@ -64,10 +65,10 @@ export function ArticleNav({ sections }: ArticleNavProps) {
                 <li key={section.id}>
                   <a
                     href={`#${section.id}`}
-                    className={`block rounded-sm text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink ${
+                    className={`block rounded-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-article-accent ${pageBodyClass} ${
                       isActive
-                        ? "text-accent-ink"
-                        : "text-text pointer-fine:hover:text-accent-ink"
+                        ? "text-foreground"
+                        : "text-text pointer-fine:hover:text-foreground"
                     }`}
                     aria-current={isActive ? "true" : undefined}
                   >

@@ -4,6 +4,7 @@ import { useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 
 import { Panel } from "@/components/Panel";
+import { pageBodyClass, pageTitleClass } from "@/components/pageStyle";
 
 const emptySubscribe = () => () => {};
 const getClientSnapshot = () => true;
@@ -22,7 +23,7 @@ export function PanelDemo() {
       <button
         type="button"
         aria-describedby="panel-demo-hint"
-        className="flex aspect-[4/3] w-full items-center justify-center rounded-2xl border border-(--border) bg-white text-base font-medium text-(--text) outline-none transition-colors focus-visible:border-(--accent) focus-visible:text-(--accent) pointer-fine:hover:border-(--accent) pointer-fine:hover:text-(--accent)"
+        className={`flex aspect-[4/3] w-full items-center justify-center rounded-2xl border border-(--border) bg-white outline-none transition-colors focus-visible:border-article-accent focus-visible:text-article-accent pointer-fine:hover:border-article-accent pointer-fine:hover:text-article-accent ${pageTitleClass}`}
         onPointerEnter={() => setIsOpen(true)}
         onPointerLeave={() => setIsOpen(false)}
         onFocus={() => setIsOpen(true)}
@@ -30,7 +31,7 @@ export function PanelDemo() {
       >
         Hover or focus
       </button>
-      <p id="panel-demo-hint" className="text-center text-body">
+      <p id="panel-demo-hint" className={`text-center ${pageBodyClass}`}>
         The panel slides into the viewport from the bottom.
       </p>
 

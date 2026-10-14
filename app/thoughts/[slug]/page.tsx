@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { notFound } from "next/navigation";
+import { PageFrame } from "@/components/PageFrame";
+import { pageArrowClass, pageBodyClass, pageLinkClass, pageTitleClass } from "@/components/pageStyle";
 import { findThought, thoughts } from "@/data/thoughts";
 
 export function generateStaticParams() {
@@ -42,24 +45,18 @@ export default async function ThoughtPage({
   const Article = thought.Component;
 
   return (
-    <main className="bg-(--canvas) text-(--text)">
-      <article className="mx-auto w-full max-w-2xl px-6 pt-10 pb-20 sm:pt-16">
-        <Link
-          href="/thoughts"
-          className="inline-flex min-h-11 items-center text-sm font-medium text-(--accent) underline decoration-1 underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-(--accent) focus-visible:ring-offset-2 focus-visible:ring-offset-(--canvas) pointer-fine:hover:text-(--text)"
-        >
-          ← Torna alle riflessioni
+    <PageFrame>
+      <article className="mt-20">
+        <Link href="/thoughts" className={pageLinkClass}>
+          Riflessioni personali
+          <ArrowUpRight aria-hidden="true" className={pageArrowClass} />
         </Link>
 
-        <header className="mt-14">
-          <p className="text-sm font-medium text-(--accent)">{thought.category}</p>
-          <h1 className="mt-3 max-w-xl font-display text-5xl leading-[0.9] text-(--accent) text-balance sm:text-6xl">
-            {thought.title}
-          </h1>
-          <p className="mt-5 max-w-xl text-lg leading-8 text-pretty">
-            {thought.description}
-          </p>
-          <p className="mt-6 text-sm">
+        <header className="mt-4 max-w-[66ch]">
+          <p className="text-body">{thought.category}</p>
+          <h1 className={`mt-4 text-balance ${pageTitleClass}`}>{thought.title}</h1>
+          <p className={`mt-4 text-pretty ${pageBodyClass}`}>{thought.description}</p>
+          <p className="mt-4 text-body">
             <time dateTime={thought.publishedAt}>{thought.publishedLabel}</time>
             <span aria-hidden="true"> · </span>
             {thought.readingTime}
@@ -68,6 +65,6 @@ export default async function ThoughtPage({
 
         <Article />
       </article>
-    </main>
+    </PageFrame>
   );
 }

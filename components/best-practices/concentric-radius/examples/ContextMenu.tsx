@@ -5,6 +5,7 @@ import ToggleButton from "../../ToggleButton";
 import ExampleBracket from "../ExampleBracket";
 import { useState } from "react";
 import { IconSwap } from "@/components/IconSwap";
+import { pageBodyClass } from "@/components/pageStyle";
 
 
 const actions = [
@@ -28,7 +29,7 @@ export default function ContextMenu() {
                         return (
                             <div
                                 key={action.label}
-                                className={`flex min-h-10 w-full items-center gap-3 px-3 py-2.5 text-sm text-foreground [transition:background-color_150ms_ease,border-radius_200ms_cubic-bezier(0.77,0,0.175,1)] motion-reduce:transition-[background-color] ${itemRadius} ${action.preview
+                                className={`flex min-h-10 w-full items-center gap-3 px-3 py-2.5 ${pageBodyClass} text-foreground [transition:background-color_150ms_ease,border-radius_200ms_cubic-bezier(0.77,0,0.175,1)] motion-reduce:transition-[background-color] ${itemRadius} ${action.preview
                                     ? "bg-inset inset-ring-1 inset-ring-demo-edge"
                                     : "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-inset"
                                     }`}

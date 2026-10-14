@@ -1,5 +1,7 @@
 "use client";
 
+import { pageAccentClass } from "@/components/pageStyle";
+
 type ToggleButtonProps = {
     label: string;
     pressed: boolean;
@@ -39,7 +41,7 @@ export default function ToggleButton({
             {annotation ? (
                 <span
                     aria-hidden="true"
-                    className={`absolute top-1/2 h-8 w-13 text-accent-ink ${annotation.side === "left"
+                    className={`absolute top-1/2 h-8 w-13 text-article-accent ${annotation.side === "left"
                         ? "right-full mr-1"
                         : "left-full ml-1"
                     }`}
@@ -57,7 +59,7 @@ export default function ToggleButton({
                         <path d="M3 5 C22 2 41 8 43 27 M36 20 L43 28 L49 20" />
                         <path d="M4 6 C23 3 42 9 42 27 M37 21 L42 28 L48 21" opacity="0.55" />
                     </svg>
-                    <span className={`absolute top-full mt-2 w-24 text-center font-handwriting text-xl font-normal leading-5 sm:w-28 sm:text-2xl sm:leading-6 ${annotation.side === "left" ? "right-[43px] translate-x-1/2" : "left-[43px] -translate-x-1/2"}`}>
+                    <span className={`absolute top-full mt-2 whitespace-nowrap text-center ${pageAccentClass} ${annotation.side === "left" ? "right-[43px] translate-x-1/2" : "left-[43px] -translate-x-1/2"}`}>
                         {annotation.text}
                     </span>
                 </span>

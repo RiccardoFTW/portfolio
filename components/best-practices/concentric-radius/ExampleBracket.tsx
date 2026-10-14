@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Annotation } from "@/components/Annotation";
+import { pageAccentClass } from "@/components/pageStyle";
 
 export default function ExampleBracket({
     children,
@@ -15,14 +16,14 @@ export default function ExampleBracket({
     return (
         <figure className={`relative ${className}`}>
             <figcaption
-                className={`absolute bottom-full mb-3 whitespace-nowrap font-handwriting text-2xl leading-tight text-accent-ink lg:bottom-auto lg:top-1/2 lg:mb-0 lg:-translate-y-1/2 ${side === "left"
+                className={`absolute bottom-full mb-3 whitespace-nowrap ${pageAccentClass} lg:bottom-auto lg:top-1/2 lg:mb-0 lg:-translate-y-1/2 ${side === "left"
                     ? "left-0 lg:left-auto lg:right-full lg:mr-8"
                     : "right-0 lg:right-auto lg:left-full lg:ml-8"
                     }`}
             >
                 {label}
             </figcaption>
-            <Annotation as="div" type="bracket" brackets={side} color="var(--accent)" padding={5} animationDuration={350}>
+            <Annotation as="div" type="bracket" brackets={side} color="var(--article-accent)" padding={5} animationDuration={350}>
                 {children}
             </Annotation>
         </figure>
