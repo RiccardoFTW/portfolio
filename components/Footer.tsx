@@ -48,7 +48,7 @@ export function Footer() {
           data-hairline="portapenne"
           aria-label="Disegna le annotazioni"
           onClick={() => ink?.start()}
-          className={`${styles.illustration} relative mt-4 -mb-[calc(var(--figure-h)*0.1)] aspect-[5/4] h-(--figure-h) shrink-0 cursor-pointer appearance-none border-0 bg-transparent p-0 text-inherit outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent`}
+          className={`${styles.illustration} relative mt-4 mt-auto aspect-[5/4] h-(--figure-h) shrink-0 cursor-pointer appearance-none border-0 bg-transparent p-0 text-inherit outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent`}
         >
           <svg
             ref={svgRef}

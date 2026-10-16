@@ -63,12 +63,13 @@ function mount({ stage, svg, read }, value) {
 
   const C = Cam(45, 0.5, 2.1);
   const ends = [];
-  for (const r of [0, 26]) for (const v of [-1, 0, 1]) for (const t of TOOLS) {
-    const { o, L } = axis(t, r, v);
+  // Centre the resting figure; raised tools use the surrounding viewBox space.
+  for (const t of TOOLS) {
+    const { o, L } = axis(t, 0, 0);
     ends.push(add(o, L, t.prof[t.prof.length - 1][0]));
   }
   for (const q of circ(R1, 24)) ends.push([q.u, q.v, CH], [q.u, q.v, 0]);
-  fit(C, ends, 200, 172);
+  fit(C, ends, 200, 160);
   const P = proj(C), Q = (p) => P(p[0], p[1], p[2]);
   const front = facing(C);
 
