@@ -4,12 +4,16 @@ import { notFound } from "next/navigation";
 import { ArticleNav } from "@/components/ArticleNav";
 import { PageFrame } from "@/components/PageFrame";
 import { pageArrowClass, pageLinkClass } from "@/components/pageStyle";
+import { contentPublished } from "@/data/content";
 import {
   bestPractices,
   findBestPractice,
 } from "@/data/best-practices";
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
+  if (!contentPublished) return [];
   return bestPractices.map(({ slug }) => ({ slug }));
 }
 
@@ -18,6 +22,8 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  if (!contentPublished) return {};
+
   const { slug } = await params;
   const item = findBestPractice(slug);
 
@@ -34,6 +40,10 @@ export default async function BestPracticePage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  if (!contentPublished) {
+    notFound();
+  }
+
   const { slug } = await params;
   const item = findBestPractice(slug);
 

@@ -97,10 +97,11 @@ function mount({ stage, svg, read }, value) {
   }).forEach((t) => g.appendChild(t.grp));
 
   const iF = LR(ringAt(P, run(inner, front), CH)), oT = LR(ringAt(P, run(top, front), CH)), oB = LR(ringAt(P, run(foot, front), 0));
-  mk("path", { class: "fo", d: poly([...iF, oT[oT.length - 1], ...oB.slice().reverse(), oT[0]]) }, g);
-  mk("path", { class: "nf lo", d: open(oT) }, g);
-  mk("path", { class: "nf", d: open(iF) }, g);
-  mk("path", { class: "nf sil", d: open([oT[0], ...oB, oT[oT.length - 1]]) }, g);
+  const foreground = mk("g", { "data-cup-front": "" }, g);
+  mk("path", { class: "fo", d: poly([...iF, oT[oT.length - 1], ...oB.slice().reverse(), oT[0]]) }, foreground);
+  mk("path", { class: "nf lo", d: open(oT) }, foreground);
+  mk("path", { class: "nf", d: open(iF) }, foreground);
+  mk("path", { class: "nf sil", d: open([oT[0], ...oB, oT[oT.length - 1]]) }, foreground);
 
   function draw(tool, lift, spread) {
     const { o, L } = axis(tool, lift, spread);
@@ -192,21 +193,26 @@ function mount({ stage, svg, read }, value) {
   }));
   bag.add(() => svg.replaceChildren());
 
-  /** Screen position of a tool's tip, at whatever height it has reached. */
-  function tip(name) {
+  /** Screen pose of a tool, sampled at its current lift and spread. */
+  function pose(name) {
     const tool = tools.find((t) => t.name === name);
     if (!tool) return null;
     const now = performance.now();
     const { o, L } = axis(tool, tval(tool.lift, now), tval(tool.spread, now));
     const end = tool.nib ? tool.nib[1] : tool.prof[tool.prof.length - 1][0];
-    const [x, y] = Q(add(o, L, end));
-    const pt = svg.createSVGPoint();
-    pt.x = x;
-    pt.y = y;
     const m = svg.getScreenCTM();
     if (!m) return null;
-    const s = pt.matrixTransform(m);
-    return { x: s.x, y: s.y };
+    const screen = (point) => {
+      const [x, y] = Q(point);
+      const pt = svg.createSVGPoint();
+      pt.x = x;
+      pt.y = y;
+      const s = pt.matrixTransform(m);
+      return { x: s.x, y: s.y };
+    };
+    const q = norm(cross(norm(cross(L, EYE)), L));
+    const nib = add(add(o, L, end), q, tool.nib ? 1.6 : 0);
+    return { tip: screen(nib), base: screen(o) };
   }
 
   return {
@@ -219,10 +225,18 @@ function mount({ stage, svg, read }, value) {
       locked = true;
       setActive(i);
     },
-    tip,
+    tip: (name) => pose(name)?.tip ?? null,
+    pose,
+    fade: (name, opacity) => {
+      const tool = tools.find((t) => t.name === name);
+      if (tool) tool.grp.style.opacity = String(opacity);
+    },
     hide: (name, hidden) => {
       const tool = tools.find((t) => t.name === name);
-      if (tool) tool.grp.style.visibility = hidden ? "hidden" : "";
+      if (tool) {
+        tool.grp.style.visibility = hidden ? "hidden" : "";
+        tool.grp.style.opacity = "1";
+      }
     },
   };
 }

@@ -3,9 +3,13 @@ import { ArrowUpRight } from "lucide-react";
 import { notFound } from "next/navigation";
 import { PageFrame } from "@/components/PageFrame";
 import { pageArrowClass, pageBodyClass, pageLinkClass, pageTitleClass } from "@/components/pageStyle";
+import { contentPublished } from "@/data/content";
 import { findLabItem, labItems } from "@/data/lab";
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
+  if (!contentPublished) return [];
   return labItems.map(({ slug }) => ({ slug }));
 }
 
@@ -14,6 +18,8 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  if (!contentPublished) return {};
+
   const { slug } = await params;
   const item = findLabItem(slug);
 
@@ -30,6 +36,10 @@ export default async function LabItemPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  if (!contentPublished) {
+    notFound();
+  }
+
   const { slug } = await params;
   const item = findLabItem(slug);
 

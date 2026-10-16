@@ -4,9 +4,13 @@ import { ArrowUpRight } from "lucide-react";
 import { notFound } from "next/navigation";
 import { PageFrame } from "@/components/PageFrame";
 import { pageArrowClass, pageBodyClass, pageLinkClass, pageTitleClass } from "@/components/pageStyle";
+import { contentPublished } from "@/data/content";
 import { findThought, thoughts } from "@/data/thoughts";
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
+  if (!contentPublished) return [];
   return thoughts.map(({ slug }) => ({ slug }));
 }
 
@@ -15,6 +19,10 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
+  if (!contentPublished) {
+    return { title: "Thought non trovato" };
+  }
+
   const { slug } = await params;
   const thought = findThought(slug);
 
@@ -35,6 +43,10 @@ export default async function ThoughtPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  if (!contentPublished) {
+    notFound();
+  }
+
   const { slug } = await params;
   const thought = findThought(slug);
 

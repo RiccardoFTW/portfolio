@@ -5,6 +5,12 @@ export type PortapenneFigure = {
   lift(name: string | null): void;
   /** Screen position of a tool's tip at its current height. */
   tip(name: string): { x: number; y: number } | null;
+  /** Screen endpoints for matching position, orientation and length at handoff. */
+  pose(name: string): {
+    tip: { x: number; y: number };
+    base: { x: number; y: number };
+  } | null;
+  fade(name: string, opacity: number): void;
   /** Hide a tool while its tip is away drawing, then show it on the way back. */
   hide(name: string, hidden: boolean): void;
 };

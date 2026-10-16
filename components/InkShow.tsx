@@ -37,6 +37,8 @@ export type InkEntry = {
 export type InkFigure = {
   lift(name: string | null): void;
   tip(name: string): { x: number; y: number } | null;
+  pose(name: string): { tip: Point; base: Point } | null;
+  fade(name: string, opacity: number): void;
   hide(name: string, hidden: boolean): void;
 };
 
@@ -55,6 +57,12 @@ export function useInkShow() {
 const LIFT_MS = 820;
 const TRAVEL_MS = 320;
 const HOP_MS = 240;
+// Allow the tool to turn upright before handing it back to the cup's drawing.
+const DOCK_MS = 360;
+// Blend over the last ~65ms, while the tool is already descending.
+const HANDOFF_START = 0.82;
+const UNDERLINE_PX_PER_MS = 0.65;
+const UNDERLINE_TURN_MS = 50;
 
 const STROKE_SRC: Record<ToolName, string> = {
   stilografica: "/sounds/pen.mp3",
@@ -260,6 +268,7 @@ function pointOn(path: SVGPathElement, length: number): Point | null {
 type Writer = {
   stage: HTMLDivElement;
   nib: [number, number];
+  base: [number, number];
 };
 
 type Writers = Record<ToolName, Writer>;
@@ -277,22 +286,34 @@ type Cursor = {
   show(tool: ToolName): void;
   hide(): void;
   place(point: Point, angle: number): void;
+  angle(): number;
   turn(from: Point, to: Point, allowFlip: boolean): number;
+  dock(
+    from: Point,
+    target: () => { tip: Point; base: Point } | null,
+    signal: AbortSignal,
+    onFrame: (t: number) => void,
+  ): Promise<void>;
+  fade(opacity: number): void;
 };
 
 function cursorFor(writers: Writers): Cursor {
   let aim = LIFT_OFF;
   let stage: HTMLDivElement | null = null;
   let nib: [number, number] = [0, 0];
+  let base: [number, number] = [0, 0];
+  let scale = 1;
 
-  function place(point: Point, angle: number) {
+  function place(point: Point, angle: number, nextScale = 1) {
     if (!stage) return;
     const width = stage.clientWidth;
     const height = stage.clientHeight;
     const ox = (nib[0] / 400) * width;
     const oy = (nib[1] / 320) * height;
     stage.style.transformOrigin = `${ox}px ${oy}px`;
-    stage.style.transform = `translate(${point.x - ox}px, ${point.y - oy}px) rotate(${angle}deg)`;
+    stage.style.transform = `translate(${point.x - ox}px, ${point.y - oy}px) rotate(${angle}deg) scale(${nextScale})`;
+    aim = angle;
+    scale = nextScale;
   }
 
   return {
@@ -300,6 +321,7 @@ function cursorFor(writers: Writers): Cursor {
       const writer = writers[tool];
       stage = writer.stage;
       nib = writer.nib;
+      base = writer.base;
       aim = LIFT_OFF;
       writer.stage.style.opacity = "1";
       const other: ToolName = tool === "stilografica" ? "evidenziatore" : "stilografica";
@@ -310,6 +332,35 @@ function cursorFor(writers: Writers): Cursor {
       stage = null;
     },
     place,
+    angle: () => aim,
+    fade(opacity) {
+      if (stage) stage.style.opacity = String(opacity);
+    },
+    async dock(from, target, signal, onFrame) {
+      if (!stage) return;
+      const startAngle = aim;
+      const startScale = scale;
+      const dx = ((nib[0] - base[0]) / 400) * stage.clientWidth;
+      const dy = ((nib[1] - base[1]) / 320) * stage.clientHeight;
+      const sourceAngle = Math.atan2(dy, dx) * 180 / Math.PI;
+      const sourceLength = Math.hypot(dx, dy);
+
+      await animate(DOCK_MS, signal, (t) => {
+        onFrame(t);
+        const pose = target();
+        if (!pose) return;
+        const e = smoothstep(t);
+        const targetAngle = Math.atan2(pose.tip.y - pose.base.y, pose.tip.x - pose.base.x) * 180 / Math.PI;
+        // Take the shortest turn, rather than pointing the nib along the flight.
+        const delta = ((targetAngle - sourceAngle - startAngle + 540) % 360 + 360) % 360 - 180;
+        const targetScale = Math.hypot(pose.tip.x - pose.base.x, pose.tip.y - pose.base.y) / sourceLength;
+        place(
+          { x: from.x + (pose.tip.x - from.x) * e, y: from.y + (pose.tip.y - from.y) * e },
+          startAngle + delta * e,
+          startScale + (targetScale - startScale) * e,
+        );
+      });
+    },
     turn(from, to, allowFlip) {
       const target = heading(from, to);
       if (target == null) return aim;
@@ -352,6 +403,70 @@ async function fly(
     );
   });
   return end;
+}
+
+function coverCupFront() {
+  const source = document.querySelector<SVGSVGElement>("[data-hairline='portapenne'] > svg");
+  const front = source?.querySelector<SVGGElement>("[data-cup-front]");
+  if (!source || !front) return () => {};
+
+  // Reuse the actual wall, including its curved rim, above the flying SVG.
+  const cover = document.createElement("div");
+  cover.className = `${styles.illustration} ${styles.cupCover}`;
+  cover.dataset.hairline = "portapenne-cover";
+  cover.setAttribute("aria-hidden", "true");
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  const wall = front.cloneNode(true) as SVGGElement;
+  svg.append(wall);
+  cover.append(svg);
+  document.body.append(cover);
+
+  let frame = 0;
+  const sync = () => {
+    const matrix = source.getScreenCTM();
+    if (matrix) {
+      wall.setAttribute("transform", `matrix(${matrix.a} ${matrix.b} ${matrix.c} ${matrix.d} ${matrix.e} ${matrix.f})`);
+    }
+    frame = requestAnimationFrame(sync);
+  };
+  sync();
+  const visibility = front.style.visibility;
+  front.style.visibility = "hidden";
+
+  return () => {
+    cancelAnimationFrame(frame);
+    front.style.visibility = visibility;
+    cover.remove();
+  };
+}
+
+async function returnToCup(
+  cursor: Cursor,
+  figure: InkFigure,
+  tool: ToolName,
+  from: Point,
+  signal: AbortSignal,
+) {
+  const uncover = coverCupFront();
+  let handingBack = false;
+  try {
+    await cursor.dock(from, () => figure.pose(tool), signal, (t) => {
+      if (t < HANDOFF_START) return;
+      if (!handingBack) {
+        handingBack = true;
+        figure.hide(tool, false);
+        figure.fade(tool, 0);
+        figure.lift(null);
+      }
+      const e = smoothstep((t - HANDOFF_START) / (1 - HANDOFF_START));
+      cursor.fade(1 - e);
+      figure.fade(tool, e);
+    });
+  } finally {
+    figure.hide(tool, false);
+    cursor.hide();
+    uncover();
+  }
 }
 
 function heldPaths(entry: InkEntry) {
@@ -561,16 +676,89 @@ function holdStroke(path: SVGPathElement) {
   return len;
 }
 
+type StrokeTrack = { path: SVGPathElement; len: number };
+
+// Accelerate and settle only at the ends of the whole handwritten gesture.
+function writingProgress(t: number) {
+  const ramp = 0.08;
+  if (t < ramp) return (t * t) / (2 * ramp * (1 - ramp));
+  if (t > 1 - ramp) return 1 - ((1 - t) ** 2) / (2 * ramp * (1 - ramp));
+  return (t - ramp / 2) / (1 - ramp);
+}
+
+async function traceUnderline(
+  cursor: Cursor,
+  tracks: StrokeTrack[],
+  duration: number,
+  signal: AbortSignal,
+) {
+  const totalLen = tracks.reduce((sum, track) => sum + track.len, 0);
+  // Keep a comparable writing speed across short words and longer phrases.
+  const strokeMs = Math.min(duration * 1.4, Math.max(duration * 0.6, totalLen / UNDERLINE_PX_PER_MS));
+  const totalMs = strokeMs + UNDERLINE_TURN_MS * (tracks.length - 1);
+  const angle = cursor.angle();
+  let last: Point | null = null;
+  const place = (point: Point | null) => {
+    if (!point) return;
+    cursor.place(point, angle);
+    last = point;
+  };
+
+  await animate(totalMs, signal, (t) => {
+    let elapsed = writingProgress(t) * totalMs;
+    for (let i = 0; i < tracks.length; i++) {
+      const track = tracks[i];
+      const ms = strokeMs * track.len / totalLen;
+      if (elapsed <= ms || i === tracks.length - 1) {
+        const progress = Math.min(1, elapsed / ms);
+        track.path.style.strokeDashoffset = `${track.len * (1 - progress)}`;
+        place(pointOn(track.path, track.len * progress));
+        return;
+      }
+      track.path.style.strokeDashoffset = "0";
+      elapsed -= ms;
+
+      if (elapsed < UNDERLINE_TURN_MS) {
+        const next = tracks[i + 1];
+        const a = pointOn(track.path, track.len);
+        const aNear = pointOn(track.path, Math.max(0, track.len - 4));
+        const b = pointOn(next.path, 0);
+        const bNear = pointOn(next.path, Math.min(4, next.len));
+        if (!a || !aNear || !b || !bNear) return;
+
+        // Follow the outgoing and incoming tangents, without drawing extra ink.
+        const handle = 6;
+        const aLen = Math.hypot(a.x - aNear.x, a.y - aNear.y) || 1;
+        const bLen = Math.hypot(bNear.x - b.x, bNear.y - b.y) || 1;
+        const c1 = { x: a.x + (a.x - aNear.x) / aLen * handle, y: a.y + (a.y - aNear.y) / aLen * handle };
+        const c2 = { x: b.x - (bNear.x - b.x) / bLen * handle, y: b.y - (bNear.y - b.y) / bLen * handle };
+        const u = elapsed / UNDERLINE_TURN_MS;
+        const v = 1 - u;
+        place({
+          x: v ** 3 * a.x + 3 * v * v * u * c1.x + 3 * v * u * u * c2.x + u ** 3 * b.x,
+          y: v ** 3 * a.y + 3 * v * v * u * c1.y + 3 * v * u * u * c2.y + u ** 3 * b.y,
+        });
+        return;
+      }
+      elapsed -= UNDERLINE_TURN_MS;
+    }
+  });
+
+  return last;
+}
+
 async function trace(
   cursor: Cursor,
   paths: SVGPathElement[],
   duration: number,
   signal: AbortSignal,
+  continuous = false,
 ) {
   const tracks = paths
     .map((path) => ({ path, len: holdStroke(path) }))
     .filter((track) => track.len > 0);
   if (!tracks.length) return null;
+  if (continuous) return traceUnderline(cursor, tracks, duration, signal);
 
   const totalLen = tracks.reduce((sum, track) => sum + track.len, 0);
   let last: Point | null = null;
@@ -597,11 +785,12 @@ async function traceStroke(
   paths: SVGPathElement[],
   duration: number,
   signal: AbortSignal,
+  type: string,
 ) {
   if (!paths.some((path) => path.getTotalLength() > 0)) return null;
   beginStroke(tool);
   try {
-    return await trace(cursor, paths, duration, signal);
+    return await trace(cursor, paths, duration, signal, type === "underline");
   } finally {
     if (signal.aborted) stopStrokeAudio();
     else endStroke(tool);
@@ -719,8 +908,8 @@ export function InkShow({ children }: { children: ReactNode }) {
     const pen = createStilografica(penStage, penSvg);
     const mark = createEvidenziatore(markStage, markSvg);
     writersRef.current = {
-      stilografica: { stage: penStage, nib: pen.nib() },
-      evidenziatore: { stage: markStage, nib: mark.nib() },
+      stilografica: { stage: penStage, nib: pen.nib(), base: pen.base() },
+      evidenziatore: { stage: markStage, nib: mark.nib(), base: mark.base() },
     };
     return () => {
       writersRef.current = null;
@@ -843,7 +1032,8 @@ async function playScrolled(
     try {
       if (pos && !signal.aborted) {
         const back = borrowed && cupVisible() ? figure.tip(tool) : null;
-        await fly(cursor, pos, back ?? offstage(pos), TRAVEL_MS, signal);
+        if (back) await returnToCup(cursor, figure, tool, pos, signal);
+        else await fly(cursor, pos, offstage(pos), TRAVEL_MS, signal);
       }
     } finally {
       if (borrowed) figure.hide(tool, false);
@@ -918,7 +1108,7 @@ async function playScrolled(
       entry.element.dataset.annotated = "true";
 
       paths = heldPaths(entry);
-      const end = await traceStroke(toolFor(entry.type), cursor, paths, duration, signal);
+      const end = await traceStroke(toolFor(entry.type), cursor, paths, duration, signal, entry.type);
       if (end) pos = end;
     }
 
@@ -991,7 +1181,7 @@ async function play(
       if (tool !== held) {
         if (held && pos) {
           const back = figure.tip(held);
-          if (back) await fly(cursor, pos, back, TRAVEL_MS, signal);
+          if (back) await returnToCup(cursor, figure, held, pos, signal);
           figure.hide(held, false);
           cursor.hide();
         }
@@ -1031,13 +1221,13 @@ async function play(
       entry.element.dataset.annotated = "true";
 
       paths = heldPaths(entry);
-      const end = await traceStroke(tool, cursor, paths, duration, signal);
+      const end = await traceStroke(tool, cursor, paths, duration, signal, entry.type);
       if (end) pos = end;
     }
 
     if (held && pos) {
       const back = figure.tip(held);
-      if (back) await fly(cursor, pos, back, TRAVEL_MS, signal);
+      if (back) await returnToCup(cursor, figure, held, pos, signal);
       figure.hide(held, false);
       cursor.hide();
       figure.lift(null);

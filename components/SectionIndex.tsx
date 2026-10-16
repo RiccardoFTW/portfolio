@@ -4,7 +4,7 @@ import { PageFrame } from "@/components/PageFrame";
 import { pageBodyClass, pageTitleClass } from "@/components/pageStyle";
 
 type SectionEntry = {
-  href: string;
+  href?: string;
   title: string;
   description: string;
 };

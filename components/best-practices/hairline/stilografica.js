@@ -113,6 +113,7 @@ function mount({ stage, svg, read }, value) {
   return {
     set: (v) => { dip = v; B.wake(); },
     destroy: bag.dispose,
+    base: () => Q(pose(REST).o),
     nib: () => {
       const { o, L } = pose(REST - tval(press, performance.now()) * dip);
       const q = norm(cross(norm(cross(L, EYE)), L));

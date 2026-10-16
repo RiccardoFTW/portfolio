@@ -1,9 +1,25 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Annotation } from "@/components/Annotation";
 import { Highlight } from "@/components/best-practices/Highlight";
 import { PageFrame } from "@/components/PageFrame";
 import { pageArrowClass, pageBodyClass, pageLinkClass } from "@/components/pageStyle";
+import { contentPublished } from "@/data/content";
+
+function SectionLink({ href, children }: { href: string; children: ReactNode }) {
+  const className = `font-italic text-[19px]/6 ${pageLinkClass}`;
+
+  if (!contentPublished) {
+    return (
+      <span role="link" aria-disabled="true" className={className}>
+        {children}
+      </span>
+    );
+  }
+
+  return <Link href={href} className={className}>{children}</Link>;
+}
 
 export default function HomePage() {
   return (
@@ -20,24 +36,24 @@ export default function HomePage() {
           Mi piace progettare e sviluppare <Highlight>componenti UI</Highlight> e <Highlight>interfacce</Highlight>, esplorando il punto d&apos;incontro tra design e tecnologia. Dedico particolare attenzione alle <Annotation type="circle" padding={7} className="whitespace-nowrap">micro-interazioni</Annotation>, all&apos;<Annotation type="circle" padding={7} className="whitespace-nowrap">accessibilità</Annotation> e a tutti quei piccoli accorgimenti che rendono un&apos;interfaccia intuitiva e piacevole da utilizzare.<br />
           In questo spazio condivido i miei {" "}
           <Annotation iterations={2} className="whitespace-nowrap">
-            <Link href="/lab" className={`font-italic text-[19px]/6 ${pageLinkClass}`}>
+            <SectionLink href="/lab">
               esperimenti
               <ArrowUpRight aria-hidden="true" className={pageArrowClass} />
-            </Link>
+            </SectionLink>
           </Annotation>
           , ciò che imparo lungo il percorso,{" "}
           <Annotation iterations={2} className="whitespace-nowrap">
-            <Link href="/best-practices" className={`font-italic text-[19px]/6 ${pageLinkClass}`}>
+            <SectionLink href="/best-practices">
               best practices
               <ArrowUpRight aria-hidden="true" className={pageArrowClass} />
-            </Link>
+            </SectionLink>
           </Annotation>{" "}
           e {" "}
           <Annotation iterations={2} className="whitespace-nowrap">
-            <Link href="/thoughts" className={`font-italic text-[19px]/6 ${pageLinkClass}`}>
+            <SectionLink href="/thoughts">
               riflessioni personali.
               <ArrowUpRight aria-hidden="true" className={pageArrowClass} />
-            </Link>
+            </SectionLink>
           </Annotation>{" "}
         </p>
       </section>

@@ -114,6 +114,7 @@ function mount({ stage, svg, read }, value) {
   return {
     set: (v) => { dip = v; B.wake(); },
     destroy: bag.dispose,
+    base: () => Q(pose(REST).o),
     nib: () => {
       const { o, L } = pose(REST - tval(press, performance.now()) * dip);
       return Q(add(o, L, TIP));

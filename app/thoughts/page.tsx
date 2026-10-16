@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Highlight } from "@/components/best-practices/Highlight";
 import { SectionIndex } from "@/components/SectionIndex";
+import { contentPublished } from "@/data/content";
 import { thoughts } from "@/data/thoughts";
 
 export const metadata: Metadata = {
@@ -9,6 +11,10 @@ export const metadata: Metadata = {
 };
 
 export default function ThoughtsPage() {
+  if (!contentPublished) {
+    notFound();
+  }
+
   return (
     <SectionIndex
       title="Riflessioni personali"
@@ -18,7 +24,7 @@ export default function ThoughtsPage() {
         </>
       }
       entries={thoughts.map((thought) => ({
-        href: `/thoughts/${thought.slug}`,
+        href: contentPublished ? `/thoughts/${thought.slug}` : undefined,
         title: thought.title,
         description: thought.description,
       }))}
