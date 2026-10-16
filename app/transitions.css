@@ -1,5 +1,3 @@
-/* transitions-dev — copy this :root block into your project once.
-   Every transition snippet reads from these semantic names. */
 :root {
   /* Card resize */
   --resize-dur: 300ms;

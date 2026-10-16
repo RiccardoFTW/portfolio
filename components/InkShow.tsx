@@ -472,7 +472,7 @@ function beginStroke(tool: ToolName) {
   if (other.readyState >= 1) other.currentTime = 0;
   audio.volume = STROKE_VOLUME[tool];
   if (tool === "evidenziatore" && audio.readyState >= 1) audio.currentTime = 0;
-  void audio.play().catch(() => {});
+  void audio.play().catch(() => { });
 }
 
 function endStroke(tool: ToolName) {
@@ -503,7 +503,7 @@ function playEraser() {
   const token = ++eraserToken;
   audio.volume = ERASER_VOLUME;
   if (audio.readyState >= 1) audio.currentTime = 0;
-  void audio.play().catch(() => {});
+  void audio.play().catch(() => { });
   const started = performance.now();
   const step = (now: number) => {
     if (token !== eraserToken) return;
@@ -658,6 +658,11 @@ export function InkShow({ children }: { children: ReactNode }) {
   const runRef = useRef<AbortController | null>(null);
   const playingRef = useRef(false);
   const [started, setStarted] = useState(false);
+  const [renderedPath, setRenderedPath] = useState(pathname);
+  if (pathname !== renderedPath) {
+    setRenderedPath(pathname);
+    setStarted(false);
+  }
   const soundOn = useSyncExternalStore(subscribeSound, getSoundEnabled, getServerSoundEnabled);
   const reduceMotion = useReducedMotion();
 
@@ -678,7 +683,7 @@ export function InkShow({ children }: { children: ReactNode }) {
     playEraser();
     for (const entry of entriesRef.current) {
       if (entry.annotation.isShowing()) entry.annotation.hide();
-      delete entry.element.dataset.annotated;
+      entry.element.removeAttribute("data-annotated");
     }
     setStarted(false);
   }, []);
@@ -745,7 +750,6 @@ export function InkShow({ children }: { children: ReactNode }) {
     runRef.current?.abort();
     stopStrokeAudio();
     stopEraserAudio();
-    setStarted(false);
   }, [pathname]);
 
   return (
@@ -753,65 +757,67 @@ export function InkShow({ children }: { children: ReactNode }) {
       {children}
       {home ? (
         <>
-      <div
-        ref={penStageRef}
-        aria-hidden="true"
-        data-hairline="stilografica"
-        className={`${styles.illustration} ${styles.writer}`}
-      >
-        <svg ref={penSvgRef} viewBox="0 0 400 320" className="size-full" />
-      </div>
-      <div
-        ref={markStageRef}
-        aria-hidden="true"
-        data-hairline="evidenziatore"
-        className={`${styles.illustration} ${styles.marker} ${styles.writer}`}
-      >
-        <svg ref={markSvgRef} viewBox="0 0 400 320" className="size-full" />
-      </div>
-      <LazyMotion features={domAnimation}>
-        <div
-            className={cn(
-              themeIconTrackClass,
-              "fixed top-14 z-40 right-[max(var(--page-padding-inline),calc((100vw-var(--page-max-width))/2+var(--page-padding-inline)))]",
-            )}
+          <div
+            ref={penStageRef}
+            aria-hidden="true"
+            data-hairline="stilografica"
+            className={`${styles.illustration} ${styles.writer}`}
           >
-            <AnimatePresence>
-              {started ? (
-                <m.button
-                  key="eraser"
-                  type="button"
-                  aria-label="Cancella le annotazioni"
-                  onClick={erase}
-                  className={themeIconButtonClass}
-                  initial={reduceMotion ? false : { opacity: 0, scale: 0.25, filter: "blur(4px)" }}
-                  animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                  exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.25, filter: "blur(4px)" }}
-                  transition={
-                    reduceMotion
-                      ? { duration: 0 }
-                      : { type: "spring", duration: 0.3, bounce: 0 }
-                  }
-                >
-                  <EraserIcon />
-                </m.button>
-              ) : null}
-            </AnimatePresence>
-            <button
-              type="button"
-              aria-pressed={soundOn}
-              aria-label={soundOn ? "Disattiva i suoni" : "Attiva i suoni"}
-              onClick={() => setSoundEnabled(!soundOn)}
-              className={cn(themeIconButtonClass, soundOn && themeIconActiveClass)}
-            >
-              <IconSwap
-                active={soundOn}
-                first={<VolumeX size={13} />}
-                second={<Volume2 size={13} />}
-              />
-            </button>
+            <svg ref={penSvgRef} viewBox="0 0 400 320" className="size-full" />
           </div>
-      </LazyMotion>
+          <div
+            ref={markStageRef}
+            aria-hidden="true"
+            data-hairline="evidenziatore"
+            className={`${styles.illustration} ${styles.marker} ${styles.writer}`}
+          >
+            <svg ref={markSvgRef} viewBox="0 0 400 320" className="size-full" />
+          </div>
+          <LazyMotion features={domAnimation}>
+            <div
+              className={cn(
+                themeIconTrackClass,
+                "animate-enter",
+                "[--stagger:0]",
+                "fixed top-15.5 z-40 right-[max(var(--page-padding-inline),calc((100vw-var(--page-max-width))/2+var(--page-padding-inline)))]",
+              )}
+            >
+              <AnimatePresence>
+                {started ? (
+                  <m.button
+                    key="eraser"
+                    type="button"
+                    aria-label="Cancella le annotazioni"
+                    onClick={erase}
+                    className={themeIconButtonClass}
+                    initial={reduceMotion ? false : { opacity: 0, scale: 0.25, filter: "blur(4px)" }}
+                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                    exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.25, filter: "blur(4px)" }}
+                    transition={
+                      reduceMotion
+                        ? { duration: 0 }
+                        : { type: "spring", duration: 0.3, bounce: 0 }
+                    }
+                  >
+                    <EraserIcon />
+                  </m.button>
+                ) : null}
+              </AnimatePresence>
+              <button
+                type="button"
+                aria-pressed={soundOn}
+                aria-label={soundOn ? "Disattiva i suoni" : "Attiva i suoni"}
+                onClick={() => setSoundEnabled(!soundOn)}
+                className={cn(themeIconButtonClass, soundOn && themeIconActiveClass)}
+              >
+                <IconSwap
+                  active={soundOn}
+                  first={<VolumeX size={13} />}
+                  second={<Volume2 size={13} />}
+                />
+              </button>
+            </div>
+          </LazyMotion>
         </>
       ) : null}
     </InkShowContext.Provider>

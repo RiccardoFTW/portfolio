@@ -40,7 +40,7 @@ export function Footer() {
   }, [ink]);
 
   return (
-    <footer className="mx-auto flex w-full flex-1 max-w-(--page-max-width) flex-col items-center gap-6 px-(--page-padding-inline) pb-[calc(1.5rem+env(safe-area-inset-bottom))] [--figure-h:min(11rem,30dvh)] sm:[--figure-h:min(15rem,30dvh)]">
+    <footer className="mx-auto flex w-full flex-1 max-w-(--page-max-width) flex-col items-center gap-6 animate-enter [--stagger:2] px-(--page-padding-inline) pb-[calc(1.5rem+env(safe-area-inset-bottom))] [--figure-h:min(11rem,30dvh)] sm:[--figure-h:min(15rem,30dvh)]">
       {home ? (
         <button
           type="button"

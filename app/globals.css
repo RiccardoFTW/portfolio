@@ -10,7 +10,6 @@
   --inset: oklch(0.979 0.002 247.839);
   --toggle-track-off: oklch(0.55 0.007 264.474);
   --toggle-track-on: var(--accent-ink);
-  /* Instructional contours need more contrast than decorative borders. */
   --demo-edge: oklch(0.55 0.007 264.474);
 
   /* Text */
@@ -21,7 +20,7 @@
   --border: oklch(0.946 0.003 264.542);
   --border-strong: oklch(0.912 0.005 258.326);
 
-  /* Contact menu foundation from the supplied tokens. */
+  /* Contact menu */
   --ink: var(--foreground);
   --ink-2: var(--text);
   --line: var(--border);
@@ -48,7 +47,7 @@
   --danger-ink: oklch(0.52 0.17 23.042);
   --danger-surface: oklch(0.956 0.017 17.462);
 
-  /* Syntax colors for code examples, grouped by the role each token plays. */
+  /* Syntax colors for code examples */
   --code-keyword: oklch(0.54 0.23 300);
   --code-string: oklch(0.5 0.19 150);
   --code-number: oklch(0.56 0.2 42);
@@ -64,7 +63,7 @@
   --code-utility-border: oklch(0.52 0.2 275);
   --code-utility-state: oklch(0.54 0.2 15);
 
-  /* Headings share the system accent without knowing its raw color. */
+  /* Headings */
   --heading: var(--accent-ink);
 
   /* Layout */
@@ -72,7 +71,7 @@
   --page-padding-inline: 24px;
   --page-padding-block: 48px;
 
-  /* Portfolio aliases (legacy classnames) */
+  /* Portfolio aliases */
   --canvas: var(--background);
 
   /* Shadow */
@@ -154,7 +153,6 @@
     --danger: oklch(0.666 0.18 21.433);
     --danger-ink: var(--danger);
     --danger-surface: oklch(0.666 0.18 21.433 / 0.14);
-
     --code-keyword: oklch(0.78 0.17 300);
     --code-string: oklch(0.77 0.16 150);
     --code-number: oklch(0.8 0.17 55);
@@ -176,14 +174,14 @@ html {
   scroll-behavior: smooth;
 }
 
-/* rough-notation gives each annotation SVG a fixed 100px box with visible overflow; near the page end that empty box adds scroll. A 0 size stops the SVG from rendering. */
+/* rough-notation */
 svg.rough-annotation {
   width: 1px !important;
   height: 1px !important;
 }
 
 .ink-marker {
-  /* Marker wash: uneven gradient, cloned across wrapped lines. */
+  /* Marker wash */
   --color: var(--annotation-highlight);
   margin: var(--marker-margin);
   padding: var(--marker-padding);
@@ -285,7 +283,6 @@ button[aria-pressed="true"] .toggle-thumb {
   }
 }
 
-/* Utilities required by the supplied main.css reference. */
 @theme inline {
   --color-muted: var(--muted);
   --color-gray-2: var(--gray-2);
@@ -297,4 +294,29 @@ button[aria-pressed="true"] .toggle-thumb {
   --text-small: 0.75rem;
   --radius-control: var(--radius-base);
   --radius-window: var(--radius-large);
+}
+
+@keyframes enter {
+  from {
+    transform: translateY(8px);
+    filter: blur(8px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+.animate-enter {
+  animation: enter 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation-delay: calc(120ms * var(--stagger, 0));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-enter {
+    animation: none;
+  }
 }

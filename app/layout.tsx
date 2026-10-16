@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     default: "Riccardo Ventura",
     template: "%s — Riccardo Ventura",
   },
-  description: "Portfolio of Riccardo Ventura.",
+  description: "Riccardo Ventura - Design Engineer.",
 };
 
 export default function RootLayout({

@@ -16,7 +16,7 @@ export function PageFrame({
     <>
       <main className="bg-background text-text">
         <section className="mx-auto w-full max-w-(--page-max-width) px-(--page-padding-inline) pt-16 pb-6 tracking-[-0.5]">
-          <hgroup className="flex flex-col">
+          <hgroup className="animate-enter [--stagger:0] flex flex-col">
             {home ? (
               <h1 className={pageTitleClass}>{name}</h1>
             ) : (
