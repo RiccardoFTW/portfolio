@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { BracketList } from "@/components/BracketList";
+import { SectionList } from "@/components/SectionList";
 import { PageFrame } from "@/components/PageFrame";
 import { pageBodyClass, pageTitleClass } from "@/components/pageStyle";
 
@@ -22,7 +22,7 @@ export function SectionIndex({
     <PageFrame>
       <h1 className={`mt-20 ${pageTitleClass}`}>{title}</h1>
       <p className={`mt-4 max-w-[66ch] text-pretty ${pageBodyClass}`}>{lede}</p>
-      <BracketList entries={entries} />
+      <SectionList entries={entries} />
     </PageFrame>
   );
 }

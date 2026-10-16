@@ -43,7 +43,6 @@ export type InkFigure = {
 type InkController = {
   register: (entry: InkEntry) => () => void;
   bind: (figure: InkFigure | null) => void;
-  /** Draw the marks. No-ops while a pass is already running. */
   start: () => void;
 };
 
@@ -63,14 +62,13 @@ const STROKE_SRC: Record<ToolName, string> = {
 };
 
 const STROKE_VOLUME: Record<ToolName, number> = {
-  stilografica: 0.4,
-  evidenziatore: 0.45,
+  stilografica: 0.9,
+  evidenziatore: 0.25,
 };
 
 const ERASER_SRC = "/sounds/eraser.mp3";
-const ERASER_VOLUME = 0.45;
-/** The file is a long rub. One wipe is enough for an instant erase. */
-const ERASER_MS = 900;
+const ERASER_VOLUME = 0.40;
+const ERASER_MS = 500;
 const SOUND_KEY = "portfolio-sound";
 
 type Point = { x: number; y: number };
@@ -105,7 +103,6 @@ function sleep(ms: number, signal: AbortSignal) {
   });
 }
 
-/** CSS `ease-out`, the curve rough-notation uses on stroke-dashoffset. */
 function easeOut(t: number) {
   return cubicBezier(0, 0, 0.58, 1, t);
 }
@@ -181,7 +178,6 @@ function inView(element: Element) {
   );
 }
 
-/** The whole mark sits in the viewport, so the pen can draw it on screen. */
 function readyToDraw(element: Element) {
   const box = element.getBoundingClientRect();
   const slop = 4;
@@ -239,11 +235,6 @@ function whenDrawable(element: Element, signal: AbortSignal) {
   });
 }
 
-/**
- * rough-notation inserts the svg right before a highlight and right after
- * anything else. Looking on both sides would pick up the previous sibling's
- * svg when two annotations sit in the same paragraph.
- */
 function annotationSvg({ element, type }: InkEntry) {
   const node =
     type === "highlight"
@@ -268,7 +259,6 @@ function pointOn(path: SVGPathElement, length: number): Point | null {
 
 type Writer = {
   stage: HTMLDivElement;
-  /** Nib or chisel, in the 400 × 320 viewBox, used as the rotation origin. */
   nib: [number, number];
 };
 
@@ -290,7 +280,6 @@ type Cursor = {
   turn(from: Point, to: Point, allowFlip: boolean): number;
 };
 
-/** The lying pen pivots on its nib. A return stroke does not spin it around. */
 function cursorFor(writers: Writers): Cursor {
   let aim = LIFT_OFF;
   let stage: HTMLDivElement | null = null;
@@ -372,7 +361,6 @@ function heldPaths(entry: InkEntry) {
   return paths;
 }
 
-/** A stroke the pen has not reached yet must stay hidden, even if the library started it. */
 function silenceRunning(current: InkEntry, entries: InkEntry[]) {
   for (const entry of entries) {
     if (entry === current) continue;
@@ -384,10 +372,6 @@ function silenceRunning(current: InkEntry, entries: InkEntry[]) {
   }
 }
 
-/**
- * Stroke audio has to be unlocked from the click that starts the show.
- * A later `play()` sits behind font and travel awaits, past the gesture.
- */
 let strokeClips: Record<ToolName, HTMLAudioElement> | null = null;
 let strokeFade = 0;
 let soundEnabled = true;
@@ -568,7 +552,6 @@ function setSoundEnabled(next: boolean) {
   notifySound();
 }
 
-/** Keep the stroke invisible until the nib draws it. The CSS animation would run on its own. */
 function holdStroke(path: SVGPathElement) {
   const len = path.getTotalLength();
   for (const animation of path.getAnimations()) animation.cancel();
@@ -826,10 +809,6 @@ export function InkShow({ children }: { children: ReactNode }) {
 
 type Grip = "hand" | "cup" | "entrance" | "fail";
 
-/**
- * The page is taller than the screen. Draw marks already in view, then each
- * one that scrolls in. The pen enters from below when the cup is off-screen.
- */
 async function playScrolled(
   signal: AbortSignal,
   entries: InkEntry[],
@@ -995,8 +974,7 @@ async function play(
     for (const entry of entries) revealAnnotations([entry]);
     return;
   }
-  // Cup and first mark share the screen, so the pen can leave the cup.
-  // Otherwise it flies in from below and draws each mark as it reaches the viewport.
+
   if (!together) {
     await playScrolled(signal, entries, figure, writers, figureRef);
     return;

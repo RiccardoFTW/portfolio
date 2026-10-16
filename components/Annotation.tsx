@@ -73,7 +73,22 @@ export function Annotation({
       : ink?.register({ ...entry, type });
     if (!group && !ink) revealAnnotations([entry]);
 
+    // rough-notation throttles resize updates by 400ms. Keep visible strokes
+    // aligned with reflowing text, coalescing resize events into one frame.
+    let resizeFrame: number | null = null;
+    const handleResize = () => {
+      if (resizeFrame !== null) return;
+      resizeFrame = window.requestAnimationFrame(() => {
+        resizeFrame = null;
+        // show() redraws an already visible annotation without replaying it.
+        if (annotation.isShowing()) annotation.show();
+      });
+    };
+    window.addEventListener("resize", handleResize, { passive: true });
+
     return () => {
+      window.removeEventListener("resize", handleResize);
+      if (resizeFrame !== null) window.cancelAnimationFrame(resizeFrame);
       unregister?.();
       annotation.remove();
       delete element.dataset.annotated;
