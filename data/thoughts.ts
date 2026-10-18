@@ -1,19 +1,6 @@
 import type { ComponentType } from "react";
-import { ButtonThought } from "@/components/thoughts/ButtonThought";
 
-export const thoughts = [
-  {
-    slug: "button",
-    title: "Progettare un pulsante: azione e feedback",
-    description:
-      "Una mini guida per progettare un’azione chiara, gestirne gli stati e scrivere codice accessibile.",
-    publishedAt: "2026-08-08",
-    publishedLabel: "8 agosto 2026",
-    readingTime: "4 min di lettura",
-    category: "Componenti",
-    Component: ButtonThought,
-  },
-] as const satisfies ReadonlyArray<{
+export type Thought = {
   slug: string;
   title: string;
   description: string;
@@ -22,9 +9,10 @@ export const thoughts = [
   readingTime: string;
   category: string;
   Component: ComponentType;
-}>;
+};
 
-export type Thought = (typeof thoughts)[number];
+export const thoughts: readonly Thought[] = [];
+
 export type ThoughtSlug = Thought["slug"];
 
 export function findThought(slug: string) {
