@@ -1,4 +1,4 @@
-import { Annotation } from "@/components/Annotation"
+import { Highlight } from "@/components/best-practices/Highlight"
 import { pageBodyClass, pageLinkClass, pageTitleClass } from "@/components/pageStyle"
 import { ButtonStateDemo } from "@/components/thoughts/ButtonStateDemo"
 
@@ -11,11 +11,11 @@ const stateExample = `type SaveState = "idle" | "loading" | "success"
 const [saveState, setSaveState] = useState<SaveState>("idle")`
 
 const states = [
-  ["Idle", "L’azione è disponibile e la sua label dice cosa succederà."],
-  ["Hover e focus", "Hover suggerisce interattività; focus visibile mantiene la tastiera orientata."],
+  ["Idle", "L’azione è disponibile e l’etichetta dice cosa succederà."],
+  ["Hover e focus", "L’hover suggerisce che puoi interagire; il focus visibile indica dove ti trovi quando usi la tastiera."],
   ["Pressed", "Un feedback breve conferma che il sistema ha ricevuto il gesto."],
   ["Loading", "L’azione è partita: evita doppi invii e rendi esplicita l’attesa."],
-  ["Success", "Il risultato chiude il loop: l’utente non deve indovinare se ha funzionato."],
+  ["Success", "La conferma permette di capire se l’operazione è riuscita."],
   ["Disabled", "Usalo solo quando l’azione non è possibile e rendi comprensibile il perché."],
 ] as const
 
@@ -32,120 +32,156 @@ export function ButtonThought() {
     <div className={`mt-16 space-y-16 text-pretty ${pageBodyClass}`}>
       <section aria-labelledby="intent-title">
         <h2 id="intent-title" className={`${pageTitleClass} text-balance`}>
-          Prima dell&apos;estetica, l&apos;intenzione
+          Che cosa deve fare il pulsante
         </h2>
         <p className="mt-4">
-          Un button non esiste per decorare una pagina: permette di compiere un&apos;azione. Salvare,
-          inviare, aprire un dialog o confermare qualcosa cambia lo stato dell&apos;interfaccia. Questa
-          intenzione arriva prima del colore, del bordo e dell&apos;animazione.
+          Un pulsante permette di compiere un&apos;azione, come salvare le modifiche o aprire
+          un dialog. La sua forma lo rende riconoscibile, ma durante l&apos;uso contano anche
+          le risposte a due domande: che cosa succede quando lo premo e come capisco se ha funzionato?
         </p>
         <p className="mt-4">
-          La domanda utile non è “come lo rendo bello?”, ma “<Annotation type="underline">che cosa
-          deve far capire e fare?</Annotation>”. Quando la risposta è chiara, anche gerarchia,
-          label e feedback diventano decisioni più semplici.
+          Per progettarlo parto da <Highlight>che cosa deve far capire e
+          fare</Highlight>. Da lì scelgo il testo, l&apos;enfasi visiva e il feedback che
+          accompagna l&apos;operazione, prima di definire colore, bordo e animazione.
         </p>
       </section>
 
-      <section aria-labelledby="link-or-button-title">
-        <h2 id="link-or-button-title" className={`${pageTitleClass} text-balance`}>
-          Link o button?
-        </h2>
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          <article className="rounded-2xl bg-black/[0.025] p-5 shadow-[0_0_0_1px_color-mix(in_oklab,var(--border),transparent_25%)]">
-            <h3 className={pageTitleClass}>Usa un link</h3>
-            <p className="mt-2">Quando l&apos;utente naviga verso un URL: “Leggi l&apos;articolo”, “Vai al profilo”.</p>
-          </article>
-          <article className="rounded-2xl bg-black/[0.025] p-5 shadow-[0_0_0_1px_color-mix(in_oklab,var(--border),transparent_25%)]">
-            <h3 className={pageTitleClass}>Usa un button</h3>
-            <p className="mt-2">Quando l&apos;utente agisce nella UI: “Salva”, “Invia”, “Apri menu”.</p>
-          </article>
+      <section aria-labelledby="button-thesis-title" className="space-y-10">
+        <div>
+          <h2 id="button-thesis-title" className={`${pageTitleClass} text-balance`}>
+            Rendere leggibile lo stato
+          </h2>
+          <p className="mt-4">
+            Un pulsante dovrebbe descrivere l&apos;azione e renderne comprensibile lo stato.
+            Nel caso di un salvataggio, il testo iniziale dice cosa verrà salvato;
+            durante l&apos;attesa il controllo evita un secondo invio, poi conferma la riuscita.
+          </p>
         </div>
+
+        <section aria-labelledby="states-title">
+          <h3 id="states-title" className={`${pageTitleClass} text-balance`}>
+            Gli stati del pulsante
+          </h3>
+          <p className="mt-4">
+            Il feedback cambia con l&apos;operazione. Durante l&apos;attesa serve sapere che
+            il salvataggio è in corso; alla fine serve capire se è riuscito.
+          </p>
+          <dl className="mt-5 divide-y divide-(--border) border-y border-(--border)">
+            {states.map(([name, description]) => (
+              <div key={name} className="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-4">
+                <dt className={pageTitleClass}>{name}</dt>
+                <dd>{description}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <section aria-labelledby="hierarchy-title">
+          <h3 id="hierarchy-title" className={`${pageTitleClass} text-balance`}>
+            Gerarchia e testo
+          </h3>
+          <p className="mt-4">
+            In un contesto, una sola azione dovrebbe avere la massima enfasi. Una label breve con un
+            verbo, come “Salva modifiche”, rende il risultato prevedibile. “Clicca qui” descrive
+            soltanto il gesto. Il target
+            deve restare comodo da toccare, anche quando il bottone visivamente è compatto.
+          </p>
+          <p className="mt-4">
+            Durante il loading, mantieni stabile la larghezza del pulsante mentre cambia
+            il testo. In questo modo puoi leggere il nuovo stato senza vedere spostarsi
+            anche i bordi del controllo.
+          </p>
+        </section>
+
+        <section aria-labelledby="code-title">
+          <h3 id="code-title" className={`${pageTitleClass} text-balance`}>
+            Parti dal button nativo
+          </h3>
+          <p className="mt-4">
+            Il tag <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-foreground">&lt;button&gt;</code>{" "}
+            porta già con sé tastiera, focus e semantica. Ricostruirli con un <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-foreground">&lt;div onClick&gt;</code>{" "}
+            significa assumersi lavoro extra e rischiare di farlo in modo incompleto.
+          </p>
+          <CodeBlock>{nativeButtonExample}</CodeBlock>
+          <p className="mt-5">
+            L&apos;informazione da ricordare è lo stato dell&apos;operazione, non ogni dettaglio visivo. Un
+            union type rende espliciti gli stati validi e impedisce combinazioni ambigue.
+          </p>
+          <CodeBlock>{stateExample}</CodeBlock>
+        </section>
+
+        <section aria-labelledby="demo-title">
+          <h3 id="demo-title" className={`${pageTitleClass} text-balance`}>
+            Prova il salvataggio
+          </h3>
+          <p className="mt-4">
+            Qui il salvataggio è simulato, ma la sequenza è reale: un click avvia l&apos;attesa, blocca il
+            doppio invio e comunica la riuscita. La label esce in 150ms e quella nuova entra in altri
+            150ms. Lo stato dell&apos;azione e il messaggio accessibile cambiano subito.
+          </p>
+          <div className="mt-6">
+            <ButtonStateDemo />
+          </div>
+        </section>
       </section>
 
-      <section aria-labelledby="states-title">
-        <h2 id="states-title" className={`${pageTitleClass} text-balance`}>
-          Gli stati non sono decorazione
-        </h2>
-        <p className="mt-4">
-          Ogni stato è un messaggio. Se ne manca uno, non stai solo perdendo polish: stai lasciando
-          una domanda senza risposta.
-        </p>
-        <dl className="mt-5 divide-y divide-(--border) border-y border-(--border)">
-          {states.map(([name, description]) => (
-            <div key={name} className="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-4">
-              <dt className={pageTitleClass}>{name}</dt>
-              <dd>{description}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
-      <section aria-labelledby="hierarchy-title">
-        <h2 id="hierarchy-title" className={`${pageTitleClass} text-balance`}>
-          Progetta la gerarchia, non solo la forma
-        </h2>
-        <p className="mt-4">
-          In un contesto, una sola azione dovrebbe avere la massima enfasi. Una label breve con un
-          verbo — “Salva modifiche”, non “Clicca qui” — rende il risultato prevedibile. Il target
-          deve restare comodo da toccare, anche quando il bottone visivamente è compatto.
-        </p>
-        <p className="mt-4">
-          Per lo stato loading, conserva uno spazio stabile: un bottone che cambia larghezza mentre
-          lo stai guardando sembra meno affidabile del tempo di attesa che sta comunicando.
-        </p>
-      </section>
-
-      <section aria-labelledby="code-title">
-        <h2 id="code-title" className={`${pageTitleClass} text-balance`}>
-          Parti dal button nativo
-        </h2>
-        <p className="mt-4">
-          Il tag <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-foreground">&lt;button&gt;</code>{" "}
-          porta già con sé tastiera, focus e semantica. Ricostruirli con un <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-foreground">&lt;div onClick&gt;</code>{" "}
-          significa assumersi lavoro extra e rischiare di farlo in modo incompleto.
-        </p>
-        <CodeBlock>{nativeButtonExample}</CodeBlock>
-        <p className="mt-5">
-          L&apos;informazione da ricordare è lo stato dell&apos;operazione, non ogni dettaglio visivo. Un
-          union type rende espliciti gli stati validi e impedisce combinazioni ambigue.
-        </p>
-        <CodeBlock>{stateExample}</CodeBlock>
-      </section>
-
-      <section aria-labelledby="demo-title">
-        <h2 id="demo-title" className={`${pageTitleClass} text-balance`}>
-          Il feedback chiude il loop
-        </h2>
-        <p className="mt-4">
-          Qui il salvataggio è simulato, ma la sequenza è reale: un click avvia l&apos;attesa, blocca il
-          doppio invio e comunica la riuscita. La label esce in 150ms e quella nuova entra in altri
-          150ms. Lo stato dell&apos;azione e il messaggio accessibile cambiano subito.
-        </p>
-        <div className="mt-6">
-          <ButtonStateDemo />
+      <section aria-labelledby="button-antithesis-title" className="space-y-10">
+        <div>
+          <h2 id="button-antithesis-title" className={`${pageTitleClass} text-balance`}>
+            Semantica e movimento
+          </h2>
+          <p className="mt-4">
+            La forma di un pulsante non basta a scegliere il comportamento. Un controllo
+            che porta a un altro URL deve essere un link, anche se visivamente assomiglia
+            al pulsante accanto. Anche il movimento va valutato: la conferma deve restare
+            comprensibile usando la tastiera o riducendo le animazioni.
+          </p>
         </div>
-      </section>
 
-      <section aria-labelledby="motion-title">
-        <h2 id="motion-title" className={`${pageTitleClass} text-balance`}>
-          La decisione di motion
-        </h2>
-        <p className="mt-4">
-          La piccola compressione al pointer press dice “ti ho sentito”. Dura 150ms, anima solo
-          <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-foreground">transform</code> e
-          non viene applicata quando l&apos;azione parte da tastiera. Il testo scorre di pochi pixel
-          e sfuma quando cambia stato, mantenendo fermo il contenitore del pulsante.
-        </p>
-        <p className="mt-4">
-          Con reduced motion il feedback di scala scompare e la label cambia senza transizione,
-          mentre il messaggio di stato resta: riduciamo il movimento, non la chiarezza.
-        </p>
+        <section aria-labelledby="link-or-button-title">
+          <h3 id="link-or-button-title" className={`${pageTitleClass} text-balance`}>
+            Link o button?
+          </h3>
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            <article className="rounded-2xl bg-black/[0.025] p-5 shadow-[0_0_0_1px_color-mix(in_oklab,var(--border),transparent_25%)]">
+              <h4 className={pageTitleClass}>Usa un link</h4>
+              <p className="mt-2">Quando l&apos;utente naviga verso un URL: “Leggi l&apos;articolo”, “Vai al profilo”.</p>
+            </article>
+            <article className="rounded-2xl bg-black/[0.025] p-5 shadow-[0_0_0_1px_color-mix(in_oklab,var(--border),transparent_25%)]">
+              <h4 className={pageTitleClass}>Usa un button</h4>
+              <p className="mt-2">Quando l&apos;utente agisce nella UI: “Salva”, “Invia”, “Apri menu”.</p>
+            </article>
+          </div>
+        </section>
+
+        <section aria-labelledby="motion-title">
+          <h3 id="motion-title" className={`${pageTitleClass} text-balance`}>
+            Quanto movimento serve
+          </h3>
+          <p className="mt-4">
+            La piccola compressione al pointer press dice “ti ho sentito”. Dura 150ms, anima solo
+            <code className="rounded bg-black/[0.04] px-1.5 py-0.5 text-foreground">transform</code> e
+            non viene applicata quando l&apos;azione parte da tastiera. Il testo scorre di pochi pixel
+            e sfuma quando cambia stato, mantenendo fermo il contenitore del pulsante.
+          </p>
+          <p className="mt-4">
+            Con reduced motion la label cambia senza transizione e il messaggio di stato
+            resta disponibile. Nella demo la compressione del pulsante resta, ma avviene
+            senza animazione.
+          </p>
+        </section>
       </section>
 
       <section aria-labelledby="checklist-title">
         <h2 id="checklist-title" className={`${pageTitleClass} text-balance`}>
-          Checklist prima di pubblicare
+          Provare l’intera operazione
         </h2>
+        <p className="mt-4">
+          Per verificare il componente, prova l&apos;intera operazione: leggi l&apos;etichetta,
+          avvia il salvataggio e aspetta la conferma. Ripeti usando la tastiera e con
+          reduced motion. Questi controlli aiutano a capire se il feedback resta chiaro
+          anche quando cambia il modo di interagire.
+        </p>
         <ul className="mt-5 list-inside list-disc space-y-2 marker:text-text">
           <li>La label descrive l&apos;azione e non il gesto.</li>
           <li>Il markup semantico corrisponde al comportamento: link per navigare, button per agire.</li>

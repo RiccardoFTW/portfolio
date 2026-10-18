@@ -9,11 +9,13 @@ export const bestPractices = [
     description:
       "Come calcolare raggio interno e esterno così che i bordi restino concentrici.",
     sections: [
-      { id: "concentric-radius-rule-title", title: "Il problema" },
-      { id: "concentric-radius-solution-title", title: "La soluzione" },
+      { id: "concentric-radius-rule-title", title: "Il problema negli angoli" },
+      { id: "concentric-radius-solution-title", title: "Calcolare il raggio interno" },
       { id: "concentric-radius-why-title", title: "La formula" },
       { id: "concentric-radius-css-title", title: "Il codice" },
       { id: "concentric-radius-examples-title", title: "Esempi pratici" },
+      { id: "concentric-radius-limits-title", title: "Quando il raggio arriva a zero" },
+      { id: "concentric-radius-conclusion-title", title: "Controllare il risultato" },
       { id: "concentric-radius-sources-title", title: "Per approfondire" },
     ],
     Component: ConcentricRadius,
@@ -24,9 +26,12 @@ export const bestPractices = [
     description:
       "Correggere allineamenti che sono geometricamente giusti ma otticamente storti.",
     sections: [
+      { id: "optical-alignment-introduction-title", title: "Un centro che sembra spostato" },
+      { id: "optical-alignment-thesis-title", title: "Il peso visivo delle forme" },
       { id: "optical-alignment-button-title", title: "Il pulsante" },
       { id: "optical-alignment-sidebar-title", title: "La sidebar" },
-      { id: "optical-alignment-practice-title", title: "Quando correggere" },
+      { id: "optical-alignment-practice-title", title: "Prima di correggere a occhio" },
+      { id: "optical-alignment-conclusion-title", title: "Correzioni riutilizzabili" },
       { id: "optical-alignment-sources-title", title: "Per approfondire" },
     ],
     Component: OpticalAlignment,

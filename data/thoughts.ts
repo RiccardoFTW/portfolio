@@ -4,7 +4,7 @@ import { ButtonThought } from "@/components/thoughts/ButtonThought";
 export const thoughts = [
   {
     slug: "button",
-    title: "Un button non è solo un rettangolo che puoi cliccare",
+    title: "Progettare un pulsante: azione e feedback",
     description:
       "Una mini guida per progettare un’azione chiara, gestirne gli stati e scrivere codice accessibile.",
     publishedAt: "2026-08-08",

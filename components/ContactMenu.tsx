@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
 import { themeIconButtonClass, themeIconTrackClass } from "./theme";
 
 const itemClassName =
-  "flex min-h-10 items-center justify-between gap-6 rounded-control px-3 py-2 font-sans text-lg leading-6 text-ink outline-none data-highlighted:bg-hover data-highlighted:inset-ring-2 data-highlighted:inset-ring-accent-ink data-disabled:cursor-default data-disabled:text-ink-2";
+  "flex min-h-10 items-center justify-between gap-6 rounded-sm px-3 py-2 font-sans text-lg leading-6 text-ink outline-none data-highlighted:bg-hover data-highlighted:inset-ring-2 data-highlighted:inset-ring-accent-ink data-disabled:cursor-default data-disabled:text-ink-2";
 
 export function ContactMenu() {
 
@@ -39,7 +39,7 @@ export function ContactMenu() {
           className="z-50 max-w-[calc(100vw-2rem)] outline-none"
         >
           <Menu.Popup className={({ open, transitionStatus }) =>
-            `t-dropdown contact-menu w-52 max-w-full rounded-window bg-surface p-1.5 text-ink shadow-overlay outline-none ${transitionStatus === "ending" ? "is-closing" : open && transitionStatus !== "starting" ? "is-open" : ""}`
+            `t-dropdown contact-menu w-52 max-w-full rounded-md bg-surface p-0.5 text-ink shadow-overlay outline-none ${transitionStatus === "ending" ? "is-closing" : open && transitionStatus !== "starting" ? "is-open" : ""}`
           }>
             {contactLinks.map(({ label, href }) =>
               href ? (

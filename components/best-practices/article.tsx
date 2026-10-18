@@ -97,15 +97,19 @@ export function ArticleTitle({
 
 export function ArticleHeading({
   id,
+  level = 2,
   children,
 }: {
   id: string;
+  level?: 2 | 3;
   children: ReactNode;
 }) {
+  const Heading = level === 3 ? "h3" : "h2";
+
   return (
-    <h2 id={id} className={cx(headingClass, "scroll-mt-24 pb-2 pt-16")}>
-      <Annotation animationDuration={250}>{children}</Annotation>
-    </h2>
+    <Heading id={id} className={cx(headingClass, "scroll-mt-24 pb-2 pt-16")}>
+      {children}
+    </Heading>
   );
 }
 

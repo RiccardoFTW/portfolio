@@ -51,13 +51,15 @@ function ConcentricRadiusProblem() {
       aria-labelledby="concentric-radius-rule-title"
     >
       <ArticleHeading id="concentric-radius-rule-title">
-        Il problema
+        Il problema negli angoli
       </ArticleHeading>
       <Prose>
-        Quando si lavora in fretta capita di dare{" "}
-        <Highlight>lo stesso border-radius</Highlight> al contenitore e
+        In una card, un menu o un campo di ricerca, lo spazio fra due bordi
+        arrotondati deve restare regolare anche negli angoli. Quando si lavora
+        in fretta capita di dare {" "}
+        <Highlight>lo stesso border-radius </Highlight> al contenitore e
         all&apos;elemento interno. Il componente funziona e a prima vista il
-        difetto passa. Negli angoli, però, le due curve non hanno lo stesso
+        difetto può sfuggire. Negli angoli, però, le due curve non hanno lo stesso
         centro
         <FootnoteRef href="#concentric-radius-source-1" n={1} />.
       </Prose>
@@ -87,13 +89,12 @@ function ConcentricRadiusProblem() {
         </DemoSurface>
       </figure>
       <Prose>
-        Nell&apos;esempio Sbagliato lo spazio fra le curve{" "}
+        Nell&apos;esempio con raggi uguali lo spazio fra le curve{" "}
         <Highlight>si allarga negli angoli</Highlight>. Paul Hebert, di Cloud
         Four
         <FootnoteRef href="#concentric-radius-source-2" n={2} />, se n&apos;è
         accorto così: aveva usato lo stesso valore per entrambi gli elementi e
-        il risultato sembrava comunque storto. Di solito si vede che la forma
-        non torna prima di capire il perché.
+        il risultato sembrava comunque storto.
       </Prose>
     </AnnotationGroup>
   );
@@ -106,16 +107,20 @@ function ConcentricRadiusSolution() {
       aria-labelledby="concentric-radius-solution-title"
     >
       <ArticleHeading id="concentric-radius-solution-title">
-        La soluzione
+        Calcolare il raggio interno
       </ArticleHeading>
       <Prose>
-        In Figma o in Paper puoi usare un offset per tenere coerenti le curve
-        degli elementi annidati. Nel codice la relazione si scrive così:
+        Per mantenere uniforme lo spazio, il raggio interno deve diminuire
+        della distanza fra i due bordi. In Figma o in Paper puoi ottenere questa
+        relazione con un offset; nel codice puoi calcolarla:
       </Prose>
       <FormulaCallout>
         raggio interno = raggio esterno − spazio
       </FormulaCallout>
       <RadiusFormulaExample />
+      <ConcentricRadiusFormula />
+      <ConcentricRadiusCode />
+      <ConcentricRadiusExamples />
     </AnnotationGroup>
   );
 }
@@ -126,7 +131,7 @@ function ConcentricRadiusFormula() {
       className="space-y-6"
       aria-labelledby="concentric-radius-why-title"
     >
-      <ArticleHeading id="concentric-radius-why-title">
+      <ArticleHeading id="concentric-radius-why-title" level={3}>
         La formula
       </ArticleHeading>
       <Prose>
@@ -144,14 +149,12 @@ function ConcentricRadiusFormula() {
 
       <Prose>
         Qui <Symbol>R</Symbol> è il raggio esterno, <Symbol>r</Symbol> quello
-        interno e <Symbol>g</Symbol> la distanza fra i due bordi. Letta al
-        contrario, la relazione diventa <Measure>R = r + g</Measure>. Se il
+        interno e <Symbol>g</Symbol> la distanza fra i due bordi. Finché la
+        sottrazione dà un valore maggiore o uguale a zero, puoi leggere la
+        relazione anche come <Measure>R = r + g</Measure>. Se il
         contenitore non ha un bordo, <Symbol>g</Symbol>{" "}coincide con il
         padding; se ce l&apos;ha, <Symbol>g</Symbol> comprende anche il suo
-        spessore. Il <Measure>max(…, 0)</Measure> viene dalla specifica CSS
-        <FootnoteRef href="#concentric-radius-source-3" n={3} />: quando la
-        sottrazione darebbe un valore negativo, il browser usa zero e
-        l&apos;angolo interno diventa vivo.
+        spessore.
       </Prose>
 
       <DemoSurface
@@ -243,7 +246,7 @@ function ConcentricRadiusCode() {
       className="space-y-6"
       aria-labelledby="concentric-radius-css-title"
     >
-      <ArticleHeading id="concentric-radius-css-title">
+      <ArticleHeading id="concentric-radius-css-title" level={3}>
         Il codice
       </ArticleHeading>
 
@@ -286,7 +289,7 @@ function ConcentricRadiusExamples() {
       className="space-y-6"
       aria-labelledby="concentric-radius-examples-title"
     >
-      <ArticleHeading id="concentric-radius-examples-title">
+      <ArticleHeading id="concentric-radius-examples-title" level={3}>
         Esempi pratici
       </ArticleHeading>
       <Prose>
@@ -306,6 +309,53 @@ function ConcentricRadiusExamples() {
       <DemoStage>
         <SearchBar />
       </DemoStage>
+    </AnnotationGroup>
+  );
+}
+
+function ConcentricRadiusLimits() {
+  return (
+    <AnnotationGroup
+      className="space-y-6"
+      aria-labelledby="concentric-radius-limits-title"
+    >
+      <ArticleHeading id="concentric-radius-limits-title">
+        Quando il raggio arriva a zero
+      </ArticleHeading>
+      <Prose>
+        Il calcolo ha un limite: se la distanza fra i bordi raggiunge o supera
+        il raggio esterno, non resta spazio per una curva interna concentrica.
+        Il <Measure>max(…, 0)</Measure> nella formula tiene conto di questo
+        caso. La specifica CSS
+        <FootnoteRef href="#concentric-radius-source-3" n={3} /> porta a zero
+        i raggi interni che risulterebbero negativi, e l&apos;angolo diventa vivo.
+      </Prose>
+      <Prose>
+        La concentricità, quindi, non richiede che ogni elemento abbia angoli
+        visibilmente arrotondati. Il raggio del figlio dipende dallo spazio che
+        lo separa dal contenitore: assegnargli comunque un valore positivo
+        cambierebbe quella relazione.
+      </Prose>
+    </AnnotationGroup>
+  );
+}
+
+function ConcentricRadiusConclusion() {
+  return (
+    <AnnotationGroup
+      className="space-y-6"
+      aria-labelledby="concentric-radius-conclusion-title"
+    >
+      <ArticleHeading id="concentric-radius-conclusion-title">
+        Controllare il risultato
+      </ArticleHeading>
+      <Prose>
+        Per scegliere il raggio interno, parti da quello esterno e misura tutta
+        la distanza fra le curve, compreso lo spessore del bordo. Sottrai quella
+        distanza e fermati a zero se il risultato è negativo. Poi confronta gli
+        angoli nel componente: negli esempi puoi cambiare il raggio interno e
+        vedere come varia lo spazio rispetto ai lati dritti.
+      </Prose>
     </AnnotationGroup>
   );
 }
@@ -379,17 +429,10 @@ export default function ConcentricRadius() {
       </ArticleTitle>
 
       <article className="space-y-6">
-        <Prose>
-          Card, menu e campi di ricerca contengono spesso un elemento
-          arrotondato. Lì <Highlight>la distanza fra i due bordi</Highlight> conta
-          anche negli angoli, e il concentric radius serve a tenerla uguale lungo
-          tutta la curva.
-        </Prose>
         <ConcentricRadiusProblem />
         <ConcentricRadiusSolution />
-        <ConcentricRadiusFormula />
-        <ConcentricRadiusCode />
-        <ConcentricRadiusExamples />
+        <ConcentricRadiusLimits />
+        <ConcentricRadiusConclusion />
         <ConcentricRadiusSources />
       </article>
     </section>

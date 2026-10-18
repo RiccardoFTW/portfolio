@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { AnimatePresence, m } from "motion/react";
 
 import { Spinner } from "@/components/feedback/Spinner";
@@ -22,6 +23,12 @@ export function FeedbackPopover({
   isLoading,
   isSuccess,
 }: FeedbackPopoverProps) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    textareaRef.current?.focus({ preventScroll: true });
+  }, []);
+
   return (
     <m.div
       layoutId="feedback-popover"
@@ -71,6 +78,8 @@ export function FeedbackPopover({
             className="h-full rounded-lg border border-[#e6e7e8] bg-white"
           >
             <textarea
+              ref={textareaRef}
+              readOnly={isLoading}
               aria-label="Feedback"
               value={feedback}
               onChange={(event) => onFeedbackChange(event.target.value)}
@@ -83,13 +92,13 @@ export function FeedbackPopover({
                   onSubmit();
                 }
               }}
-              className="h-36 w-full resize-none rounded-t-lg p-4 text-base outline-none"
+              className="h-36 w-full resize-none rounded-t-lg p-4 text-base outline-none focus-visible:inset-ring-2 focus-visible:inset-ring-foreground"
             />
             <div className="flex h-14 items-center border-t border-dashed border-[#e6e7e8] px-3">
               <button
                 type="submit"
                 disabled={isLoading || feedback.trim().length === 0}
-                className="relative ml-auto inline-flex h-8 w-[128px] items-center justify-center overflow-hidden rounded-lg bg-article-accent font-sans text-lg leading-6 font-medium text-white"
+                className="relative ml-auto inline-flex h-8 w-[128px] items-center justify-center overflow-hidden rounded-lg bg-article-accent font-sans text-lg leading-6 font-medium text-white outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
               >
                 <AnimatePresence initial={false} mode="popLayout">
                   <m.span

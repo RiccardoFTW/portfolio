@@ -1,25 +1,9 @@
-import Link from "next/link";
-import type { ReactNode } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Annotation } from "@/components/Annotation";
 import { Highlight } from "@/components/best-practices/Highlight";
 import { PageFrame } from "@/components/PageFrame";
-import { pageArrowClass, pageBodyClass, pageLinkClass } from "@/components/pageStyle";
-import { contentPublished } from "@/data/content";
-
-function SectionLink({ href, children }: { href: string; children: ReactNode }) {
-  const className = `font-italic text-[19px]/6 ${pageLinkClass}`;
-
-  if (!contentPublished) {
-    return (
-      <span role="link" aria-disabled="true" className={className}>
-        {children}
-      </span>
-    );
-  }
-
-  return <Link href={href} className={className}>{children}</Link>;
-}
+import { SectionLink } from "@/components/SectionLink";
+import { pageArrowClass, pageBodyClass } from "@/components/pageStyle";
 
 export default function HomePage() {
   return (
@@ -27,7 +11,7 @@ export default function HomePage() {
       <section className={`animate-enter [--stagger:1] mt-20 max-w-[66ch] ${pageBodyClass}`}>
         <p className="text-pretty">
           Ciao!<br /> Sono un{" "}
-          <Annotation type="box" padding={5} className="whitespace-nowrap">
+          <Annotation type="circle" padding={7} className="whitespace-nowrap">
             designer
           </Annotation>
           , che cerca di dare vita alle proprie idee attraverso il{" "}codice. <br />

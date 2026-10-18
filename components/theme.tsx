@@ -20,7 +20,7 @@ export const themeIconTrackClass =
   "flex w-fit items-center gap-0.5 overflow-hidden rounded-md bg-(--gray-2) p-0.5";
 
 export const themeIconButtonClass =
-  "flex size-6 cursor-pointer items-center justify-center rounded-sm text-(--muted) outline-none hover:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink";
+  "flex size-8 cursor-pointer items-center justify-center rounded-sm text-(--muted) outline-none hover:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink";
 
 export const themeIconActiveClass = "bg-(--gray-4) text-foreground";
 

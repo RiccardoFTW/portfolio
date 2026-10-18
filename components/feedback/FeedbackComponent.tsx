@@ -10,7 +10,7 @@ type FormState = "idle" | "loading" | "success";
 
 const popoverTransition = {
   type: "spring",
-  duration: 0.6,
+  duration: 0.26,
   bounce: 0,
 } as const;
 
@@ -20,18 +20,26 @@ export function FeedbackComponent() {
   const [formState, setFormState] = useState<FormState>("idle");
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const submitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const restoreFocusRef = useRef(false);
+
+  function close() {
+    restoreFocusRef.current = true;
+    setIsOpen(false);
+    setFormState("idle");
+  }
 
   function handleSubmit() {
     if (!feedback.trim() || formState !== "idle") return;
     setFormState("loading");
 
-    setTimeout(() => {
+    submitTimerRef.current = setTimeout(() => {
       setFormState("success");
 
-      setTimeout(() => {
-        setIsOpen(false);
+      closeTimerRef.current = setTimeout(() => {
+        close();
         setFeedback("");
-        setFormState("idle");
       }, 1500);
     }, 1200);
   }
@@ -41,13 +49,16 @@ export function FeedbackComponent() {
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
+        restoreFocusRef.current = true;
         setIsOpen(false);
+        setFormState("idle");
       }
     }
 
     function handlePointerDown(event: PointerEvent) {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
+        setFormState("idle");
       }
     }
 
@@ -57,6 +68,8 @@ export function FeedbackComponent() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("pointerdown", handlePointerDown);
+      if (submitTimerRef.current) clearTimeout(submitTimerRef.current);
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     };
   }, [isOpen]);
 
@@ -73,7 +86,15 @@ export function FeedbackComponent() {
               isSuccess={formState === "success"}
             />
           ) : (
-            <FeedbackButton onClick={() => setIsOpen(true)} />
+            <FeedbackButton
+              onClick={() => setIsOpen(true)}
+              buttonRef={(element) => {
+                if (element && restoreFocusRef.current) {
+                  element.focus();
+                  restoreFocusRef.current = false;
+                }
+              }}
+            />
           )}
         </div>
       </MotionConfig>

@@ -16,19 +16,17 @@ export function SectionList({ entries }: { entries: readonly SectionListEntry[] 
         <li key={entry.href ?? entry.title} className="flex flex-col items-start gap-1.5">
           <h2 className={pageTitleClass}>
             {entry.href ? (
-              <Link href={entry.href} className={pageLinkClass}>
-                {entry.title}
-                <ArrowUpRight aria-hidden="true" className={pageArrowClass} />
-              </Link>
+              <Annotation iterations={2}>
+                <Link href={entry.href} className={pageLinkClass}>
+                  {entry.title}
+                  <ArrowUpRight aria-hidden="true" className={pageArrowClass} />
+                </Link>
+              </Annotation>
             ) : (
               entry.title
             )}
           </h2>
-          <p className={pageBodyClass}>
-            <Annotation type="underline" multiline>
-              {entry.description}
-            </Annotation>
-          </p>
+          <p className={pageBodyClass}>{entry.description}</p>
         </li>
       ))}
     </ul>

@@ -44,11 +44,12 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const activeTabRef = useRef<HTMLButtonElement | null>(null);
   const shouldFocusActiveTabRef = useRef(false);
+  const animateIndicatorRef = useRef(true);
   const x = useMotionValue(0);
   const widthMv = useMotionValue(0);
   const targetWidth = useMotionValue(0);
   const velocity = useVelocity(x);
-  const scaleX = useTransform(velocity, [-1200, 0, 1200], [1.8, 1, 1.8]);
+  const scaleX = useTransform(velocity, [-1200, 0, 1200], [1.04, 1, 1.04]);
   const blur = useTransform(velocity, [-1200, 0, 1200], [3, 0, 3]);
   const filter = useMotionTemplate`blur(${blur}px)`;
   const widthScale = useTransform<number, number>([widthMv, targetWidth], ([current, target]) =>
@@ -86,9 +87,9 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
   useLayoutEffect(() => {
     targetWidth.set(indicator.width);
 
-    if (shouldReduceMotion || widthMv.get() === 0) {
-      x.set(indicator.x);
-      widthMv.set(indicator.width);
+    if (shouldReduceMotion || !animateIndicatorRef.current || widthMv.get() === 0) {
+      x.jump(indicator.x);
+      widthMv.jump(indicator.width);
       return;
     }
 
@@ -122,6 +123,7 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
 
   function previewTab(tab: TabId) {
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      animateIndicatorRef.current = true;
       hoveredTabRef.current = tab;
       updateIndicator();
     }
@@ -133,6 +135,8 @@ export function Tabs({ value, onValueChange, panelId }: TabsProps) {
   }
 
   function selectTab(tab: TabId, options?: { focus?: boolean }) {
+    animateIndicatorRef.current = !options?.focus;
+    hoveredTabRef.current = null;
     shouldFocusActiveTabRef.current = options?.focus ?? false;
     onValueChange(tab);
 

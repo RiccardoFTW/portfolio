@@ -25,101 +25,121 @@ export default function OpticalAlignment() {
       </ArticleTitle>
 
       <article className="space-y-6">
-        <Prose>
-          Nei tool di design e nel codice ragioniamo per griglie, bounding box e
-          coordinate. Le misure possono essere esatte e il risultato sembrare
-          comunque storto, perché l’occhio legge forme e pesi, non i rettangoli
-          che le contengono. In un pulsante con testo e icona{" "}
-          <Highlight>
-            il contenuto può sembrare decentrato anche quando le distanze sono
-            uguali
-          </Highlight>
-          . L’allineamento ottico corregge questa differenza. L’esempio classico
-          è un triangolo dentro un cerchio, come l’icona play: se lo allinei con
-          il bounding box sembra spostato, se allinei il suo baricentro al centro
-          del cerchio sembra a posto
-          <FootnoteRef href="#optical-alignment-source-1" n={1} />.
-        </Prose>
-
         <AnnotationGroup
           className="space-y-6"
-          aria-labelledby="optical-alignment-button-title"
+          aria-labelledby="optical-alignment-introduction-title"
         >
-          <ArticleHeading id="optical-alignment-button-title">
-            Il pulsante
+          <ArticleHeading id="optical-alignment-introduction-title">
+            Un centro che sembra spostato
           </ArticleHeading>
-
           <Prose>
-            Nel pulsante dell’esempio testo e freccia formano un solo gruppo. La
-            freccia è asimmetrica e pesa di più a destra. Il padding è uguale sui
-            due lati, quindi secondo le misure il gruppo è centrato.{" "}
-            <Highlight>All’occhio può sembrare spostato</Highlight>.
-          </Prose>
-
-          <IconAlignment />
-
-          <Prose>
-            Nell’esempio aumentiamo il padding a sinistra e lo riduciamo a
-            destra. La somma non cambia, quindi il contenuto si sposta dentro il
-            pulsante e la larghezza resta la stessa.{" "}
+            Nei tool di design e nel codice usiamo griglie e bounding box, i
+            rettangoli che racchiudono gli elementi, per decidere dove mettere
+            le cose. Le misure possono essere esatte e il risultato sembrare
+            comunque storto. In un pulsante con testo e icona, per esempio,{" "}
             <Highlight>
-              La misura giusta dipende dalla forma dell’icona, dal testo e dal
-              contesto in cui li usi.
-            </Highlight>{" "}
-            Apple suggerisce lo stesso trucco per le icone asimmetriche: mettere
-            il padding dentro l’asset, così che centrarlo con le misure lo centri
-            anche a occhio. Il suo esempio è l’icona download, che pesa di più in
-            basso e, centrata geometricamente, sembra troppo bassa
-            <FootnoteRef href="#optical-alignment-source-2" n={2} />.
+              il contenuto può sembrare decentrato anche quando le distanze
+              sono uguali
+            </Highlight>
+            . L’allineamento ottico serve a correggere questa differenza fra
+            posizione misurata e posizione percepita.
           </Prose>
         </AnnotationGroup>
 
-        <AnnotationGroup
+        <section
           className="space-y-6"
-          aria-labelledby="optical-alignment-sidebar-title"
+          aria-labelledby="optical-alignment-thesis-title"
         >
-          <ArticleHeading id="optical-alignment-sidebar-title">
-            La sidebar
+          <ArticleHeading id="optical-alignment-thesis-title">
+            Il peso visivo delle forme
           </ArticleHeading>
-
           <Prose>
-            In una sidebar le icone hanno bisogno della stessa area e di una
-            colonna regolare, e il rapporto con le etichette deve essere chiaro.{" "}
-            <Highlight>Le misure sono il punto di partenza</Highlight>.
+            Per centrare una forma bisogna considerare come è distribuito il
+            suo peso visivo. Il caso classico è il triangolo dell’icona play
+            dentro un cerchio: centrare il suo bounding box può farlo sembrare
+            spostato; allineare il suo baricentro al centro del cerchio corregge
+            quella sensazione
+            <FootnoteRef href="#optical-alignment-source-1" n={1} />.
           </Prose>
 
-          <SidebarAlignment />
+          <AnnotationGroup
+            className="space-y-6"
+            aria-labelledby="optical-alignment-button-title"
+          >
+            <ArticleHeading id="optical-alignment-button-title" level={3}>
+              Il pulsante
+            </ArticleHeading>
 
-          <Prose>
-            Attiva le guide per vedere i box di icone e testo. Quando la colonna
-            è a posto, guarda le forme una per una: qualcuna può sembrare ancora
-            troppo alta, troppo bassa o spostata di lato.{" "}
-            <Highlight>Lì ha senso valutare una correzione ottica.</Highlight>{" "}
-            Gli SF Symbols di Apple
-            <FootnoteRef href="#optical-alignment-source-3" n={3} /> la portano
-            già dentro il simbolo: ogni variante può avere margini sinistro e
-            destro propri, anche negativi, che cambiano con il peso e la scala
-            <FootnoteRef href="#optical-alignment-source-4" n={4} />.
-          </Prose>
-        </AnnotationGroup>
+            <Prose>
+              Nel pulsante dell’esempio testo e freccia formano un solo gruppo. La
+              freccia è asimmetrica e pesa di più a destra. Il padding è uguale sui
+              due lati, quindi secondo le misure il gruppo è centrato.{" "}
+              <Highlight>All’occhio può sembrare spostato</Highlight>.
+            </Prose>
+
+            <IconAlignment />
+
+            <Prose>
+              Nell’esempio aumentiamo il padding a sinistra e lo riduciamo a
+              destra. La somma non cambia, quindi il contenuto si sposta dentro il
+              pulsante e la larghezza resta la stessa.{" "}
+              <Highlight>
+                La misura giusta dipende dalla forma dell’icona, dal testo e dal
+                contesto in cui li usi.
+              </Highlight>{" "}
+              Apple suggerisce lo stesso accorgimento per le icone asimmetriche:
+              mettere il padding dentro l’asset, così che centrarlo con le misure
+              lo centri anche a occhio. Il suo esempio è l’icona download, che pesa
+              di più in basso e, centrata geometricamente, sembra troppo bassa
+              <FootnoteRef href="#optical-alignment-source-2" n={2} />.
+            </Prose>
+          </AnnotationGroup>
+
+          <AnnotationGroup
+            className="space-y-6"
+            aria-labelledby="optical-alignment-sidebar-title"
+          >
+            <ArticleHeading id="optical-alignment-sidebar-title" level={3}>
+              La sidebar
+            </ArticleHeading>
+
+            <Prose>
+              In una sidebar le icone hanno bisogno della stessa area e di una
+              colonna regolare, e il rapporto con le etichette deve essere chiaro.{" "}
+              <Highlight>Le misure sono il punto di partenza</Highlight>.
+            </Prose>
+
+            <SidebarAlignment />
+
+            <Prose>
+              Attiva le guide per vedere i box di icone e testo. Quando la colonna
+              è a posto, guarda le forme una per una: qualcuna può sembrare ancora
+              troppo alta, troppo bassa o spostata di lato.{" "}
+              In quel caso puoi valutare una correzione ottica.{" "}
+              Gli SF Symbols di Apple
+              <FootnoteRef href="#optical-alignment-source-3" n={3} /> la portano
+              già dentro il simbolo: ogni variante può avere margini sinistro e
+              destro propri, anche negativi, che cambiano con il peso e la scala
+              <FootnoteRef href="#optical-alignment-source-4" n={4} />.
+            </Prose>
+          </AnnotationGroup>
+        </section>
 
         <AnnotationGroup
           className="space-y-6"
           aria-labelledby="optical-alignment-practice-title"
         >
           <ArticleHeading id="optical-alignment-practice-title">
-            Quando correggere
+            Prima di correggere a occhio
           </ArticleHeading>
 
           <Prose>
             Prima di spostare un elemento di uno o due pixel, controlla com’è
             costruito il componente: dimensioni coerenti, SVG puliti, viewBox
             corretti, spaziature costanti e allineamento geometrico.{" "}
-            <Highlight>
-              Se qualcosa sembra ancora fuori posto, prova una correzione ottica.
-            </Highlight>{" "}
-            Se ripeti lo stesso spostamento in più punti, chiediti se quella
-            regola appartiene al componente, all’icona o al design system.
+            Uno spostamento può nascondere un problema in uno di questi punti.
+            La correzione ottica ha senso quando la struttura è già coerente e
+            una forma continua a sembrare fuori posto.
           </Prose>
 
           <Prose>
@@ -129,8 +149,26 @@ export default function OpticalAlignment() {
             largo quanto un quadrato sembra più piccolo; per dargli la stessa
             area va scalato del 112,84%. Per forme con buchi o rientranze, come
             una ciambella o una stella, propone di misurare l’area del loro
-            involucro convesso. Il giudizio resta tuo, ma un numero aiuta quando
-            la correzione va automatizzata o animata.
+            involucro convesso. Un numero aiuta quando la correzione va
+            automatizzata o animata; il risultato va comunque valutato nel
+            componente.
+          </Prose>
+        </AnnotationGroup>
+
+        <AnnotationGroup
+          className="space-y-6"
+          aria-labelledby="optical-alignment-conclusion-title"
+        >
+          <ArticleHeading id="optical-alignment-conclusion-title">
+            Correzioni riutilizzabili
+          </ArticleHeading>
+          <Prose>
+            Parti dall’allineamento geometrico, poi osserva il componente con
+            le forme e i testi che userai davvero. Negli esempi puoi attivare le
+            guide e confrontare la posizione misurata con quella corretta.
+            Se lo stesso spostamento serve in più punti, valuta se incorporarlo
+            nell’icona, nel componente o nel design system, come fanno i simboli
+            che hanno già margini ottici propri.
           </Prose>
         </AnnotationGroup>
 
