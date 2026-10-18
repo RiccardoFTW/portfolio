@@ -9,10 +9,10 @@ function hairline(figure) {
 /** A centred cup slides sideways; its handle shifts the visual weight. */
 const {
   Cam, circ, clamp, disposer, fit, hull, mk, pointer, poly, proj,
-  put, register, ringAt, solid, spring, stepS,
+  put, reducedMotion, register, ringAt, solid, spring, stepS,
 } = HL;
 
-function mount({ stage, svg, read }, value) {
+function mount({ stage, svg, read, liquid }, value) {
   const bag = disposer();
   const C = Cam(45, 0.5, 2.12);
   const maxShift = 12, saucerZ = 5, rimZ = 39, handleZ = 23;
@@ -70,9 +70,18 @@ function mount({ stage, svg, read }, value) {
   const loop = register(stage, (dt) => {
     const moving = stepS(shift, dt);
     draw();
-    return moving;
+    // The liquid keeps the loop awake while it sloshes or drops are still falling.
+    const settling = liquid
+      ? liquid.frame(dt, {
+          P, offset: clamp(shift.x, -maxShift, maxShift), velocity: shift.v,
+          saucerZ, rimZ, rimR: 29, innerR: 26, footR: 19, plateR: 54,
+          still: reducedMotion(),
+        })
+      : false;
+    return moving || settling;
   });
   bag.add(loop.unregister);
+  liquid?.bind(loop.wake);
   function retarget() {
     shift.t = over ? value * clamp((over[0] - centre[0]) / 90, -1, 1) : 0;
     loop.wake();
@@ -101,7 +110,7 @@ hairline({
   mount,
 });
 
-export function createTazzina(stage, svg) {
+export function createTazzina(stage, svg, liquid) {
   HL.inject(document);
-  return definition.mount({ stage, svg, read: { textContent: "rest" } }, definition.range[1]);
+  return definition.mount({ stage, svg, liquid, read: { textContent: "rest" } }, definition.range[1]);
 }

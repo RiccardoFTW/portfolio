@@ -3,18 +3,25 @@
 import { useEffect, useRef } from "react";
 import { createPista } from "../hairline/pista";
 import styles from "../hairline/ChapterIllustration.module.css";
+import { createPistaRunners } from "./pistaRunners";
 
 export default function ConcentricRadiusIntro() {
     const stageRef = useRef<HTMLDivElement>(null);
     const svgRef = useRef<SVGSVGElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
         const stage = stageRef.current;
         const svg = svgRef.current;
-        if (!stage || !svg) return;
+        const canvas = canvasRef.current;
+        if (!stage || !svg || !canvas) return;
 
-        const figure = createPista(stage, svg);
-        return () => figure.destroy();
+        const runners = createPistaRunners(stage, canvas);
+        const figure = createPista(stage, svg, runners ?? undefined);
+        return () => {
+            figure.destroy();
+            runners?.destroy();
+        };
     }, []);
 
     return (
@@ -29,6 +36,10 @@ export default function ConcentricRadiusIntro() {
                 ref={svgRef}
                 viewBox="0 0 400 320"
                 className="absolute inset-0 size-full"
+            />
+            <canvas
+                ref={canvasRef}
+                className="pointer-events-none absolute inset-0 size-full"
             />
         </div>
     );

@@ -9,13 +9,13 @@ function hairline(figure) {
 /** Five running lanes: every inset preserves the two semicircles' centres. */
 const {
   Cam, circ, clamp, disposer, fit, hull, mk, open, pointer, poly, proj,
-  put, register, ringAt, rrect, seg, solid, spring, stepS, unproj,
+  put, reducedMotion, register, ringAt, rrect, seg, solid, spring, stepS, unproj,
 } = HL;
 
 const STRAIGHT = 48, R = 46, LANES = 5;
 const MIN_GAP = 3.5, MAX_GAP = 7;
 
-function mount({ stage, svg, read }, value) {
+function mount({ stage, svg, read, runners }, value) {
   const bag = disposer();
   const C = Cam(45, 0.5, 1.83);
   const W = STRAIGHT + R;
@@ -74,9 +74,17 @@ function mount({ stage, svg, read }, value) {
   const loop = register(stage, (dt) => {
     const moving = stepS(gap, dt);
     draw();
-    return moving;
+    // Runners keep the loop awake; the kernel already pauses it off screen.
+    const running = runners
+      ? runners.frame(dt, {
+          P, straight: STRAIGHT, radius: R, lanes: LANES,
+          gap: clamp(gap.x, MIN_GAP, MAX_GAP), still: reducedMotion(),
+        })
+      : false;
+    return moving || running;
   });
   bag.add(loop.unregister);
+  runners?.bind(loop.wake);
   function retarget() {
     gap.t = over ? clamp(value + over[0] / W * 1.5, MIN_GAP, MAX_GAP) : value;
     loop.wake();
@@ -106,7 +114,7 @@ hairline({
   mount,
 });
 
-export function createPista(stage, svg) {
+export function createPista(stage, svg, runners) {
   HL.inject(document);
-  return definition.mount({ stage, svg, read: { textContent: "rest" } }, definition.range[1]);
+  return definition.mount({ stage, svg, runners, read: { textContent: "rest" } }, definition.range[1]);
 }

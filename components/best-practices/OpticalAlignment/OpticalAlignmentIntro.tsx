@@ -3,18 +3,25 @@
 import { useEffect, useRef } from "react";
 import { createTazzina } from "../hairline/tazzina";
 import styles from "../hairline/ChapterIllustration.module.css";
+import { createTazzinaLiquid } from "./tazzinaLiquid";
 
 export default function OpticalAlignmentIntro() {
     const stageRef = useRef<HTMLDivElement>(null);
     const svgRef = useRef<SVGSVGElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
         const stage = stageRef.current;
         const svg = svgRef.current;
-        if (!stage || !svg) return;
+        const canvas = canvasRef.current;
+        if (!stage || !svg || !canvas) return;
 
-        const figure = createTazzina(stage, svg);
-        return () => figure.destroy();
+        const liquid = createTazzinaLiquid(stage, canvas);
+        const figure = createTazzina(stage, svg, liquid ?? undefined);
+        return () => {
+            figure.destroy();
+            liquid?.destroy();
+        };
     }, []);
 
     return (
@@ -29,6 +36,10 @@ export default function OpticalAlignmentIntro() {
                 ref={svgRef}
                 viewBox="0 0 400 320"
                 className="absolute inset-0 size-full"
+            />
+            <canvas
+                ref={canvasRef}
+                className="pointer-events-none absolute inset-0 size-full"
             />
         </div>
     );
